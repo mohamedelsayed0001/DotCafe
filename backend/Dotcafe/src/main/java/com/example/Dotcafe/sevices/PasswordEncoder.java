@@ -9,6 +9,7 @@ public class PasswordEncoder {
 
     // Method to hash the password
     public String encodePassword(String rawPassword) {
+
         return BCrypt.hashpw(rawPassword, BCrypt.gensalt());
     }
 

@@ -4,6 +4,12 @@ import com.example.Dotcafe.entity.Dto.CustomerDto;
 
 public class CustomerService {
 
+    private PasswordEncoder passwordEncoder;
+
+    public CustomerService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
     public String login(CustomerDto customerDto){
         return null;
     }

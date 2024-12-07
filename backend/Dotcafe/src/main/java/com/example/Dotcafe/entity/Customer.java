@@ -26,13 +26,15 @@ public class Customer {
     private String password;
     private String phoneNumber;
 
+
     public CustomerDto getcustomerDto() {
-        return CustomerDto.builder()
-                .name(name)
-                .mail(mail)
-                .id(id)
-                .role(role)
-                .points(points)
-                .build();
+         return CustomerDto.builder().
+                 name(name).
+                 mail(mail).
+                 id(id).
+                 role(role).
+                 points(points).
+                 build();
+
     }
 }

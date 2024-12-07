@@ -1,13 +1,12 @@
 package com.example.Dotcafe.entity.Dto;
 
 import com.example.Dotcafe.entity.Customer;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerDto {
