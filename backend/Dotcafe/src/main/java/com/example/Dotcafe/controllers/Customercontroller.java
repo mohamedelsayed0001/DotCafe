@@ -9,14 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/customer")
 public class Customercontroller {
-    ICus
 
-    @PostMapping
-    public ResponseEntity<?> login(@RequestBody CustomerDto){
-
-        String response =
-
-
-    }
 
 }
