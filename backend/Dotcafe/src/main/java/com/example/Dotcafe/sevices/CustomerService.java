@@ -10,11 +10,9 @@ import java.util.Optional;
 @Service
 public class CustomerService {
 
-    CustomerRepository customerRepository;
-
-
+    static CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
-
+    public static  Long ID =1L;
     public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
@@ -29,10 +27,23 @@ public class CustomerService {
             throw new IllegalArgumentException();
         }
     }
-    public void signup(CustomerDto customerDto) throws Exception{
+    public CustomerDto signup(CustomerDto customerDto) throws Exception {
+        Optional<Customer> customer = customerRepository.getCustomerByMail(customerDto.getMail());
+        if (customer.isPresent()) {
+            throw new IllegalArgumentException();
+        }
+
+        String encodedPassword = passwordEncoder.encodePassword(customerDto.getPassword());
+        customerDto.setPassword(encodedPassword);
+        customerDto.setId(ID++);
+        customerRepository.save(new Customer());
+        return customerDto;
 
     }
 
 
 
 }
+
+
+

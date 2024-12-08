@@ -1,10 +1,7 @@
 package com.example.Dotcafe.entity;
 
 import com.example.Dotcafe.entity.Dto.CustomerDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "customer")
 public class Customer {
     private String mail;
     @Id
