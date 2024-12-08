@@ -17,10 +17,10 @@ public class Customer {
     private String mail;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
     private String role;
-    private long points;
+    private Long points;
     private String password;
     private String phoneNumber;
 

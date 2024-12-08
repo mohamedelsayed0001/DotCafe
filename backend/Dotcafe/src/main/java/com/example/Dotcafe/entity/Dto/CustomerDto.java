@@ -12,10 +12,10 @@ import lombok.*;
 @AllArgsConstructor
 public class CustomerDto {
     private String mail;
-    private long id;
+    private Long id;
     private String name;
     private String role;
-    private long points;
+    private Long points;
     private String password;
     private String phoneNumber;
 

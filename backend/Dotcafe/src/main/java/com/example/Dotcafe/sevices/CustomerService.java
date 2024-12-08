@@ -12,7 +12,7 @@ public class CustomerService {
 
     static CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
-    public static  Long ID =1L;
+
     public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
@@ -35,9 +35,11 @@ public class CustomerService {
 
         String encodedPassword = passwordEncoder.encodePassword(customerDto.getPassword());
         customerDto.setPassword(encodedPassword);
-        customerDto.setId(ID++);
-        customerRepository.save(new Customer());
-        return customerDto;
+        customerDto.setId(null);
+        customerDto.setRole("user");
+        customerDto.setPoints(0L);
+       Customer newcustomer= customerRepository.save(customerDto.getcustomer());
+        return newcustomer.getcustomerDto();
 
     }
 
