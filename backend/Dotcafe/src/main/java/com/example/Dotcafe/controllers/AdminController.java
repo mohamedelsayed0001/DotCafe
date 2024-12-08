@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/Admin")
 public class AdminController {
 
-    private AdminService adminService;
+    private final AdminService adminService;
 
 
 
-    public AdminController(AdminService adminService,CategoryRepository categoryRepository) {
+    public AdminController(AdminService adminService) {
         this.adminService=adminService;
 
     }
