@@ -148,7 +148,7 @@ export default function Menu () {
     const [currentProduct, setCurrentProduct] = useState(null);
 
     return (
-        <div style={{ backgroundColor: "#E9EED9", minHeight: "100vh", display: 'flex', flexDirection: 'column' }}>
+        <div className= 'menu-page' style={{ backgroundColor: "#E9EED9", minHeight: "100vh", display: 'flex', flexDirection: 'column' }}>
             <div className='new-manage-buttons'>
                 <button onClick={() => setWindow("New Product")}>New Product</button>
                 <button onClick={() => setWindow("New Category")}>New Category</button>

@@ -21,3 +21,19 @@
     background-color: hsla(69, 34%, 73%, 0.137);
     color: black;
 }
+
+.menu-page {
+    display: flex;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    max-width: 90%;
+    margin: 0 5%;
+    height: 100vh;
+    width: 100vw;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #CBD2A4;
+}
