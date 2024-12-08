@@ -61,7 +61,7 @@ export default function AddingProduct({ window, setWindow, data, setData, curren
                 setData([...data, createdProduct]); 
                 setWindow("Home");
             } catch (error) {
-                console.error("Error creating product:", error.response || error.message);
+                console.error("Error creating product:", error.response);
             }
         }*/}
     };
