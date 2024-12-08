@@ -1,6 +1,7 @@
 package com.example.Dotcafe.entity.Dto;
 
 import com.example.Dotcafe.entity.Customer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 @Builder
@@ -18,6 +19,7 @@ public class CustomerDto {
     private String password;
     private String phoneNumber;
 
+    @JsonIgnore
     public Customer getcustomer() {
         return Customer.builder()
                 .name(name)

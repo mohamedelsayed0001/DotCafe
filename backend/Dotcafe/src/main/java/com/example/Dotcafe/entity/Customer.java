@@ -34,6 +34,7 @@ public class Customer {
                  id(id).
                  role(role).
                  points(points).
+                 phoneNumber(phoneNumber).
                  build();
 
     }
