@@ -38,7 +38,7 @@ public class CustomerService {
         customerDto.setId(null);
         customerDto.setRole("user");
         customerDto.setPoints(0L);
-       Customer newcustomer= customerRepository.save(customerDto.getcustomer());
+        Customer newcustomer= customerRepository.save(customerDto.getcustomer());
         return newcustomer.getcustomerDto();
 
     }

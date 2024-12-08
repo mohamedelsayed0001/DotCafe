@@ -1,5 +1,6 @@
 package com.example.Dotcafe.controllers;
 
+import com.example.Dotcafe.entity.Customer;
 import com.example.Dotcafe.entity.Dto.CustomerDto;
 import com.example.Dotcafe.repository.CustomerRepository;
 import com.example.Dotcafe.sevices.CustomerService;
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/customer")
@@ -30,12 +34,31 @@ public class Customercontroller {
     public ResponseEntity<?> create(@RequestBody CustomerDto customerDto){
       try {
           CustomerDto createdaccount = customerService.signup(customerDto);
-          return new ResponseEntity<>(createdaccount,HttpStatus.OK);
+          return new ResponseEntity<>(createdaccount,HttpStatus.CREATED);
       } catch (IllegalArgumentException e) {
           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("you already have an account");
       } catch (Exception e) {
           throw new RuntimeException(e);
       }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody CustomerDto customerDto){
+        Optional<Customer> customer = customerRepository.getCustomerByMail(customerDto.getMail());
+        try {
+            customerService.login(customerDto);
+            return new ResponseEntity<>(customer.get().getcustomerDto(), HttpStatus.ACCEPTED);
+        }
+        catch (NoSuchElementException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("account not found signup to continue");
+        }
+        catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("wrong password");
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("null");
+        }
+
 
     }
 }
