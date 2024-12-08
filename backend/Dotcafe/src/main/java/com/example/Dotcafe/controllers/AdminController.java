@@ -18,7 +18,6 @@ public class AdminController {
 
     public AdminController(AdminService adminService) {
         this.adminService=adminService;
-
     }
     @PostMapping(value = "/createcategory")
     public ResponseEntity<?> create(@RequestBody CategoryDto categoryDto){
@@ -27,8 +26,6 @@ public class AdminController {
             return new ResponseEntity<>(createdcategory, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("this category already exists");
-        } catch (Exception e) {
-           return null;
         }
     }
 

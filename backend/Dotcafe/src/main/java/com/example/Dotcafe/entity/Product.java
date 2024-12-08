@@ -14,11 +14,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Product_id_seq")
     private Long id;
     private String name;
     private Double price;
-    private String category;
+    @ManyToOne
+    private Category category;
     private Long stockQuantity;
     @Lob
     private byte[] image;

@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class Customer {
     private String mail;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Customer_id_seq")
     private Long id;
     private String name;
     private String role;

@@ -1,5 +1,6 @@
 package com.example.Dotcafe.entity.Dto;
 
+import com.example.Dotcafe.entity.Category;
 import com.example.Dotcafe.entity.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ public class ProductDto {
     private Long id;
     private String name;
     private Double price;
-    private String category;
+    private Category category;
     private Long stockQuantity;
     private byte[] image;
     private String imageName;
