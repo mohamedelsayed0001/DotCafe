@@ -1,0 +1,304 @@
+@import url('https://fonts.googleapis.com/css2?family=Imprima&display=swap');
+
+body {
+    background-image: url('../assets/background.jpg');
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    margin: 0; 
+    height: 100vh; 
+    overflow: hidden; 
+}
+
+
+.logo {
+    position: absolute;
+    left: 55px;
+    top: 200px;
+    width: 600px;
+    height: auto; 
+}
+
+/* Styling for the menu button */
+.menu-button {
+    background-color:rgba(251, 165, 165, 0.2); /* 20% opacity for #FBA5A5 */
+    
+    color: #8A521A;  
+    position: absolute;
+    left: 80px;
+    top: 20px;
+    padding: 3px 25px;  
+    font-family: 'Imprima', sans-serif;  
+    font-size: 16px;  
+    
+    align-items: center;
+    border-radius: 20px;  
+    cursor: pointer;  
+    box-shadow: inset 0px 2.9px 5px rgba(0, 0, 0, 0.2); 
+}
+
+/* Hover effect for the menu button */
+.menu-button:hover {
+    background-color: #e3c5a4;  
+    transform: scale(1.05); 
+}
+
+
+.menu-button:focus {
+    outline: none;  
+    box-shadow: 0 0 5px 2px rgba(124, 94, 70, 0.5);  
+}
+
+/* Styling for the menu button */
+.track-button {
+    background-color:rgba(251, 165, 165, 0.2); /* 20% opacity for #FBA5A5 */
+    
+    color: #8A521A;  
+    position: absolute;
+    left: 200px;
+    top: 20px;
+    padding: 3px 25px;  
+    font-family: 'Imprima', sans-serif;  
+    font-size: 16px;  
+    
+    align-items: center;
+    border-radius: 20px;  
+    cursor: pointer;  
+    box-shadow: inset 0px 2.9px 5px rgba(0, 0, 0, 0.2); 
+}
+
+/* Hover effect for the menu button */
+.track-button:hover {
+    background-color: #e3c5a4;  
+    transform: scale(1.05); 
+}
+
+
+.track-button:focus {
+    outline: none;  
+    box-shadow: 0 0 5px 2px rgba(124, 94, 70, 0.5);  
+}
+
+.login-button {
+    background-color:rgba(251, 165, 165, 0.2); /* 20% opacity for #FBA5A5 */
+    
+    color: #8A521A;  
+    position: absolute;
+    left: 1400px;
+    top: 20px;
+    padding: 3px 25px;  
+    font-family: 'Imprima', sans-serif;  
+    font-size: 16px;  
+    
+    align-items: center;
+    border-radius: 20px;  
+    cursor: pointer;  
+    box-shadow: inset 0px 2.9px 5px rgba(0, 0, 0, 0.2); 
+}
+
+/* Hover effect for the menu button */
+.login-button:hover {
+    background-color: #e3c5a4;  
+    transform: scale(1.05); 
+}
+
+
+.login-button:focus {
+    outline: none;  
+    box-shadow: 0 0 5px 2px rgba(124, 94, 70, 0.5);  
+}
+
+.signup-button {
+    background-color:rgba(251, 165, 165, 0.2); /* 20% opacity for #FBA5A5 */
+    
+    color: #8A521A;  
+    position: absolute;
+    left: 1550px;
+    top: 20px;
+    padding: 3px 25px;  
+    font-family: 'Imprima', sans-serif;  
+    font-size: 16px;  
+    
+    align-items: center;
+    border-radius: 20px;  
+    cursor: pointer;  
+    box-shadow: inset 0px 2.9px 5px rgba(0, 0, 0, 0.2); 
+}
+
+/* Hover effect for the menu button */
+.signup-button:hover {
+    background-color: #e3c5a4;  
+    transform: scale(1.05); 
+}
+
+
+.signup-button:focus {
+    outline: none;  
+    box-shadow: 0 0 5px 2px rgba(124, 94, 70, 0.5);  
+}
+.profile{
+    position: absolute;
+    left: 1600px;
+    top: 10px;
+    width: 60px;
+    height: auto; 
+}
+.moving-drink1 {
+    position: absolute;
+    top: 790px;
+    left: 1050px;
+    transform-origin:-250px 0;
+    width: 250px;
+    height: 200px;
+    animation:move-in-custom-circle 5s cubic-bezier(0.25, 0.1, 0.75, 0.9) infinite;
+    animation-delay: 0s; /* No delay for the first drink */
+}
+
+.moving-drink2 {
+    position: absolute;
+    top: 790px;
+    left: 1050px;
+    transform-origin: -250px 0;
+    width: 250px;
+    height: 200px;
+    animation:move-in-custom-circle 5s cubic-bezier(0.25, 0.1, 0.75, 0.9) infinite;
+    animation-delay: 1.25s; /* Quarter-circle delay (360° / 4 = 90° offset) */
+}
+
+.moving-drink3 {
+    position: absolute;
+    top: 790px;
+    left: 1050px;
+    transform-origin: -250px 0;
+    width: 250px;
+    height: 200px;
+    animation:move-in-custom-circle 5s cubic-bezier(0.25, 0.1, 0.75, 0.9) infinite;
+    animation-delay: 2.5s; /* Half-circle delay (360° / 2 = 180° offset) */
+}
+
+.moving-drink4 {
+    position: absolute;
+    top: 790px;
+    left: 1050px;
+    transform-origin: -250px 0;
+    width: 250px;
+    height: 200px;
+    
+    animation:move-in-custom-circle 5s cubic-bezier(0.25, 0.1, 0.75, 0.9) infinite;
+    animation-delay: 3.75s; /* Three-quarter-circle delay (360° / 4 * 3 = 270° offset) */
+}
+
+/* Common animation for all drinks */
+@keyframes move-in-custom-circle {
+    0% {
+        /* Slow at 0° */
+        animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.1);
+        transform: rotate(0deg) translate(500px) rotate(0deg) scale(0.2);
+    }
+    25% {
+        /* Slow at 90° */
+        animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.1);
+        transform: rotate(90deg) translate(500px) rotate(-90deg) scale(0.6);
+    }
+    50% {
+        /* Slow at 180° */
+        animation-timing-function: cubic-bezier(1, 0, 0.7, 0.1);
+        transform: rotate(170deg) translate(10px,-500px) rotate(-250deg)scale(1.1);
+    }
+    75% {
+        /* Slow at 270° */
+        animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.1);
+        transform: rotate(270deg) translate(600px,-300px) rotate(-270deg) scale(2);
+    }
+    100% {
+        /* Slow at 360° */
+        animation-timing-function: cubic-bezier(1, 0, 0.9, 0.1);
+        transform: rotate(360deg) translate(900px) rotate(-300deg) scale(0.6);
+    }
+}
+
+
+
+.circle {
+    width: 700px;              
+    height: 650px;             
+    border-radius: 50%;       
+    background-color:rgba(217, 217, 217, 0.2); 
+    
+    position: absolute;       
+    left: 950px;             
+    top: 550px;   
+}
+.Ellipse1 {
+    width: 145px;              
+    height: 50px;             
+    border-radius: 50%;        
+    background: linear-gradient(90deg, rgba(124, 68, 12, 0.13) 0%, rgba(150, 82, 15, 0.13) 26%, rgba(226, 124, 23, 0.13) 100%);
+    position: absolute;        
+    left: 1190px;             
+    top: 880px;
+    animation: circleMotion 5s cubic-bezier(0.25, 0.1, 0.75, 0.9) infinite ;
+    animation-delay: 0s
+}
+.Ellipse2 {
+    width: 140px;              
+    height: 50px;             
+    border-radius: 50%;        
+    background: linear-gradient(90deg, rgba(124, 68, 12, 0.13) 0%, rgba(150, 82, 15, 0.13) 26%, rgba(226, 124, 23, 0.13) 100%);
+    position: absolute;        
+    left: 1190px;             
+    top:880px;
+    animation: circleMotion 5s cubic-bezier(0.25, 0.1, 0.75, 0.9) infinite ;
+    animation-delay: 1.25s
+}
+.Ellipse3 {
+    width: 130px;              
+    height: 50px;             
+    border-radius: 50%;        
+    background: linear-gradient(90deg, rgba(124, 68, 12, 0.13) 0%, rgba(150, 82, 15, 0.13) 26%, rgba(226, 124, 23, 0.13) 100%);
+    position: absolute;        
+    left: 1190px;             
+    top: 880px;
+    animation: circleMotion 5s cubic-bezier(0.25, 0.1, 0.75, 0.9) infinite ;
+    animation-delay: 2.5s
+}
+.Ellipse4 {
+    width: 125px;              
+    height: 50px;             
+    border-radius: 50%;        
+    background: linear-gradient(90deg, rgba(124, 68, 12, 0.13) 0%, rgba(150, 82, 15, 0.13) 26%, rgba(226, 124, 23, 0.13) 100%);
+    position: absolute;        
+    left: 1190px;             
+    top: 880px;
+    animation: circleMotion 5s cubic-bezier(0.25, 0.1, 0.75, 0.9) infinite ;
+    animation-delay: 3.75s
+}
+
+@keyframes circleMotion {
+    0% {
+        animation-timing-function: cubic-bezier(1, 0, 0.7, 0.1);
+        transform: rotate(0deg) translate(300px)rotate(-0deg);
+    }
+    25% {
+        /* Slow at 90° */
+        animation-timing-function: cubic-bezier(1, 0, 0.7, 0.1);
+        transform: rotate(90deg) translate(300px)rotate(-90deg);
+    }
+    50% {
+        /* Slow at 180° */
+        animation-timing-function: cubic-bezier(1, 0, 0.7, 0.1);
+        transform: rotate(90deg) translate(300px)rotate(-250deg);;
+    }
+    75% {
+        /* Slow at 270° */
+        animation-timing-function: cubic-bezier(1, 0, 0.7, 0.1);
+        transform: rotate(270deg) translate(300px)rotate(-270deg);
+    }
+    100% {
+        animation-timing-function: cubic-bezier(1, 0, 0.7, 0.1);
+        transform: rotate(360deg) translate(330px)rotate(-300deg);
+    }
+}
+  
+  
+  
