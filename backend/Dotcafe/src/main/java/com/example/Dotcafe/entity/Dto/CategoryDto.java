@@ -19,12 +19,12 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class CategoryDto {
-
+    private Long id;
     private String name;
     private List<Product> products;
 
     @JsonIgnore
-    Category getCategory(){
+    public Category getCategory(){
         return Category.builder().name(name).products(products).build();
     }
 

@@ -17,13 +17,15 @@ import java.util.List;
 @Builder
 public class Category {
     @Id
-    private String name;
+    private Long id;
+    private  String name;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     private List<Product> products;
-    CategoryDto getDto(){
-        return CategoryDto.builder().name(name).products(products).build();
+
+    public CategoryDto getcategoryDto() {return CategoryDto.builder().name(name).products(products).build();
     }
+
 
 
 }
