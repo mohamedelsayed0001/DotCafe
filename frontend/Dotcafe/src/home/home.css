@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Imprima&display=swap');
 
-body {
+body.home-body  {
     background-image: url('../assets/background.jpg');
     background-size: cover; 
     background-position: center; 
@@ -11,7 +11,7 @@ body {
 }
 
 
-.logo {
+.Home-logo {
     position: absolute;
     left: 55px;
     top: 200px;
@@ -21,7 +21,7 @@ body {
 
 /* Styling for the menu button */
 .menu-button {
-    background-color:rgba(251, 165, 165, 0.2); /* 20% opacity for #FBA5A5 */
+    background-color:rgba(251, 165, 165, 0.2); 
     
     color: #8A521A;  
     position: absolute;
