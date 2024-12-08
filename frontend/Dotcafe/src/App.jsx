@@ -1,19 +1,17 @@
-import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import './App.css';
 import Registration from './registration/registration';
 import Admin from './admin/admin';
 
 function App() {
-  // const [count, setCount] = useState(0)
+  const [window, setWindow] = useState("sign up");
 
   return (
     <>
-      <Admin/>
-      {/* <Registration page="signIn" /> */}
+      {window === "sign in" && <Registration window={window} setWindow={setWindow} />}
+      {window === "sign up" && <Registration window={window} setWindow={setWindow} />}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
