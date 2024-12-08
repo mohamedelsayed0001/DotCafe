@@ -64,6 +64,25 @@
     border-radius: 20px;
     color: black;
 }
-.login:hover , .signUp-options:hover{
-    background: rgba(255, 166, 0, 0.568)
+.signUp-options:hover{
+    background:linear-gradient(rgba(128, 128, 128, 0.247),white);
+}
+
+
+.signUp{
+    margin: 8px;
+    background-color: #FFFFFF;
+    width: 60%;
+    height: 50px;
+    padding: 6px;
+    padding-left: 8px;
+    border-radius: 20px;
+    color: black;
+    background: #FEEFAE;
+      text-align: center;
+    color: "black";
+    font-weight: 800;
+}
+.signUp:hover, .login:hover{
+    background: rgba(255, 166, 0, 0.568);
 }

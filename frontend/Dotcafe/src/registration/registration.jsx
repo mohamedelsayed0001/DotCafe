@@ -1,8 +1,57 @@
 import "./Registration.css";
 import { useState,useEffect } from "react";
 import logo_icon from "/public/logo.svg";
+import axios from 'axios'
 
-function Registration(props) {
+function Registration({window,setWindow}) {
+  const [signed, setSigned] = useState(false);
+  function checkPass() {
+    const note = document.getElementById("note");
+  
+    if (password !== confirmPass) {
+      note.style.display = "block";
+      note.innerText = "Passwords don't match!!";
+      console.log("Passwords don't match!!");
+      setPassword("");
+      setConfirmPass("");
+  
+      // Hide the message after 2 seconds
+      setTimeout(() => {
+        note.style.display = "none";
+      }, 2000);
+  
+      return false;
+    }
+    return true;
+  }
+  
+  
+  async function handle_signUP() {
+    if (checkPass()&&name.length>0&&email.length>0&&phoneNumber>=11) {
+      const data = {
+        name,
+        mail:email,
+        password,
+        phoneNumber: phone,
+      };
+  
+      const url = "localhost:8080/customer/signup";
+  
+      try {
+        const response = await axios.post(url, data);
+        console.log("Response Data:", response.data);
+        setSigned(true);
+        setWindow("Signed home");
+      } catch (error) {
+        console.error(
+          "Error:",
+          error.response ? error.response.data : error.message
+        );
+      }
+    }
+
+  }
+  
  //use state for all input to handle its value
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -46,18 +95,17 @@ function Registration(props) {
 
     if (op.name === "Sign UP") {
       return (
-        <input
+        <>
+          <h1 id="note" style={{display:"none",fontSize:"1rem"}}></h1>
+              <input
           type="submit"
           key={op.id}
-          className="signUp-options"
-          style={{
-            background: "#FEEFAE",
-            textAlign: "center",
-            color: "black",
-            fontWeight: "800",
-          }}
+          className={"signUp"}
+          onClick={handle_signUP}
           value={op.name}
         />
+        </>
+       
       );
     }
 
@@ -102,6 +150,8 @@ function Registration(props) {
 
     if (op.name === "Sign IN") {
       return (
+        <>
+     
         <input
           type="submit"
           key={op.id}
@@ -114,6 +164,8 @@ function Registration(props) {
           }}
           value={op.name}
         />
+      
+        </>
       );
     }
 
@@ -131,7 +183,7 @@ function Registration(props) {
 
   
   function SignUp_SignIn() {
-    return props.page === "signIn" ? signInOptions : signUpOptions;
+    return window === "sign in" ? signInOptions : signUpOptions;
   }
   useEffect(() => {
     document.body.classList.add('signup-page-body');
@@ -140,6 +192,7 @@ function Registration(props) {
         document.body.classList.remove('signup-page-body');
     };
 }, []);
+  
   return (
     <>
       <div className="header">
@@ -148,10 +201,11 @@ function Registration(props) {
         </button>
         <div className="regist">
           <h1 style={{ color: "black" }}>
-            {props.page === "signIn" ? "Welcome Back" : "Create Account"}
+            {window === "sign in" ? "Welcome Back" : "Create Account"}
           </h1>
           {SignUp_SignIn()}
-          {props.page === "signIn" && (
+      
+          {window === "sign in" && (
             <a
               className="create-account"
               href="##"
@@ -161,8 +215,11 @@ function Registration(props) {
             </a>
           )}
         </div>
-        {props.page !== "signIn" && <button className="login">Login</button>}
+        {window=="sign up"&& <button className="login" onClick={()=>{setWindow("sign in")}}>Login</button>}
       </div>
+     
+    
+
     </>
   );
 }

@@ -4,146 +4,11 @@ import trashIcon from '../icons/trash.svg'
 import editIcon from '../icons/edit.svg'
 import './table.css'
 
-export default function Table({window, setWindow}) {
-    const sampleData = [
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-        
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1876",
-            name: "Latte Beans",
-            category: "Coffee Beans",
-            availability: "Out of Stock",
-            price: "12.30",
-        },
-        {
-            id: "1877",
-            name: "Cappuccino Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "15.00",
-        },
-        {
-            id: "1878",
-            name: "Decaf Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "8.00",
-        },
-        {
-            id: "1879",
-            name: "Cold Brew Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "9.25",
-        },
-        {
-            id: "1880",
-            name: "Arabica Beans",
-            category: "Coffee Beans",
-            availability: "Out of Stock",
-            price: "13.00",
-        },
-    ];
-    
+export default function Table({window, setWindow,data,setData,setCurrentID}) {
+ 
+
     // const [data, setData] = useState([]);
-    const [data, setData] = useState(sampleData);
+ 
     const [sortConfig, setSortConfig] = useState(null);
 
 
@@ -170,7 +35,12 @@ export default function Table({window, setWindow}) {
                 : { key, direction: "asc" }
         );
     };
-
+    function handelDelete(id) {
+        const newData = data.filter(item => item.id !== id);
+        setData(newData);
+     //   fetchDelete();///send request to delete from data base with id 
+    }
+    
     return (
         <div style={{ backgroundColor: "#E9EED9", padding: "0.5% 4% 0px 4%" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -193,8 +63,10 @@ export default function Table({window, setWindow}) {
                             <td className="table-cell">{item.availability}</td>
                             <td className="table-cell">{item.price}</td>
                             <td className="table-cell">
-                            <button className="actions-button"> <img style={{width: "25px", height: "25px"}} src={trashIcon} alt="trash icon" title="Delete" /> </button>
-                            <button className="actions-button" onClick={() => setWindow("Edit Product")}> <img style={{width: "25px", height: "25px"}} src={editIcon} alt="edit icon" title="Edit" /> </button>
+                            <button className="actions-button" onClick={()=>{handelDelete(item.id)}}> <img style={{width: "25px", height: "25px"}} src={trashIcon} alt="trash icon" title="Delete" /> </button>
+                            <button className="actions-button" onClick={() => {setWindow("Edit Product");
+                                                                               setCurrentID(item.id);}
+                            }> <img style={{width: "25px", height: "25px"}} src={editIcon} alt="edit icon" title="Edit" /> </button>
                             </td>
                         </tr>
                     ))}
