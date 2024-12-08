@@ -1,0 +1,137 @@
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.window {
+    background: #CDD7AD;
+    padding: 20px;
+    border-radius: 10px;
+    width: 450px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: left;
+    scrollbar-color: #54473F #CDD7AD;
+}
+
+.row {
+    display: flex;
+    gap: 50px;
+    margin-left: 50px;
+    align-items: center;
+    height: 60px;
+}
+
+.window h3 {
+    margin-top: 0;
+    background-color: #54473F;
+    color: #E9EED9;
+    width: fit-content;
+    padding: 5px 10px;
+    font-size: 20px;
+    border-radius: 10px;
+    /* font-family: 'Inter', sans-serif; */
+}
+
+.window form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.window form input,
+.window form select,
+.window form textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #E9EED9;
+}
+
+.size-options input[type="radio"] {
+    display: none;
+}
+
+.size-options .size-button {
+    padding: 5px 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+    border: 2px solid #54473F;
+    border-radius: 5px;
+    background-color: #E9EED9;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.size-options input[type="radio"]:checked+.size-button {
+    background-color: #54473F;
+    color: white;
+}
+
+.size-options .size-button:hover {
+    background-color: #54473F;
+    color: white;
+}
+
+.image-upload {
+    display: flex;
+    align-items: center;
+    margin-left: 50px;
+    gap: 50px;
+}
+
+.image-preview {
+    width: 100px;
+    height: 100px;
+    background: green;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.image-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.image-buttons button {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    border: 2px;
+    
+}
+.image-buttons button:hover {
+    border: 2px solid #54473F;
+    border-radius: 5px;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    background-color: #E9EED9;
+    color: black;
+    height: 70%;
+}
+
+.actions button:hover {
+    background-color: #54473F;
+    color: white;
+}

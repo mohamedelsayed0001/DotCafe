@@ -1,0 +1,30 @@
+.header-cell {
+    background-color: #CBD2A4;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.table-cell{
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #CBD2A4;
+};
+
+.actions-button img {
+    padding: 0;
+    background-color:transparent;
+    border: none;
+    margin: 0;
+} 
+
+.actions-button {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    
+}
+.actions-button:hover {
+    background-color: #CBD2A4;
+    border-radius: 5px;
+}
