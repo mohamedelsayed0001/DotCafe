@@ -1,6 +1,7 @@
 package com.example.Dotcafe.entity.Dto;
 
 import com.example.Dotcafe.entity.Product;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class ProductDto {
     private byte[] image;
     private String imageName;
     private String imageType;
-
+    @JsonIgnore
     Product getProduct(){
         return Product.builder().
                 id(id).

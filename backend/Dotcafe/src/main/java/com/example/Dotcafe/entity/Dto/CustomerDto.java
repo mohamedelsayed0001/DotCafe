@@ -2,6 +2,7 @@ package com.example.Dotcafe.entity.Dto;
 
 import com.example.Dotcafe.entity.Customer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Builder
