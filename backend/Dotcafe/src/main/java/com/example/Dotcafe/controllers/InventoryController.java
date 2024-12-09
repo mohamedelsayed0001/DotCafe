@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping("/Admin/inventory")
 public class InventoryController {
@@ -40,13 +41,11 @@ public class InventoryController {
         }
 
     }
-    @DeleteMapping("/deleteitem")
-    public ResponseEntity<?> delete(@RequestBody ItemDto itemDto) {
-        try {
-            ItemDto deleteditem = inventoryService.deleteitem(itemDto);
-            return new ResponseEntity<>(deleteditem, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    @DeleteMapping("/deleteitem/{id}")
+    public ResponseEntity<?> delete(@PathVariable  Long id) {
+
+            inventoryService.deleteitem(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+
     }
 }

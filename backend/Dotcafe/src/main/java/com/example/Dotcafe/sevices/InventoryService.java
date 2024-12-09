@@ -18,7 +18,7 @@ public class InventoryService {
     }
 
     public ItemDto createitem(ItemDto itemDto) throws CloneNotSupportedException {
-        Optional<Item> searchitem = itemRepository.getitembyname(itemDto.getName());
+        Optional<Item> searchitem = itemRepository.findByName(itemDto.getName());
         if (searchitem.isPresent()) {
             throw new CloneNotSupportedException("Item with the same name already exists.");
         }
@@ -30,7 +30,7 @@ public class InventoryService {
     public ItemDto edititem(ItemDto itemDto) throws IllegalArgumentException {
         Optional<Item> currentitem = itemRepository.findById(itemDto.getId());
         if (currentitem.isPresent()) {
-            Optional<Item> otheritem = itemRepository.getitembyname(itemDto.getName());
+            Optional<Item> otheritem = itemRepository.findByName(itemDto.getName());
             if (otheritem.isPresent() && !otheritem.get().getId().equals(itemDto.getId())) {
                 throw new IllegalArgumentException("Another item with the same name already exists.");
             }
@@ -42,14 +42,9 @@ public class InventoryService {
         }
     }
 
-    public ItemDto deleteitem(ItemDto itemDto) {
-        Optional<Item> pastItem = itemRepository.getitembyname(itemDto.getName());
+    public void deleteitem(Long id) {
+        Optional<Item> pastItem = itemRepository.findById(id);
         if (pastItem.isPresent()) {
-            throw new IllegalArgumentException();
+            itemRepository.deleteById(id);
         }
-        itemDto.setId(null);
-        Item Finalitem = itemRepository.save(itemDto.getitem());
-        return Finalitem.getitemDto();
-
-    }
-}
+}}
