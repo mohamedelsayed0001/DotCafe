@@ -29,6 +29,16 @@ public class AdminController {
         }
     }
 
+    @PostMapping ("/editcategory")
+    public ResponseEntity<?> edit(@RequestBody CategoryDto categoryDto){
+        try {
+            CategoryDto editedCategory = adminService.editCategory(categoryDto);
+            return new ResponseEntity<>(editedCategory, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("this name already exist");
+        }
+    }
+
 
 
 }

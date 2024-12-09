@@ -29,5 +29,22 @@ public class AdminService {
        return category.getcategoryDto();
 
 
- }
+    }
+
+    public CategoryDto editCategory(CategoryDto categoryDto) throws IllegalArgumentException{
+        Optional<Category> pastcategory = categoryRepository.findById(categoryDto.getId());
+        if (pastcategory.isPresent()) {
+
+            Optional<Category> othercategory = categoryRepository.getCategoryByName(categoryDto.getName());
+            if(othercategory.isPresent() && othercategory.get().getId()!=categoryDto.getId())
+                throw new IllegalArgumentException();
+
+
+            Category category = categoryRepository.save(categoryDto.getCategory());
+            return category.getcategoryDto();
+        }
+        else
+            throw new IllegalArgumentException();
+
+    }
 }
