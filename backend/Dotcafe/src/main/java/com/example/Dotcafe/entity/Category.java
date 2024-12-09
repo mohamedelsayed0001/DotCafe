@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,15 +15,21 @@ import java.util.List;
 @Builder
 public class Category {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Category_id_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private  String name;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Product> products;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,mappedBy = "category")
+    private List<Product> products = new ArrayList<>();
 
-    public CategoryDto getcategoryDto() {return CategoryDto.builder().id(id).name(name)
-            .products(products)
+    public CategoryDto getDto() {
+        CategoryDto categoryDto = CategoryDto.builder().id(id).name(name)
          .build();
+        categoryDto.setProducts(new ArrayList<>());
+        for(Product p : products){
+            categoryDto.addProductDto(p.getDto());
+        }
+        return categoryDto;
+
     }
     public void addProduct(Product product){
         products.add(product);

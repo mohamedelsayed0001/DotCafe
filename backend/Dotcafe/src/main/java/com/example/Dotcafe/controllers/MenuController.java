@@ -1,10 +1,13 @@
 package com.example.Dotcafe.controllers;
 
+import com.example.Dotcafe.entity.Dto.CategoryDto;
 import com.example.Dotcafe.entity.Dto.ProductDto;
 import com.example.Dotcafe.sevices.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/menu")
@@ -16,23 +19,11 @@ public class MenuController {
         this.productService = productService;
     }
 
-    @DeleteMapping("/deleteproduct")
-    public ResponseEntity<?> deleteProduct(@RequestBody ProductDto productDto) {
-        try {
-            ProductDto deletedProduct = productService.deleteproduct(productDto);
-            return new ResponseEntity<>(deletedProduct, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error deleting product: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    @GetMapping
+    public ResponseEntity<List<CategoryDto>> menu(){
+        return new ResponseEntity<>(productService.menu(), HttpStatus.OK);
+
     }
 
-    @PutMapping("/editproduct")
-    public ResponseEntity<?> editProduct(@RequestBody ProductDto productDto) {
-        try {
-            ProductDto editedProduct = productService.editproduct(productDto);
-            return new ResponseEntity<>(editedProduct, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error editing product: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
+
 }

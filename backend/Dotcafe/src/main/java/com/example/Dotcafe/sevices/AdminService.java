@@ -24,12 +24,13 @@ public class AdminService {
             throw new IllegalArgumentException();
         }
         categoryDto.setId(null);
-        categoryDto.setProducts(new ArrayList<>());
        Category category = categoryRepository.save(categoryDto.getCategory());
-       return category.getcategoryDto();
+       category.setProducts(new ArrayList<>());
+       return category.getDto();
 
 
     }
+
 
     public CategoryDto editCategory(CategoryDto categoryDto) throws IllegalArgumentException{
         Optional<Category> pastcategory = categoryRepository.findById(categoryDto.getId());
@@ -41,10 +42,11 @@ public class AdminService {
 
 
             Category category = categoryRepository.save(categoryDto.getCategory());
-            return category.getcategoryDto();
+            return category.getDto();
         }
         else
             throw new IllegalArgumentException();
 
     }
+
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,13 +16,17 @@ import java.util.List;
 public class CategoryDto {
     private Long id;
     private String name;
-    private List<Product> products;
+    private List<ProductDto> products = new ArrayList<>();
 
     @JsonIgnore
     public Category getCategory(){
-        return Category.builder().id(id).name(name)
-                .products(products)
+        return Category.builder().id(id).name(name).products(new ArrayList<>())
         .build();
+    }
+    @JsonIgnore
+    public void addProductDto(ProductDto productDto){
+        products.add(productDto);
+
     }
 
 }

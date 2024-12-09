@@ -36,7 +36,7 @@ public class CustomerService {
         String encodedPassword = passwordEncoder.encodePassword(customerDto.getPassword());
         customerDto.setPassword(encodedPassword);
         customerDto.setId(null);
-        customerDto.setRole("user");
+        customerDto.setRole("customer");
         customerDto.setPoints(0L);
         Customer newcustomer= customerRepository.save(customerDto.getcustomer());
         return newcustomer.getcustomerDto();

@@ -12,11 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "customer")
 public class Customer {
     private String mail;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Customer_id_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String role;

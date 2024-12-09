@@ -17,14 +17,14 @@ import java.util.Base64;
 @Builder
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Product_id_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private Double price;
-    @JsonIgnore
+    private String description;
     @ManyToOne
     private Category category;
-    private Long stockQuantity;
+    private Boolean inStock;
     @Lob
     private byte[] image;
     @JsonIgnore
@@ -32,10 +32,11 @@ public class Product {
         return ProductDto.builder().
                 id(id).
                 name(name).
-                category(category.getcategoryDto()).
+                categoryId(category.getId()).
                 price(price).
-                stockQuantity(stockQuantity).
+                inStock(inStock).
                 image(image != null ? Base64.getEncoder().encodeToString(image) : null).
+                description(description).
                 build();
     }
 
