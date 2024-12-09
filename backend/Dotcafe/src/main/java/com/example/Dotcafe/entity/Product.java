@@ -1,11 +1,14 @@
 package com.example.Dotcafe.entity;
 
 import com.example.Dotcafe.entity.Dto.ProductDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Base64;
 
 @Data
 @Entity
@@ -18,23 +21,21 @@ public class Product {
     private Long id;
     private String name;
     private Double price;
+    @JsonIgnore
     @ManyToOne
     private Category category;
     private Long stockQuantity;
     @Lob
     private byte[] image;
-    private String imageName;
-    private String imageType;
-    ProductDto getDto(){
+    @JsonIgnore
+    public ProductDto getDto(){
         return ProductDto.builder().
                 id(id).
                 name(name).
-                category(category).
+                category(category.getcategoryDto()).
                 price(price).
                 stockQuantity(stockQuantity).
-                image(image).
-                imageName(imageName).
-                imageType(imageType).
+                image(image != null ? Base64.getEncoder().encodeToString(image) : null).
                 build();
     }
 

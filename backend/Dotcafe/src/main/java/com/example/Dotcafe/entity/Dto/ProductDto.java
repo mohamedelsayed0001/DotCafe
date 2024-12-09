@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Base64;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,22 +18,20 @@ public class ProductDto {
     private Long id;
     private String name;
     private Double price;
-    private Category category;
+    private CategoryDto category;
     private Long stockQuantity;
-    private byte[] image;
-    private String imageName;
-    private String imageType;
+    private String image;
+
     @JsonIgnore
-    Product getProduct(){
+    public Product getProduct(){
         return Product.builder().
                 id(id).
                 name(name).
-                category(category).
+                category(category.getCategory()).
                 price(price).
                 stockQuantity(stockQuantity).
-                image(image).
-                imageName(imageName).
-                imageType(imageType).
+                image(image!=null ?Base64.getDecoder().decode(image) : null).
                 build();
     }
+
 }
