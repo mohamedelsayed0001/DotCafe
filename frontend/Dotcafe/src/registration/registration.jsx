@@ -33,6 +33,7 @@ function Registration({window,setWindow,customerDTO,setCustomerDTO, signed,setSi
          {
             id: null,
             role: null,
+            points:null,
             name: formData.name,
             mail: formData.email,
             password: formData.password,

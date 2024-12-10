@@ -5,7 +5,17 @@ import Registration from './registration/registration';
 import Admin from './admin/admin';
 
 function App() {
-  const [customerDTO, setCustomerDTO] = useState({});
+  const [customerDTO, setCustomerDTO] = useState(
+    {
+      id: null,
+      role: null,
+      points:null,
+      name:null,
+      mail: null,
+      password:null,
+      phoneNumber: null,
+    }
+  );
   const [signed, setSigned] = useState(false);
   const [window, setWindow] = useState("home"); 
 
