@@ -3,75 +3,85 @@ import { useState,useEffect } from "react";
 import logo_icon from "/public/logo.svg";
 import axios from 'axios'
 
-function Registration({window,setWindow}) {
-  const [signed, setSigned] = useState(false);
-  function checkPass() {
-    const note = document.getElementById("note");
+function Registration({window,setWindow,customerDTO,setCustomerDTO, signed,setSigned}) {
+  const [noteMessage, setNoteMessage] = useState("");//to handle massage error to be visible in form  
+  function showNoteMessage(message) {
+    setNoteMessage(message);
+    setTimeout(() => setNoteMessage(""), 2000);// Hide the msg after 2sec
+  }
+  function validData(signUp) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
+    let msg = "";
   
-    if (password !== confirmPass) {
-      note.style.display = "block";
-      note.innerText = "Passwords don't match!!";
-      console.log("Passwords don't match!!");
-      setPassword("");
-      setConfirmPass("");
+    if ((!formData.email || !formData.password) || (signUp && (!formData.name || !formData.confirmPass || !formData.phone))) {
+      msg = "Please fill in all required fields!";
+    } else if (!emailRegex.test(formData.email)) {
+      msg = "Invalid email format!";
+    }
   
-      // Hide the message after 2 seconds
-      setTimeout(() => {
-        note.style.display = "none";
-      }, 2000);
-  
+    if (msg) {
+      showNoteMessage(msg);
       return false;
     }
     return true;
   }
   
   
-  async function handle_signUP() {
-    if (checkPass()&&name.length>0&&email.length>0&&phoneNumber>=11) {
-      const data = {
-        name,
-        mail:email,
-        password,
-        phoneNumber: phone,
-      };
+  async function handleRegistration(signup) {
+    if (validData(signup)) {
+      const customerData = 
+         {
+            id: null,
+            role: null,
+            name: formData.name,
+            mail: formData.email,
+            password: formData.password,
+            phoneNumber: formData.phone,
+          };
   
-      const url = "localhost:8080/customer/signup";
+      const url = signup
+        ? "http://localhost:8080/customer/signup"
+        : "http://localhost:8080/customer/login";
   
       try {
-        const response = await axios.post(url, data);
-        console.log("Response Data:", response.data);
-        setSigned(true);
-        setWindow("Signed home");
+        const response = await axios.post(url, customerData);
+  
+        if (response.status === 202 || response.status === 200) {
+          setCustomerDTO(response.data);
+          setSigned(true);
+          setWindow(response.data.role === "admin" ? "admin" : "home");
+        } else {
+          showNoteMessage(response.statusText || "Unexpected response");
+        }
       } catch (error) {
-        console.error(
-          "Error:",
-          error.response ? error.response.data : error.message
-        );
+        console.error("Error:", error);
+        showNoteMessage("An error occurred. Please try again.");
       }
     }
-
   }
   
- //use state for all input to handle its value
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPass, setConfirmPass] = useState("");
-  const [phone, setPhone] = useState("");
+ 
+const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPass: "",
+    phone: ""
+});
+
+const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+};
+
+
 //sign-up and sign-in button options to handle two cases
-  const signUp = [
-    { name: "Name", id: 1 },
-    { name: "E-mail Address", id: 2 },
-    { name: "Password", id: 3 },
-    { name: "Confirm Password", id: 4 },
-    { name: "Phone Number", id: 5 },
-    { name: "Sign UP", id: 6 },
+  const signUp = [{ name: "Name", id: 1 },{ name: "E-mail Address", id: 2 }, { name: "Password", id: 3 },
+    { name: "Confirm Password", id: 4 },{ name: "Phone Number", id: 5 },{ name: "Sign UP", id: 6 },
   ];
 
   const signIn = [
-    { name: "E-mail Address", id: 1 },
-    { name: "Password", id: 2 },
-    { name: "Sign IN", id: 3 },
+    { name: "E-mail Address", id: 1 },{ name: "Password", id: 2 },{ name: "Sign IN", id: 3 },
   ];
 
 
@@ -79,15 +89,14 @@ function Registration({window,setWindow}) {
     if (op.name === "Password" || op.name === "Confirm Password") {
       return (
         <input
+          name= {op.name ==="Password" ?"password":"confirmPass"}
           type="password"
           key={op.id}
           className="signUp-options"
           placeholder={op.name}
-          value={op.name === "Password" ? password : confirmPass}
+          value={op.name === "Password" ?  formData.password : formData.confirmPass}
           onChange={(e) =>
-            op.name === "Password"
-              ? setPassword(e.target.value)
-              : setConfirmPass(e.target.value)
+            handleInputChange(e)
           }
         />
       );
@@ -96,12 +105,13 @@ function Registration({window,setWindow}) {
     if (op.name === "Sign UP") {
       return (
         <>
-          <h1 id="note" style={{display:"none",fontSize:"1rem"}}></h1>
-              <input
+         {noteMessage && <h1 style={{ fontSize: "1rem" }}>{noteMessage}</h1>}
+
+          <input
           type="submit"
           key={op.id}
           className={"signUp"}
-          onClick={handle_signUP}
+          onClick={()=>handleRegistration(true)}
           value={op.name}
         />
         </>
@@ -112,22 +122,25 @@ function Registration({window,setWindow}) {
     return (
       <input
         type="text"
+        name={
+          op.name === "Name"
+          ? "name"
+          : op.name === "E-mail Address"
+          ? "email"
+          : "phone"
+        }
         key={op.id}
         className="signUp-options"
         placeholder={op.name}
         value={
           op.name === "Name"
-            ? name
+            ? formData.name
             : op.name === "E-mail Address"
-            ? email
-            : phone
+            ? formData.email
+            : formData.phone
         }
         onChange={(e) =>
-          op.name === "Name"
-            ? setName(e.target.value)
-            : op.name === "E-mail Address"
-            ? setEmail(e.target.value)
-            : setPhone(e.target.value)
+             handleInputChange(e)
         }
       />
     );
@@ -138,12 +151,13 @@ function Registration({window,setWindow}) {
     if (op.name === "Password") {
       return (
         <input
+          name="password"
           type="password"
           key={op.id}
           className="signUp-options"
           placeholder={"Enter " + op.name}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={formData.password}
+          onChange={(e) => handleInputChange(e)}
         />
       );
     }
@@ -151,17 +165,12 @@ function Registration({window,setWindow}) {
     if (op.name === "Sign IN") {
       return (
         <>
-     
+          {noteMessage && <h1 style={{ fontSize: "1rem" }}>{noteMessage}</h1>}
         <input
           type="submit"
           key={op.id}
-          className="signUp-options"
-          style={{
-            background: "#FEEFAE",
-            textAlign: "center",
-            color: "black",
-            fontWeight: "800",
-          }}
+          className="signUp"
+          onClick={()=>{handleRegistration(false)}}
           value={op.name}
         />
       
@@ -172,11 +181,12 @@ function Registration({window,setWindow}) {
     return (
       <input
         type="text"
+        name="email"
         key={op.id}
         className="signUp-options"
         placeholder={op.name}
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={formData.email}
+        onChange={(e) =>handleInputChange(e)}
       />
     );
   });
@@ -196,7 +206,7 @@ function Registration({window,setWindow}) {
   return (
     <>
       <div className="header">
-        <button className="logo">
+        <button className="logo" onClick={()=>{setWindow("home")}}>
           <img src={logo_icon} alt="Logo Icon" style={{ width: "100%" }} />
         </button>
         <div className="regist">
@@ -210,6 +220,9 @@ function Registration({window,setWindow}) {
               className="create-account"
               href="##"
               style={{ color: "blue" }}
+              onClick={()=>{
+                setWindow("sign up")
+              }}
             >
               Create new Account
             </a>
