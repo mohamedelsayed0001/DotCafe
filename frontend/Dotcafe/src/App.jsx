@@ -13,8 +13,8 @@ function App() {
 
   return (
     <>
-      {/*window === "sign in" && <Registration window={window} setWindow={setWindow} />*/}
-      {/*window === "sign up" && <Registration window={window} setWindow={setWindow} />*/}
+      {/*window === "sign in" && <Registration window={window} setWindow={setWindow} />}
+      {window === "sign up" && <Registration window={window} setWindow={setWindow} />*/}
       {<Home></Home>}
       {/*<Admin></Admin>*/}
     </>

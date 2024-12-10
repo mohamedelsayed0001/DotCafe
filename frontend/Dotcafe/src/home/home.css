@@ -13,9 +13,9 @@ body.home-body  {
 
 .Home-logo {
     position: absolute;
-    left: 55px;
-    top: 200px;
-    width: 600px;
+    left: 3.23%;
+    top: 25.31%;
+    width: 35.294%;
     height: auto; 
 }
 
@@ -25,8 +25,8 @@ body.home-body  {
     
     color: #8A521A;  
     position: absolute;
-    left: 80px;
-    top: 20px;
+    left: 4.7%;
+    top: 2.53%;
     padding: 3px 25px;  
     font-family: 'Imprima', sans-serif;  
     font-size: 16px;  
@@ -37,7 +37,6 @@ body.home-body  {
     box-shadow: inset 0px 2.9px 5px rgba(0, 0, 0, 0.2); 
 }
 
-/* Hover effect for the menu button */
 .menu-button:hover {
     background-color: #e3c5a4;  
     transform: scale(1.05); 
@@ -55,8 +54,8 @@ body.home-body  {
     
     color: #8A521A;  
     position: absolute;
-    left: 200px;
-    top: 20px;
+    left: 11.76%;
+    top: 2.53%;
     padding: 3px 25px;  
     font-family: 'Imprima', sans-serif;  
     font-size: 16px;  
@@ -84,8 +83,8 @@ body.home-body  {
     
     color: #8A521A;  
     position: absolute;
-    left: 1400px;
-    top: 20px;
+    left: 82.35%;
+    top: 2.53%;
     padding: 3px 25px;  
     font-family: 'Imprima', sans-serif;  
     font-size: 16px;  
@@ -113,8 +112,8 @@ body.home-body  {
     
     color: #8A521A;  
     position: absolute;
-    left: 1550px;
-    top: 20px;
+    left: 91.176%;
+    top: 2.53%;
     padding: 3px 25px;  
     font-family: 'Imprima', sans-serif;  
     font-size: 16px;  
@@ -138,51 +137,51 @@ body.home-body  {
 }
 .profile{
     position: absolute;
-    left: 1600px;
-    top: 10px;
+    left: 94.117%;
+    top: 1.265%;
     width: 60px;
     height: auto; 
 }
 .moving-drink1 {
     position: absolute;
-    top: 790px;
-    left: 1050px;
+    top: 100%;
+    left: 61.76%;
     transform-origin:-250px 0;
-    width: 250px;
-    height: 200px;
+    width: 14.7%;
+    height: 25.31%;
     animation:move-in-custom-circle 5s cubic-bezier(0.25, 0.1, 0.75, 0.9) infinite;
     animation-delay: 0s; /* No delay for the first drink */
 }
 
 .moving-drink2 {
     position: absolute;
-    top: 790px;
-    left: 1050px;
+    top: 100%;
+    left: 61.76%;
     transform-origin: -250px 0;
-    width: 250px;
-    height: 200px;
+    width: 14.7%;
+    height: 25.31%;
     animation:move-in-custom-circle 5s cubic-bezier(0.25, 0.1, 0.75, 0.9) infinite;
     animation-delay: 1.25s; /* Quarter-circle delay (360° / 4 = 90° offset) */
 }
 
 .moving-drink3 {
     position: absolute;
-    top: 790px;
-    left: 1050px;
+    top: 100%;
+    left: 61.76%;
     transform-origin: -250px 0;
-    width: 250px;
-    height: 200px;
+    width: 14.7%;
+    height: 25.31%;
     animation:move-in-custom-circle 5s cubic-bezier(0.25, 0.1, 0.75, 0.9) infinite;
     animation-delay: 2.5s; /* Half-circle delay (360° / 2 = 180° offset) */
 }
 
 .moving-drink4 {
     position: absolute;
-    top: 790px;
-    left: 1050px;
+    top: 100%;
+    left: 61.76%;
     transform-origin: -250px 0;
-    width: 250px;
-    height: 200px;
+    width: 14.7%;
+    height: 25.31%;
     
     animation:move-in-custom-circle 5s cubic-bezier(0.25, 0.1, 0.75, 0.9) infinite;
     animation-delay: 3.75s; /* Three-quarter-circle delay (360° / 4 * 3 = 270° offset) */
@@ -220,56 +219,56 @@ body.home-body  {
 
 
 .circle {
-    width: 700px;              
-    height: 650px;             
+    width: 41.176%;              
+    height: 82.27%;             
     border-radius: 50%;       
     background-color:rgba(217, 217, 217, 0.2); 
     
     position: absolute;       
-    left: 950px;             
-    top: 550px;   
+    left: 55.882%;             
+    top: 69.62%;   
 }
 .Ellipse1 {
-    width: 145px;              
-    height: 50px;             
+    width: 8.529%;              
+    height: 6.329%;             
     border-radius: 50%;        
     background: linear-gradient(90deg, rgba(124, 68, 12, 0.13) 0%, rgba(150, 82, 15, 0.13) 26%, rgba(226, 124, 23, 0.13) 100%);
     position: absolute;        
-    left: 1190px;             
-    top: 880px;
+    left: 70%;             
+    top: 111.392%;
     animation: circleMotion 5s cubic-bezier(0.25, 0.1, 0.75, 0.9) infinite ;
     animation-delay: 0s
 }
 .Ellipse2 {
-    width: 140px;              
-    height: 50px;             
+    width: 8.235%;              
+    height: 6.329%;             
     border-radius: 50%;        
     background: linear-gradient(90deg, rgba(124, 68, 12, 0.13) 0%, rgba(150, 82, 15, 0.13) 26%, rgba(226, 124, 23, 0.13) 100%);
     position: absolute;        
-    left: 1190px;             
-    top:880px;
+    left: 70%;             
+    top: 111.392%;
     animation: circleMotion 5s cubic-bezier(0.25, 0.1, 0.75, 0.9) infinite ;
     animation-delay: 1.25s
 }
 .Ellipse3 {
-    width: 130px;              
-    height: 50px;             
+    width: 7.647%;              
+    height: 6.329%;             
     border-radius: 50%;        
     background: linear-gradient(90deg, rgba(124, 68, 12, 0.13) 0%, rgba(150, 82, 15, 0.13) 26%, rgba(226, 124, 23, 0.13) 100%);
     position: absolute;        
-    left: 1190px;             
-    top: 880px;
+    left: 70%;             
+    top: 111.392%;
     animation: circleMotion 5s cubic-bezier(0.25, 0.1, 0.75, 0.9) infinite ;
     animation-delay: 2.5s
 }
 .Ellipse4 {
-    width: 125px;              
-    height: 50px;             
+    width: 7.352%;              
+    height: 6.329%;             
     border-radius: 50%;        
     background: linear-gradient(90deg, rgba(124, 68, 12, 0.13) 0%, rgba(150, 82, 15, 0.13) 26%, rgba(226, 124, 23, 0.13) 100%);
     position: absolute;        
-    left: 1190px;             
-    top: 880px;
+    left: 70%;            
+    top: 111.392%;
     animation: circleMotion 5s cubic-bezier(0.25, 0.1, 0.75, 0.9) infinite ;
     animation-delay: 3.75s
 }
@@ -299,6 +298,3 @@ body.home-body  {
         transform: rotate(360deg) translate(330px)rotate(-300deg);
     }
 }
-  
-  
-  
