@@ -7,7 +7,7 @@ import './menu.css'
 
 export default function Menu () {
     const  sampleData = [
-        {   index:0,
+        {  
             id: "1",
             name: "Espresso Beans",
             category: "Coffee Beans",

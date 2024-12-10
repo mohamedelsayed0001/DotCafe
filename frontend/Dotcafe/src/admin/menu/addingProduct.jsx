@@ -10,7 +10,8 @@ export default function AddingProduct({ window, setWindow, data, setData, curren
     const [size, setSize] = useState("");
 
     useEffect(() => {
-        if (currentID) {
+
+        if (currentID&&window==="Edit Product") {
             get_product();
         }
     }, [currentID]);
@@ -26,23 +27,45 @@ export default function AddingProduct({ window, setWindow, data, setData, curren
         });
     }
 
-    const handleSave = () => {
-        const updatedProduct = {
-            id: currentID,
-            name: name,
-            category: category,
-            availability: "In Stock",
-            price: price,
-          
-        };
-
-        const updatedData = data.map((item) =>
-            item.id === currentID ? updatedProduct : item
-        );
-
-        setData(updatedData);
-        setWindow("Home");
+    const handleSave = async () => {
+        if (window === "Edit Product") {
+            const updatedProduct = {
+                id: currentID,
+                name: name,
+                category: category,
+                availability: "In Stock",
+                price: price,
+            };
+    
+            const updatedData = data.map((item) =>
+                item.id === currentID ? updatedProduct : item
+            );
+    
+            setData(updatedData);
+            setWindow("Home");
+        } else if (window === "New Product") {
+            const newProduct = {
+                id: 2, 
+                name: name,
+                category: category,
+                availability: "Out of Stock",
+                price: price,
+            };
+             data.push(newProduct);
+             setData(data);
+             setWindow("Home");
+            /*try {
+                const response = await axios.post("localhost:8080/add_product", newProduct);
+                const createdProduct = { ...newProduct, id: response.data.id };
+    
+                setData([...data, createdProduct]); 
+                setWindow("Home");
+            } catch (error) {
+                console.error("Error creating product:", error.response);
+            }
+        }*/}
     };
+    
 
     const handleCancel = () => {
         setWindow("Home");

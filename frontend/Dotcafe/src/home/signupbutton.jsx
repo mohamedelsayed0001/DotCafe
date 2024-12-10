@@ -1,6 +1,6 @@
 import './home.css';
 
-function SignupButton() {
+function SignupButton({setwindow}) {
     const goToMenu = () => {
         window.location.href = "/menu"; 
     };
@@ -16,10 +16,10 @@ function SignupButton() {
             <button onClick={goToMenu} className="menu-button">
                 Menu
             </button>
-            <button onClick={goToLogin} className="login-button">
+            <button onClick={()=>setwindow("sign in")} className="login-button">
                 Log In
             </button>
-            <button onClick={goToSignup} className="signup-button">
+            <button onClick={()=>setwindow("sign up")} className="signup-button">
                 Sign Up
             </button>
         </div>
