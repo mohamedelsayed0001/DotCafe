@@ -57,20 +57,20 @@ public class AdminController {
     @DeleteMapping("/product")
     public ResponseEntity<?> delete(@RequestBody ProductDto productDto) {
         try {
-            ProductDto deletedProduct = productService.delete(productDto);
-            return new ResponseEntity<>(deletedProduct, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error deleting product: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+
+            return new ResponseEntity<>(productService.delete(productDto), HttpStatus.OK);
+        }catch (IllegalArgumentException e){
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();}
+
     }
 
     @PutMapping("/product/edit")
     public ResponseEntity<?> edit(@RequestBody ProductDto productDto) {
         try {
-            ProductDto editedProduct = productService.edit(productDto);
-            return new ResponseEntity<>(editedProduct, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error editing product: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+
+            return new ResponseEntity<>(productService.edit(productDto), HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>( e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
