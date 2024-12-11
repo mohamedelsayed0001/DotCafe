@@ -1,7 +1,6 @@
 package com.example.Dotcafe.controllers;
 import com.example.Dotcafe.entity.Dto.CategoryDto;
 import com.example.Dotcafe.entity.Dto.ProductDto;
-import com.example.Dotcafe.repository.CategoryRepository;
 import com.example.Dotcafe.sevices.AdminService;
 import com.example.Dotcafe.sevices.ProductService;
 import org.springframework.http.HttpStatus;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AdminController {
 
     private final AdminService adminService;
@@ -23,20 +23,21 @@ public class AdminController {
     @PostMapping(value = "/category")
     public ResponseEntity<?> create(@RequestBody CategoryDto categoryDto){
         try {
-            CategoryDto createdcategory = adminService.createCategory(categoryDto);
-            return new ResponseEntity<>(createdcategory, HttpStatus.CREATED);
+            CategoryDto createdCategory = adminService.createCategory(categoryDto);
+            return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("this category already exists");
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PutMapping ("/category/edit")
-    public ResponseEntity<?> edit(@RequestBody CategoryDto categoryDto){
+    @PutMapping ("/category/edit/{id}")
+    public ResponseEntity<?> edit(@PathVariable Long id, @RequestBody CategoryDto categoryDto){
         try {
+            categoryDto.setId(id);
             CategoryDto editedCategory = adminService.editCategory(categoryDto);
             return new ResponseEntity<>(editedCategory, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("this name already exist");
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -45,29 +46,25 @@ public class AdminController {
         try{
             return new ResponseEntity<>(productService.create(productDto), HttpStatus.CREATED);
         }catch (IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("category not found");
-        }
-        catch (CloneNotSupportedException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("product name exist");
-
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
 
     }
 
-    @DeleteMapping("/product")
-    public ResponseEntity<?> delete(@RequestBody ProductDto productDto) {
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
-
-            return new ResponseEntity<>(productService.delete(productDto), HttpStatus.OK);
-        }catch (IllegalArgumentException e){
-          return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();}
+            return new ResponseEntity<>(productService.delete(id), HttpStatus.OK);
+        }catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
 
     }
 
-    @PutMapping("/product/edit")
-    public ResponseEntity<?> edit(@RequestBody ProductDto productDto) {
+    @PutMapping("/product/edit/{id}")
+    public ResponseEntity<?> edit(@PathVariable Long id, @RequestBody ProductDto productDto) {
         try {
-
+            productDto.setId(id);
             return new ResponseEntity<>(productService.edit(productDto), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>( e.getMessage(), HttpStatus.BAD_REQUEST);

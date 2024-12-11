@@ -3,7 +3,6 @@ package com.example.Dotcafe.entity.Dto;
 import com.example.Dotcafe.entity.Item;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,14 +16,14 @@ public class ItemDto {
 
     private Long id;
     private String name;
-    private Boolean availability;
+    private Double quantity;
     private Double price;
     @JsonIgnore
-    public Item getitem(){
+    public Item getItem(){
         return Item
                 .builder()
                 .id(id)
-                .availability(availability)
+                .quantity(quantity)
                 .price(price)
                 .name(name)
                 .build();

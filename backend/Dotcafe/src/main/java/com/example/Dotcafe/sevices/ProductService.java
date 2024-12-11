@@ -3,11 +3,12 @@ package com.example.Dotcafe.sevices;
 import com.example.Dotcafe.entity.Category;
 import com.example.Dotcafe.entity.Dto.CategoryDto;
 import com.example.Dotcafe.entity.Dto.ProductDto;
-import com.example.Dotcafe.entity.Item;
 import com.example.Dotcafe.entity.Product;
 import com.example.Dotcafe.repository.CategoryRepository;
 import com.example.Dotcafe.repository.ProductRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,58 +24,51 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-    public ProductDto create(ProductDto productDto) throws CloneNotSupportedException,IllegalArgumentException {
+    public ProductDto create(ProductDto productDto) throws IllegalArgumentException {
+        productDto.setId(null);
         Optional<Product> isAProduct = productRepository.getProductByName(productDto.getName());
-        if(isAProduct.isPresent()){
-            throw new CloneNotSupportedException();
+        if(isAProduct.isPresent() && isAProduct.get().getInStock()){
+            throw new IllegalArgumentException("Product name exist");
         }
         Optional<Category> isACategory = categoryRepository.findById(productDto.getCategoryId());
         if (isACategory.isPresent()){
             Product product = productDto.getProduct();
-            product.setId(null);
             product.setInStock(true);
             product.setCategory(isACategory.get());
-
+            if(isAProduct.isPresent()){
+                product.setId(isAProduct.get().getId());
+            }
             Product newProduct = productRepository.save(product);
-//
-//            Category category = isACategory.get();
-//            category.addProduct(newProduct);
-//            categoryRepository.save(category);
-
             productDto = newProduct.getDto();
             return productDto;
-
         }
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("Category not found");
 
     }
-    public ProductDto delete(ProductDto productDto) {
-        Optional<Product> currentProduct = productRepository.findById(productDto.getId());
-        if(currentProduct.isPresent()){
-          Optional<Category> isACategory = categoryRepository.findById(productDto.getCategoryId());
-        if (isACategory.isPresent()){
-           // Product product = productDto.getProduct();
-            currentProduct.get().setInStock(false);
-//            product.setCategory(isACategory.get());
-//            Product newProduct = productRepository.save(product);
-//            Category category = isACategory.get();
-//            category.addProduct(newProduct);
-//            categoryRepository.save(category);
-            productDto = currentProduct.get().getDto();
-            return productDto;
 
-    } else {
-            throw new IllegalArgumentException("this category doesn't exist");
+    public ProductDto delete(Long id) {
+        Optional<Product> currentProduct = productRepository.findById(id);
+        if (currentProduct.isPresent()) {
+            Optional<Category> isACategory = categoryRepository.findById(id);
+            if (isACategory.isPresent()) {
+                currentProduct.get().setInStock(false);
+                productRepository.save(currentProduct.get());
+                return currentProduct.get().getDto();
+
+            } else {
+                throw new IllegalArgumentException("This category doesn't exist");
+            }
+        } else {
+            throw new IllegalArgumentException("This product is not available");
         }
-    } else {
-        throw new IllegalArgumentException("this product is not available");
-    }}
+    }
+    @Transactional
     public ProductDto edit(ProductDto productDto) throws IllegalArgumentException {
         Optional<Product> currentProduct = productRepository.findById(productDto.getId());
 
         if (currentProduct.isPresent() ) {
-            Optional<Product> otheritem = productRepository.getProductByName(productDto.getName());
-            if (otheritem.isPresent() && !otheritem.get().getId().equals(productDto.getId())) {
+            Optional<Product> otherItem = productRepository.getProductByName(productDto.getName());
+            if (otherItem.isPresent() && !otherItem.get().getId().equals(productDto.getId())) {
                 throw new IllegalArgumentException("Another product with the same name already exists.");
             }
             Optional<Category> isACategory = categoryRepository.findById(productDto.getCategoryId());
@@ -83,29 +77,21 @@ public class ProductService {
                 product.setId(currentProduct.get().getId());
                 product.setCategory(isACategory.get());
                 Product newProduct = productRepository.save(product);
-//
-//                Category category = isACategory.get();
-//                category.addProduct(newProduct);
-//                categoryRepository.save(category);
-
                 productDto = newProduct.getDto();
                 return productDto;}
-      else {
-                throw new IllegalArgumentException("this category doesn't exist");
+            else {
+                throw new IllegalArgumentException("This category doesn't exist");
             }
         } else {
-            throw new IllegalArgumentException("this product is not available");
+            throw new IllegalArgumentException("This product is not available");
         }
     }
 
     public List<CategoryDto> menu(){
-        Iterable<Category> categories = categoryRepository.findAll();
-        List<CategoryDto> menu = new ArrayList<>();
-        for(Category category : categories){
-            CategoryDto categoryDto = category.getDto();
-            menu.add(categoryDto);
-        }
-        return menu;
+        return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
+                .stream()
+                .map(Category::getDto)
+                .toList();
 
     }
 }

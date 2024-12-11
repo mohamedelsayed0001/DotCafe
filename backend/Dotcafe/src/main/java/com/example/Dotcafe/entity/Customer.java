@@ -24,7 +24,7 @@ public class Customer {
     private String phoneNumber;
 
 
-    public CustomerDto getcustomerDto() {
+    public CustomerDto getDto() {
          return CustomerDto.builder().
                  name(name).
                  mail(mail).

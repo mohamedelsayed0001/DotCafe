@@ -2,7 +2,6 @@ package com.example.Dotcafe.entity.Dto;
 
 import com.example.Dotcafe.entity.Customer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Builder
@@ -21,7 +20,7 @@ public class CustomerDto {
     private String phoneNumber;
 
     @JsonIgnore
-    public Customer getcustomer() {
+    public Customer getCustomer() {
         return Customer.builder()
                 .name(name)
                 .mail(mail)

@@ -1,7 +1,6 @@
 package com.example.Dotcafe.entity.Dto;
 
 import com.example.Dotcafe.entity.Category;
-import com.example.Dotcafe.entity.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
