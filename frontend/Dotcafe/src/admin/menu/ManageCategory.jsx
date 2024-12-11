@@ -1,73 +1,12 @@
 import React, { useState } from "react";
 import "./window.css";
-import trashIcon from '../icons/trash.svg'
+// import trashIcon from '../icons/trash.svg'
 import editIcon from '../icons/edit.svg'
 
-export default function ManageCategory({ window, setWindow}) {
-
-    const sampleData = [
-        {
-            id: "1875",
-            name: "Espresso Beans",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-        },
-        {
-            id: "1876",
-            name: "Latte Beans",
-        },
-        {
-            id: "1877",
-            name: "Cappuccino Beans",
-        },
-        {
-            id: "1878",
-            name: "Decaf Beans",
-        },
-        {
-            id: "1879",
-            name: "Cold Brew Beans",
-        },
-        {
-            id: "1880",
-            name: "Arabica Beans",
-        },
-    ];
-    
-    const [data, setData] = useState(sampleData);
+export default function ManageCategory({ menuWindow, setMenuWindow, categories, setCategories, selectedCategory, setSelectedCategory}) {
 
     const handleCancel = () => {
-        setWindow("Home");
+        setMenuWindow("Home");
     }
 
   return (
@@ -89,17 +28,25 @@ export default function ManageCategory({ window, setWindow}) {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((category) => (
+                    {categories.map((category) => (
                         <tr key={category.id} style={{borderTop: "2px solid black"}}>
                             <td className="table-cell">{category.id}</td>
                             <td className="table-cell">{category.name}</td>
                             <td className="table-cell">
-                                <button className="actions-button"> 
+                                {/* <button className="actions-button"> 
                                     <img style={{width: "25px", height: "25px"}} src={trashIcon} alt="trash icon" title="Delete" /> 
-                                </button>
+                                </button> */}
                                 <button className="actions-button"
-                                    onClick={() => setWindow("Edit Category")}> 
-                                    <img style={{width: "25px", height: "25px"}} src={editIcon} alt="edit icon" title="Edit" /> 
+                                    onClick={() => {
+                                        setMenuWindow("Edit Category")
+                                        setSelectedCategory(category)
+                                        }}> 
+                                    <img    
+                                        style={{width: "25px", height: "25px"}} 
+                                        src={editIcon} a
+                                        lt="edit icon" 
+                                        title="Edit"
+                                        />
                                 </button>
                             </td>
                         </tr>
