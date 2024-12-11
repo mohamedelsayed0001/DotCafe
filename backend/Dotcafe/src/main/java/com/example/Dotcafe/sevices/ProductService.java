@@ -6,7 +6,9 @@ import com.example.Dotcafe.entity.Dto.ProductDto;
 import com.example.Dotcafe.entity.Product;
 import com.example.Dotcafe.repository.CategoryRepository;
 import com.example.Dotcafe.repository.ProductRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,65 +24,74 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-    public ProductDto create(ProductDto productDto) throws CloneNotSupportedException,IllegalArgumentException {
+    public ProductDto create(ProductDto productDto) throws IllegalArgumentException {
+        productDto.setId(null);
         Optional<Product> isAProduct = productRepository.getProductByName(productDto.getName());
-        if(isAProduct.isPresent()){
-            throw new CloneNotSupportedException();
+        if(isAProduct.isPresent() && isAProduct.get().getInStock()){
+            throw new IllegalArgumentException("Product name exist");
         }
         Optional<Category> isACategory = categoryRepository.findById(productDto.getCategoryId());
         if (isACategory.isPresent()){
             Product product = productDto.getProduct();
-            product.setId(null);
             product.setInStock(true);
             product.setCategory(isACategory.get());
-
+            if(isAProduct.isPresent()){
+                product.setId(isAProduct.get().getId());
+            }
             Product newProduct = productRepository.save(product);
-
-            Category category = isACategory.get();
-            category.addProduct(newProduct);
-            categoryRepository.save(category);
-
             productDto = newProduct.getDto();
             return productDto;
-
         }
-        throw new IllegalArgumentException();
-
-    }
-    public ProductDto delete(ProductDto productDto) {
-        Optional<Product> currentproduct = productRepository.findById(productDto.getId());
-        if (currentproduct.isPresent()) {
-            productDto.setInStock(false);
-            Product newproduct = productRepository.save(productDto.getProduct());
-            return newproduct.getDto();
-
-        } else
-            throw new IllegalArgumentException();
+        throw new IllegalArgumentException("Category not found");
 
     }
 
+    public ProductDto delete(Long id) {
+        Optional<Product> currentProduct = productRepository.findById(id);
+        if (currentProduct.isPresent()) {
+            Optional<Category> isACategory = categoryRepository.findById(id);
+            if (isACategory.isPresent()) {
+                currentProduct.get().setInStock(false);
+                productRepository.save(currentProduct.get());
+                return currentProduct.get().getDto();
+
+            } else {
+                throw new IllegalArgumentException("This category doesn't exist");
+            }
+        } else {
+            throw new IllegalArgumentException("This product is not available");
+        }
+    }
+    @Transactional
     public ProductDto edit(ProductDto productDto) throws IllegalArgumentException {
-        Optional<Product> currentproduct = productRepository.findById(productDto.getId());
-        if (currentproduct.isPresent()) {
-            Product newproduct = currentproduct.get();
+        Optional<Product> currentProduct = productRepository.findById(productDto.getId());
 
-            Product finalproduct = productRepository.save(productDto.getProduct());
-
-
-            return finalproduct.getDto();
+        if (currentProduct.isPresent() ) {
+            Optional<Product> otherItem = productRepository.getProductByName(productDto.getName());
+            if (otherItem.isPresent() && !otherItem.get().getId().equals(productDto.getId())) {
+                throw new IllegalArgumentException("Another product with the same name already exists.");
+            }
+            Optional<Category> isACategory = categoryRepository.findById(productDto.getCategoryId());
+            if (isACategory.isPresent()) {
+                Product product = productDto.getProduct();
+                product.setId(currentProduct.get().getId());
+                product.setCategory(isACategory.get());
+                Product newProduct = productRepository.save(product);
+                productDto = newProduct.getDto();
+                return productDto;}
+            else {
+                throw new IllegalArgumentException("This category doesn't exist");
+            }
+        } else {
+            throw new IllegalArgumentException("This product is not available");
         }
-        else
-            throw new IllegalArgumentException();
     }
 
     public List<CategoryDto> menu(){
-        Iterable<Category> categories = categoryRepository.findAll();
-        List<CategoryDto> menu = new ArrayList<>();
-        for(Category category : categories){
-            CategoryDto categoryDto = category.getDto();
-            menu.add(categoryDto);
-        }
-        return menu;
+        return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
+                .stream()
+                .map(Category::getDto)
+                .toList();
 
     }
 }

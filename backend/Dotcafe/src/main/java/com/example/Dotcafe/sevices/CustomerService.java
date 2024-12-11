@@ -5,12 +5,11 @@ import com.example.Dotcafe.entity.Dto.CustomerDto;
 import com.example.Dotcafe.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 @Service
 public class CustomerService {
 
-    static CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
 
     public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
@@ -18,28 +17,30 @@ public class CustomerService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void login(CustomerDto customerDto) throws Exception{
+    public CustomerDto login(CustomerDto customerDto) throws IllegalArgumentException{
         Optional<Customer> customer = customerRepository.getCustomerByMail(customerDto.getMail());
         if(customer.isEmpty()){
-            throw new NoSuchElementException();
+            throw new IllegalArgumentException("Account not found signup to continue");
         }
         else if(!passwordEncoder.checkPassword(customerDto.getPassword(),customer.get().getPassword())){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Wrong password");
+        }
+        else{
+            return customer.get().getDto();
         }
     }
-    public CustomerDto signup(CustomerDto customerDto) throws Exception {
+    public CustomerDto signup(CustomerDto customerDto) throws IllegalArgumentException {
         Optional<Customer> customer = customerRepository.getCustomerByMail(customerDto.getMail());
         if (customer.isPresent()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("You already have an account");
         }
-
         String encodedPassword = passwordEncoder.encodePassword(customerDto.getPassword());
         customerDto.setPassword(encodedPassword);
         customerDto.setId(null);
         customerDto.setRole("customer");
         customerDto.setPoints(0L);
-        Customer newcustomer= customerRepository.save(customerDto.getcustomer());
-        return newcustomer.getcustomerDto();
+        Customer newcustomer= customerRepository.save(customerDto.getCustomer());
+        return newcustomer.getDto();
 
     }
 

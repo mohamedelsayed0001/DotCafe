@@ -26,6 +26,7 @@ public class Product {
     private Category category;
     private Boolean inStock;
     @Lob
+    @Basic(fetch = FetchType.EAGER) // to fetch large obj directly
     private byte[] image;
     @JsonIgnore
     public ProductDto getDto(){

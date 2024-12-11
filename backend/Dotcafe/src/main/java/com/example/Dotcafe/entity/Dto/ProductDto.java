@@ -1,8 +1,7 @@
 package com.example.Dotcafe.entity.Dto;
 
-import com.example.Dotcafe.entity.Category;
+
 import com.example.Dotcafe.entity.Product;
-import com.example.Dotcafe.repository.CategoryRepository;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

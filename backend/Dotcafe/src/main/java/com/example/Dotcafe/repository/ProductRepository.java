@@ -1,6 +1,5 @@
 package com.example.Dotcafe.repository;
 
-import com.example.Dotcafe.entity.Category;
 import com.example.Dotcafe.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

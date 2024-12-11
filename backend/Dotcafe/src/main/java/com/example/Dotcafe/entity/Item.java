@@ -20,13 +20,13 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Boolean availability;
+    private Double quantity;
     private Double price;
     @JsonIgnore
-    public ItemDto getitemDto(){
+    public ItemDto getDto(){
         return ItemDto.builder()
                 .id(id)
-                .availability(availability)
+                .quantity(quantity)
                 .price(price)
                 .name(name)
                 .build();
