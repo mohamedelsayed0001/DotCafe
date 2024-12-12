@@ -46,18 +46,11 @@ public class ProductService {
 
     }
 
-    public ProductDto delete(Long id) {
+    public void delete(Long id) {
         Optional<Product> currentProduct = productRepository.findById(id);
         if (currentProduct.isPresent()) {
-            Optional<Category> isACategory = categoryRepository.findById(id);
-            if (isACategory.isPresent()) {
-                currentProduct.get().setInStock(false);
-                productRepository.save(currentProduct.get());
-                return currentProduct.get().getDto();
-
-            } else {
-                throw new IllegalArgumentException("This category doesn't exist");
-            }
+            currentProduct.get().setInStock(false);
+            productRepository.save(currentProduct.get());
         } else {
             throw new IllegalArgumentException("This product is not available");
         }

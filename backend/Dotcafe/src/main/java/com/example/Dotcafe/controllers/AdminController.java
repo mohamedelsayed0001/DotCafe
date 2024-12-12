@@ -54,7 +54,7 @@ public class AdminController {
     @DeleteMapping("/product/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
-            return new ResponseEntity<>(productService.delete(id), HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
