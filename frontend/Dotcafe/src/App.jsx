@@ -17,7 +17,7 @@ function App() {
     }
   );
   const [signed, setSigned] = useState(false);
-  const [window, setWindow] = useState("sign up"); 
+  const [window, setWindow] = useState("admin"); 
 
   return (
     <>

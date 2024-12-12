@@ -11,66 +11,59 @@ export default function AddingCategory({ menuWindow, setMenuWindow, categories, 
         }
     }, [selectedCategory, menuWindow])
 
-    const handleSave = async () => {
-        if(menuWindow === 'New Category') {
-            // try {
-            //     const response = await fetch("localhost:8080/admin/category", {
-            //         method: "POST",
-            //         headers: {
-            //             "Content-Type": "application/json",
-            //         },
-            //         body: JSON.stringify(
-            //             {
-            //                 "id" : 0,
-            //                 "name": newCategoryName,
-            //                 "products": null
-            //             }
-            //         ),
-            //     });
-    
-            //     if (response.ok) {
-            //         setMessage("Category created successfully!");
-            //         setNewCategoryName('');
-            //     } else {
-            //         const errorData = await response.json();
-            //         setMessage(`Error: ${errorData.message || "Failed to create category"}`);
-            //     }
-            // } catch (error) {
-            //     setMessage(`Error: ${error.message}`);
-            // }
-            const newCategory = {
-                id: categories.length,
-                name: newCategoryName,
-                products: [],
+    const addCategory = async (category) => {
+        try {
+            const response = await fetch('http://localhost:8080/admin/category', {
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json'}, 
+                    body: JSON.stringify(category)
+                }
+            ); 
+
+            if (!response.ok) { 
+                const errorText = await response.text(); 
+                console.error('Server error:', errorText); 
+                return; 
+            }
+            const data = await response.json(); 
+            console.log('adding category message:', data);
+
+            const returnedCategory = { 
+                id: data.id,
+                name: data.name,
+                products: data.products,
             };
-            setCategories([...categories, newCategory]);
-            setNewCategoryName('y')
-        } else if (menuWindow === 'Edit Category') {
-            // try {
-            //     const response = await fetch("localhost:8080/admin/edit/{id}", {
-            //         method: "POST",
-            //         headers: {
-            //             "Content-Type": "application/json",
-            //         },
-            //         body: JSON.stringify(
-            //             {
-            //                 "id" : 0,
-            //                 "name": newCategoryName,
-            //                 "products": null
-            //             }
-            //         ),
-            //     });
-    
-            //     if (response.ok) {
-            //         setMessage("Category created successfully!");
-            //         setNewCategoryName('');
-            //     } else {
-            //         const errorData = await response.json();
-            //         setMessage(`Error: ${errorData.message || "Failed to create category"}`);
-            //     }
-            // } catch (error) {
-            //     setMessage(`Error: ${error.message}`);
-            // }
+
+            setCategories([...categories, returnedCategory]);
+
+        } catch (error) {
+            console.error('Error adding product:', error); 
+        } 
+    };
+
+    const editCategory = async (category) => {
+        try {
+            const response = await fetch(`http://localhost:8080/admin/category/edit/${category.id}`, {
+                    method: 'PUT', 
+                    headers: { 'Content-Type': 'application/json'}, 
+                    body: JSON.stringify(category)
+                }
+            ); 
+
+            if (!response.ok) { 
+                const errorText = await response.text(); 
+                console.error('Server error:', errorText); 
+                return; 
+            }
+            const data = await response.json(); 
+            console.log('adding category message:', data);
+
+            const returnedCategory = { 
+                id: data.id,
+                name: data.name,
+                products: data.products,
+            };
+
             setCategories((prevCategories) =>
                 prevCategories.map((category) =>
                     category.id === selectedCategory.id
@@ -78,10 +71,26 @@ export default function AddingCategory({ menuWindow, setMenuWindow, categories, 
                         : category
                 )
             );
-            setNewCategoryName('x')
+
+        } catch (error) {
+            console.error('Error adding product:', error); 
+        } 
+    };
+
+    const handleSave = async () => {
+        const newCategory = {
+            id: selectedCategory?.id || 0,
+            name: newCategoryName,
+            products: [],
+        };
+
+        if(menuWindow === 'New Category') {
+            addCategory(newCategory);
+        } else if (menuWindow === 'Edit Category') {
+            editCategory(newCategory)
         }
         
-        setMenuWindow("Home");
+        setMenuWindow("Manage Category");
     }
 
     const handleCancel = () => {

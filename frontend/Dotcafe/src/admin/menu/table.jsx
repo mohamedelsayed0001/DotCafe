@@ -4,26 +4,26 @@ import trashIcon from '../icons/trash.svg'
 import editIcon from '../icons/edit.svg'
 import './table.css'
 
-export default function Table({window, setWindow, setCurrentID, categories, setCategories}) {
+export default function Table({window, setWindow, selectedProduct, setSelectedProduct, categories, setCategories}) {
 
-    const [sortConfig, setSortConfig] = useState(null);
+    const deleteProduct = async (productId) => {
+        try {
+            const response = await fetch(`http://localhost:8080/admin/product/${productId}`, {
+                method: 'DELETE'
+            });   
+            const data = await response.text(); 
+            console.log('delete message:', data);
+        } catch (error) {
+            console.error('Error deleting product:', error); 
+        } 
+    };
 
-    // function handelDelete(id) {
-    //     const newData = data.filter(item => item.id !== id);
-    //     setData(newData);
-    //  //   fetchDelete();///send request to delete from data base with id 
-    // }
-    const handelDelete = (productId) => {
-        setCategories(prevCategories => 
-            prevCategories.map(category => 
-                category.products 
-                    ? { 
-                        ...category, 
-                        products: category.products.filter(product => product.id !== productId)
-                    }
-                    : category
-            )
-        );
+    const handleDelete = async (productId, categoryId) => { 
+        await deleteProduct(productId); 
+        setCategories(categories.map(category => 
+            category.id === categoryId
+                ? { ...category, products: category.products.filter(product => product.id !== productId) } :
+                category ));
     };
     
     return (
@@ -41,18 +41,21 @@ export default function Table({window, setWindow, setCurrentID, categories, setC
                 </thead>
                 <tbody>
                     {categories.map((category) => (
-                        category.products && category.products.length > 0 ? (
+                        category.products.length > 0 ? (
                         category.products.map((product) => (
                             <tr key={product.id}>
                             <td className="table-cell">{product.id}</td>
                             <td className="table-cell">{product.name}</td>
-                            <td className="table-cell">{categories[product.category].name}</td>
+                            <td className="table-cell">{category.name}</td> 
                             <td className="table-cell">{product.inStock ? 'In Stock' : 'Out of Stock'}</td>
                             <td className="table-cell">${product.price}</td>
                             <td className="table-cell">
                                 <button
                                 className="actions-button"
-                                onClick={() => handelDelete(product.id)}
+                                onClick={() => {
+                                    setSelectedProduct(product); 
+                                    handleDelete(product.id, product.categoryId);
+                                }}
                                 >
                                 <img
                                     style={{ width: "25px", height: "25px" }}
@@ -65,7 +68,7 @@ export default function Table({window, setWindow, setCurrentID, categories, setC
                                 className="actions-button"
                                 onClick={() => {
                                     setWindow("Edit Product");
-                                    setCurrentID(product.id);
+                                    setSelectedProduct(product);
                                 }}
                                 >
                                 <img
@@ -78,7 +81,7 @@ export default function Table({window, setWindow, setCurrentID, categories, setC
                             </td>
                             </tr>
                         ))
-                        ) : null // Do nothing for categories without products
+                        ) : null
                     ))}
                 </tbody>
             </table>

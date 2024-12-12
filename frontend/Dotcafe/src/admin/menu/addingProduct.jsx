@@ -3,87 +3,157 @@ import "./window.css";
 import trashIcon from '../icons/trash.svg';
 import editIcon from '../icons/edit.svg';
 
-export default function AddingProduct({ menuWindow, setMenuWindow, categories, setCategories, currentID, setCurrentID }) {
+export default function AddingProduct({ menuWindow, setMenuWindow, categories, setCategories, selectedProduct, setSelectedProduct }) {
     const [name, setName] = useState("");
-    const [categoryId, setCategoryId] = useState("");
-    const [price, setPrice] = useState("");
+    const [categoryId, setCategoryId] = useState();
+    const [price, setPrice] = useState();
+    const [description, setDescription] = useState("");
+    const [imageSrc, setImageSrc] = useState("");
 
-    useEffect(() => {
+    useEffect(() => { 
+        if (menuWindow === "Edit Product" && selectedProduct) { 
+            setName(selectedProduct.name || ""); 
+            setCategoryId(selectedProduct.categoryId || ""); 
+            setPrice(selectedProduct.price || ""); 
+            setDescription(selectedProduct.description || ""); 
+            setImageSrc(selectedProduct.src || ""); 
+        } 
+    }, [menuWindow, selectedProduct]);
 
-        if (currentID && menuWindow === "Edit Product") {
-            get_product();
-        }
-    }, [currentID]);
-
-    function get_product() {
-        data.forEach((item) => {
-            if (item.id === currentID) {
-                setCategoryId(item.category);
-                setName(item.name);
-                setPrice(item.price);
+    const addProduct = async (product) => {        
+        try {
+            const response = await fetch('http://localhost:8080/admin/product', {
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json'}, 
+                body: JSON.stringify(product)
             }
-        });
-    }
+        ); 
 
-    const handleSave = async () => {
-        if (menuWindow === "Edit Product") {
-            const updatedProduct = {
-                id: currentID,
-                name: name,
-                category: categoryId,
-                availability: "In Stock",
-                price: price,
-            };
+        if (!response.ok) { 
+            const errorText = await response.text(); 
+            console.error('Server error:', errorText); 
+            return; 
+        }
+        const data = await response.json(); 
+        console.log('adding message:', data);
 
+        const returnedProduct = { 
+            id: data.id,
+            name: data.name,
+            description: data.description || '',
+            categoryId: data.categoryId || 0,
+            inStock: data.inStock,
+            price: data.price,
+            src: data.src
+        };
+
+        setCategories(prevCategories =>
+            prevCategories.map(category => 
+                category.id === returnedProduct.categoryId ? 
+                { ...category, products: [...category.products, returnedProduct] } 
+                : category 
+            ) 
+        );
+
+        } catch (error) {
+          console.error('Error adding product:', error); 
+        } 
+    };
+
+    const editProduct = async (product) => {
+        try {
+            const response = await fetch(`http://localhost:8080/admin/product/edit/${product.id}`, {
+                method: 'PUT', 
+                headers: { 'Content-Type': 'application/json'}, 
+                body: JSON.stringify(product)
+            }
+        ); 
+
+        if (!response.ok) { 
+            const errorText = await response.text(); 
+            console.error('Server error:', errorText); 
+            return; 
+        }
+        const data = await response.json(); 
+        console.log('editing message:', data);
+
+        const returnedProduct = { 
+            id: data.id,
+            name: data.name,
+            description: data.description || '',
+            categoryId: data.categoryId || 0,
+            inStock: data.inStock,
+            price: data.price,
+            src: data.src
+        };
+
+        // console.log(selectedProduct.categoryId);
+        // console.log(returnedProduct.categoryId);
+
+        if(selectedProduct.categoryId === returnedProduct.categoryId) {
             setCategories(prevCategories => 
-                prevCategories.map(category => 
-                    category.products 
-                        ? { 
-                            ...category, 
-                            products: category.products.map(product => 
-                                product.id === currentID 
-                                    ? { ...product, ...updatedProduct }
-                                    : product
+                prevCategories.map(category => category.products ?
+                    { ...category, products: category.products.map(product => 
+                                product.id === returnedProduct.id ? 
+                                    { ...product, ...returnedProduct }
+                                : product
                             )
                         }
-                        : category
+                    : category
                 )
             );
-            // const updatedData = data.map((item) =>
-            //     item.id === currentID ? updatedProduct : item
-            // );
-    
-            // setData(updatedData);
-            setMenuWindow("Home");
-        } else if (menuWindow === "New Product") {
-            const newProduct = {
-                id: 9340, 
-                name: name,
-                category: categoryId,
-                inStock: true,
-                price: price,
-            };
-            categories[categoryId].products.push(newProduct);
-            setCategories(categories);
-
-            console.log(categories);
+        } else {
+            // console.log("hereeeeeeeeeeee");
             
-        
-            //  data.push(newProduct);
-            //  setData(data);
-             setMenuWindow("Home");
-            /*try {
-                const response = await axios.post("localhost:8080/add_product", newProduct);
-                const createdProduct = { ...newProduct, id: response.data.id };
-    
-                setData([...data, createdProduct]); 
-                setWindow("Home");
-            } catch (error) {
-                console.error("Error creating product:", error.response);
-            }
-        }*/}
+            setCategories(prevCategories => {
+                const categoriesWithoutProduct = prevCategories.map(category => {
+                    if (category.id === product.categoryId) {
+                        return {
+                            ...category,
+                            products: category.products.filter(p => p.id !== product.id)
+                        };
+                    }
+                    return category;
+                });
+                
+                return categoriesWithoutProduct.map(category => {
+                    if (category.id === returnedProduct.categoryId) {
+                        return {
+                            ...category,
+                            products: [...category.products, returnedProduct]
+                        };
+                    }
+                    return category;
+                });
+            });              
+        }
+
+        } catch (error) {
+          console.error('Error adding product:', error); 
+        } 
     };
-    
+
+    const handleSave = async () => {
+        const newProduct = { 
+            id: selectedProduct?.id || 0,
+            name, 
+            description, 
+            categoryId, 
+            inStock: true, 
+            price, 
+            src: imageSrc 
+        };
+
+        if (menuWindow === "Edit Product") {
+            editProduct(newProduct)
+        } else if (menuWindow === "New Product") {
+            addProduct(newProduct);
+        }
+
+        console.log(categories);
+
+        setMenuWindow("Home");
+    };    
 
     const handleCancel = () => {
         setMenuWindow("Home");
@@ -128,7 +198,11 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
 
                     <div className="row">
                         <label>Description</label>
-                        <textarea placeholder="Type Description"></textarea>
+                        <textarea 
+                            placeholder="Type Description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        ></textarea>
                     </div>
 
                     <div className="image-upload">
