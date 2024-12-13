@@ -1,5 +1,5 @@
-import './home.css'
-import profile from '../assets/profile.svg';
+import './menu.css'
+import Orders from '../assets/tracking.svg';
 function LogedinButton(){
   
     
@@ -9,13 +9,11 @@ function LogedinButton(){
 
     return (
         <div>
-            <button onClick={()=>setwindow("menu")} className="menu-button">
-                Menu
-            </button>
+            
             <button onClick={goToTrack} className="track-button">
                 Track
             </button>
-            <img src={profile} alt="profile"  className='profile'/>
+            <img src={Orders} alt="Order" className='Orders'/>
         </div>
     );
     

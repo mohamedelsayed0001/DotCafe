@@ -231,9 +231,6 @@ const handleInputChange = (e) => {
         </div>
         {window=="sign up"&& <button className="login" onClick={()=>{setWindow("sign in")}}>Login</button>}
       </div>
-     
-    
-
     </>
   );
 }

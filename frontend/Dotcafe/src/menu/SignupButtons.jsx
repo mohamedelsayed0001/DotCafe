@@ -1,14 +1,8 @@
-import './home.css';
-
-function SignupButton({setwindow}) {
+import './menu.css'
+function SignupButtons({setwindow}) {
     
-    
-
     return (
         <div>
-            <button onClick={()=>setwindow("menu")} className="menu-button">
-                Menu
-            </button>
             <button onClick={()=>setwindow("sign in")} className="login-button">
                 Log In
             </button>
@@ -18,5 +12,4 @@ function SignupButton({setwindow}) {
         </div>
     );
 }
-
-export default SignupButton;
+export default SignupButtons;

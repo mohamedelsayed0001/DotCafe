@@ -1,0 +1,235 @@
+body.menu-body  {
+    background-image: url('../assets/menuBackground.png');
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: repeat; 
+    margin: 0; 
+    height: 100vh; 
+    overflow: hidden; 
+    overflow-y: auto;
+   
+}
+.Menu-logo{
+    position: absolute;
+    left: 3.23%;
+    top: 3.31%;
+    width: 15.294%;
+    height: auto; 
+}
+.login-button {
+    background-color:rgba(251, 165, 165, 0.2); /* 20% opacity for #FBA5A5 */
+    
+    color: #8A521A;  
+    position: absolute;
+    left: 82.35%;
+    top: 2.53%;
+    padding: 3px 25px;  
+    font-family: 'Imprima', sans-serif;  
+    font-size: 16px;  
+    
+    align-items: center;
+    border-radius: 20px;  
+    cursor: pointer;  
+    box-shadow: inset 0px 2.9px 5px rgba(0, 0, 0, 0.2); 
+}
+
+/* Hover effect for the menu button */
+.login-button:hover {
+    background-color: #e3c5a4;  
+    transform: scale(1.05); 
+}
+
+
+.login-button:focus {
+    outline: none;  
+    box-shadow: 0 0 5px 2px rgba(124, 94, 70, 0.5);  
+}
+
+.signup-button {
+    background-color:rgba(251, 165, 165, 0.2); /* 20% opacity for #FBA5A5 */
+    
+    color: #8A521A;  
+    position: absolute;
+    left: 91.176%;
+    top: 2.53%;
+    padding: 3px 25px;  
+    font-family: 'Imprima', sans-serif;  
+    font-size: 16px;  
+    
+    align-items: center;
+    border-radius: 20px;  
+    cursor: pointer;  
+    box-shadow: inset 0px 2.9px 5px rgba(0, 0, 0, 0.2); 
+}
+
+/* Hover effect for the menu button */
+.signup-button:hover {
+    background-color: #e3c5a4;  
+    transform: scale(1.05); 
+}
+
+
+.signup-button:focus {
+    outline: none;  
+    box-shadow: 0 0 5px 2px rgba(124, 94, 70, 0.5);  
+}
+
+.Orders{
+    position: absolute;
+    left: 85.117%;
+    top: 0.8%;
+    width: 60px;
+    height: auto; 
+    
+}
+.track-button {
+    background-color:rgba(251, 165, 165, 0.2); /* 20% opacity for #FBA5A5 */
+    
+    color: #8A521A;  
+    position: absolute;
+    left: 90.76%;
+    top: 2.53%;
+    padding: 3px 25px;  
+    font-family: 'Imprima', sans-serif;  
+    font-size: 16px;  
+    
+    align-items: center;
+    border-radius: 20px;  
+    cursor: pointer;  
+    box-shadow: inset 0px 2.9px 5px rgba(0, 0, 0, 0.2); 
+}
+
+/* Hover effect for the menu button */
+.track-button:hover {
+    background-color: #e3c5a4;  
+    transform: scale(1.05); 
+}
+
+
+.track-button:focus {
+    outline: none;  
+    box-shadow: 0 0 5px 2px rgba(124, 94, 70, 0.5);  
+}
+
+.main-menu{
+    position: absolute;
+    top:12%;
+    left:10%;
+    height: auto;
+    width: 80%;
+    background-color:rgba(255, 255, 255, 0.6) ;
+    border-radius: 20px;
+    overflow-y: auto;
+}
+
+
+.searchBar{
+    position: relative;
+    margin-top: 1%;
+    margin-left: 2%;
+    height: 40px;
+    width: 16%;
+    background: linear-gradient(to right, rgba(217, 217, 217, 0.2) 0%, rgba(208, 146, 46, 0.2) 100%);
+    border-radius: 20px;
+    border: 1px solid #F18A86;
+}
+.search{
+    width: 40px;
+    height: 35px;
+}
+
+.catlist-container {
+    display: flex;
+    overflow-x: auto; /* Allows horizontal scrolling */
+    padding: 10px;
+    gap: 50px; /* Adds space between buttons */
+    scrollbar-width: none;
+}
+.catlist-container::-webkit-scrollbar {
+    display: none; 
+}
+  
+.catlist {
+    background-color:rgba(255, 255, 255, 0.1) ;
+    color: #54473F;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 18px;
+    font-family: 'Imprima', sans-serif;  
+    text-decoration: none;
+    position: relative;
+}
+  
+.catlist:focus::after {
+    content: ''; 
+    position: absolute;
+    left: 30%;
+    bottom: 2px; 
+    width: 40%; 
+    height: 2px; 
+    background-color: #54473F; 
+    transition: width 0.2s ease-in-out; 
+}
+
+.catlist:focus {
+    outline: none; 
+}
+.category-name {
+    font-size: 30px;
+    text-align: center; 
+    font-family: 'Imprima', sans-serif;  
+    margin-bottom: 1px;
+}
+/* Container for all ItemCards */
+.categories-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 items per row */
+    gap: 20px; /* Space between items */
+    padding: 20px; 
+    margin-bottom: 25px;
+    height: auto;
+}
+
+/* Individual ItemCard styling */
+.item-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    
+    
+    align-items: center; 
+    background-color:rgba(255, 255, 255, 0) ; 
+    border-radius: 10px; 
+    overflow: hidden; 
+    padding: 13%;
+    width: 60%;
+    height: 60%;
+    margin-left: 3%;
+    
+}
+
+
+.item-card img {
+    width: 150px; 
+    height: 150px; 
+    margin-left: 18%;
+    
+    transition: transform 0.3s ease-in-out; /* Smooth zoom effect */
+}
+
+
+.item-card:hover img {
+    transform: scale(1.3); /* Scales the image on hover */
+}
+
+
+.item-card h1 {
+    
+    font-size: 16px; /* Font size */
+    color: #54473F; /* Text color */
+    text-align: center; /* Horizontally center text */
+    font-family: 'Imprima', sans-serif;
+    margin-top: 70%; 
+}

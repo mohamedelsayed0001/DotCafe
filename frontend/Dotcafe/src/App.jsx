@@ -3,6 +3,7 @@ import { useState } from 'react';
 import './App.css';
 import Registration from './registration/registration';
 import Admin from './admin/admin';
+import Menu from './menu/menu';
 
 function App() {
   const [customerDTO, setCustomerDTO] = useState(
@@ -38,6 +39,9 @@ function App() {
           signed={signed} 
           setWindow={setWindow}
           />}
+      {window === "menu" && <Menu  
+          signed = {signed}
+          setWindow =  {setWindow}/>}
     </>
   );
 }
