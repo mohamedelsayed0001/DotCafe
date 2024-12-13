@@ -18,7 +18,7 @@ function Registration({ window, setWindow, customerDTO, setCustomerDTO, signed, 
     } else if (!emailRegex.test(formData.email)) {
       msg = "Invalid email format!";
     }
-    else if ((formData.password != formData.confirmPass) && signUp) {
+    else if (signUp&&(formData.password != formData.confirmPass)) {
       msg = "Passwords don't match!!"
 
     }

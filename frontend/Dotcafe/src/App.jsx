@@ -17,9 +17,30 @@ function App() {
       phoneNumber: null,
     }
   );
-  const [signed, setSigned] = useState(false);
-  const [window, setWindow] = useState("home"); 
+  useEffect(() => {
+    const savedSigned = sessionStorage.getItem("signed");
+    const savedCustomerDTO = sessionStorage.getItem("customerDTO");
+    const SavedWindow=sessionStorage.getItem("window")
+    if (savedSigned) {
+      setSigned(JSON.parse(savedSigned));
+    }
+    if (savedCustomerDTO) {
+      setCustomerDTO(JSON.parse(savedCustomerDTO));
+    }
+    if(SavedWindow){
+      setWindow(JSON.parse(SavedWindow));
+    }
+  }, []);
 
+
+  const [signed, setSigned] = useState(false);
+  const [window, setWindow] = useState("admin"); 
+  useEffect(() => {
+    sessionStorage.setItem("signed", JSON.stringify(signed));
+    sessionStorage.setItem("customerDTO", JSON.stringify(customerDTO));
+    sessionStorage.setItem("window", JSON.stringify(window));
+
+  }, [signed, customerDTO],window);
   return (
     <>
      
