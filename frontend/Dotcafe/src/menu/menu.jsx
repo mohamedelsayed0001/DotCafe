@@ -24,7 +24,9 @@ function Menu({ signed,setWindow }) {
     useEffect(() => {
         pullmenu();
         document.body.classList.add('menu-body');
+        document.body.classList.add('menu-body');
         return () => {
+            document.body.classList.remove('menu-body');
             document.body.classList.remove('menu-body');
         };
     }, []); 

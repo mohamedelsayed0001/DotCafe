@@ -17,8 +17,8 @@ function App() {
       phoneNumber: null,
     }
   );
-  const [signed, setSigned] = useState(false);
-  const [window, setWindow] = useState("admin"); 
+  const [signed, setSigned] = useState(true);
+  const [window, setWindow] = useState("home"); 
 
   return (
     <>

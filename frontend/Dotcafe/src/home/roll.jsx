@@ -8,9 +8,7 @@ import Drink4 from '../assets/drink4.svg';
 const drinks = {Drink1,Drink2,Drink3,Drink4}
 
 function Roll (){
-  
 
-    
   
     return (
       <>

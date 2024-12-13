@@ -1,10 +1,10 @@
 import './home.css'
 import profile from '../assets/profile.svg';
-function LogedinButton(){
+function LogedinButton({setwindow}){
   
     
     const goToTrack = () => {
-        window.location.href = "/track"; 
+       
     };
 
     return (

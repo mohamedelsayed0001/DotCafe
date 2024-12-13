@@ -1,6 +1,6 @@
 body.menu-body  {
     background-image: url('../assets/menuBackground.png');
-    background-size: cover; 
+    background-size: auto; 
     background-position: center; 
     background-repeat: repeat; 
     margin: 0; 
@@ -82,7 +82,7 @@ body.menu-body  {
     height: auto; 
     
 }
-.track-button {
+.menu-track-button {
     background-color:rgba(251, 165, 165, 0.2); /* 20% opacity for #FBA5A5 */
     
     color: #8A521A;  
@@ -100,13 +100,13 @@ body.menu-body  {
 }
 
 /* Hover effect for the menu button */
-.track-button:hover {
+.menu-track-button:hover {
     background-color: #e3c5a4;  
     transform: scale(1.05); 
 }
 
 
-.track-button:focus {
+.menu-track-button:focus {
     outline: none;  
     box-shadow: 0 0 5px 2px rgba(124, 94, 70, 0.5);  
 }

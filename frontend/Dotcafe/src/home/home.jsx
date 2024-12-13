@@ -18,7 +18,7 @@ function Home({ signed,setWindow }) {
         <>
             {signed ? (
                
-                <Logedinbutton ></Logedinbutton>
+                <Logedinbutton  setwindow ={setWindow}></Logedinbutton>
             ) : (
                 <SignupButton setwindow={setWindow}></SignupButton>
             )}
