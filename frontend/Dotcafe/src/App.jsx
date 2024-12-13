@@ -17,9 +17,32 @@ function App() {
       phoneNumber: null,
     }
   );
+  useEffect(() => {
+    const savedSigned = sessionStorage.getItem("signed");
+    const savedCustomerDTO = sessionStorage.getItem("customerDTO");
+    const SavedWindow=sessionStorage.getItem("window")
+    if (savedSigned) {
+      setSigned(JSON.parse(savedSigned));
+    }
+    if (savedCustomerDTO) {
+      setCustomerDTO(JSON.parse(savedCustomerDTO));
+    }
+    if(SavedWindow){
+      setWindow(JSON.parse(SavedWindow));
+    }
+  }, []);
+
+
+  const [signed, setSigned] = useState(false);
+  const [window, setWindow] = useState("admin"); 
+  useEffect(() => {
+    sessionStorage.setItem("signed", JSON.stringify(signed));
+    sessionStorage.setItem("customerDTO", JSON.stringify(customerDTO));
+    sessionStorage.setItem("window", JSON.stringify(window));
   const [signed, setSigned] = useState(true);
   const [window, setWindow] = useState("home"); 
 
+  }, [signed, customerDTO],window);
   return (
     <>
      
@@ -34,7 +57,7 @@ function App() {
         />
       )}
 
-      {window === "admin" && <Admin/>}
+      {window === "admin" && <Admin setMainWindow={setWindow} setUserState={setSigned}/>}
       {window==="home"&& < Home
           signed={signed} 
           setWindow={setWindow}
