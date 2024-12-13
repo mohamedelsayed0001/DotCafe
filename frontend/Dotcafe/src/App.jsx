@@ -18,7 +18,7 @@ function App() {
     }
   );
   const [signed, setSigned] = useState(false);
-  const [window, setWindow] = useState("admin"); 
+  const [window, setWindow] = useState("home"); 
 
   return (
     <>
@@ -34,7 +34,7 @@ function App() {
         />
       )}
 
-      {window === "admin" && <Admin/>}
+      {window === "admin" && <Admin setMainWindow={setWindow} setUserState={setSigned}/>}
       {window==="home"&& < Home
           signed={signed} 
           setWindow={setWindow}

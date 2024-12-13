@@ -1,7 +1,7 @@
 import React from "react";
 import "./navbar.css";
 
-export default function Navbar({ activeButton, setPage }) {
+export default function Navbar({ activeButton, setPage, setMainWindow, setUserState }){
     return (
         <div className="navbar-container">
             <button className={`button ${activeButton === "Inventory" ? "active" : ""}`}
@@ -14,7 +14,10 @@ export default function Navbar({ activeButton, setPage }) {
                 onClick={() => setPage("Orders")}
             >Orders</button>
             <button className={`logout-button ${activeButton === "Log Out" ? "active" : ""}`}
-                onClick={() => setPage("Log Out")}
+                onClick={() => {
+                    setMainWindow("home");
+                    setUserState(false);
+                }}
             >Log Out</button>
         </div>
     );
