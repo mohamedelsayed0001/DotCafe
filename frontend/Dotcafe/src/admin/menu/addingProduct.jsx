@@ -69,10 +69,10 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
             }
         ); 
 
-        if (!response.ok) { 
-            const errorText = await response.text(); 
-            console.error('Server error:', errorText); 
-            return; 
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Server error:', errorText);
+            return;
         }
         const data = await response.json(); 
         console.log('editing message:', data);
@@ -87,9 +87,6 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
             src: data.src
         };
 
-        // console.log(selectedProduct.categoryId);
-        // console.log(returnedProduct.categoryId);
-
         if(selectedProduct.categoryId === returnedProduct.categoryId) {
             setCategories(prevCategories => 
                 prevCategories.map(category => category.products ?
@@ -103,31 +100,31 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
                 )
             );
         } else {
-            // console.log("hereeeeeeeeeeee");
-            
             setCategories(prevCategories => {
-                const categoriesWithoutProduct = prevCategories.map(category => {
-                    if (category.id === product.categoryId) {
+                return prevCategories.map(category => {
+                    if (category.id === selectedProduct.categoryId) {
                         return {
                             ...category,
-                            products: category.products.filter(p => p.id !== product.id)
+                            products: category.products.filter(p => p.id !== selectedProduct.id),
                         };
                     }
                     return category;
                 });
-                
-                return categoriesWithoutProduct.map(category => {
+            });
+
+            setCategories(prevCategories => {
+                return prevCategories.map(category => {
                     if (category.id === returnedProduct.categoryId) {
                         return {
                             ...category,
-                            products: [...category.products, returnedProduct]
+                            products: [...category.products, returnedProduct],
                         };
                     }
                     return category;
                 });
-            });              
+            });
+        
         }
-
         } catch (error) {
           console.error('Error adding product:', error); 
         } 
@@ -145,12 +142,10 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
         };
 
         if (menuWindow === "Edit Product") {
-            editProduct(newProduct)
+            await editProduct(newProduct)
         } else if (menuWindow === "New Product") {
-            addProduct(newProduct);
+            await addProduct(newProduct);
         }
-
-        console.log(categories);
 
         setMenuWindow("Home");
     };    
