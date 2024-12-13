@@ -1,163 +1,53 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import Table from './table';
 import AddingProduct from './addingProduct';
 import AddingCategory from './addingCategory';
 import ManageCategory from './ManageCategory';
 import './menu.css'
 
-export default function Menu () {
-    const  sampleData = [
-        {  
-            id: "1",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-        
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1875",
-            name: "Espresso Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "10.50",
-        },
-        {
-            id: "1876",
-            name: "Latte Beans",
-            category: "Coffee Beans",
-            availability: "Out of Stock",
-            price: "12.30",
-        },
-        {
-            id: "1877",
-            name: "Cappuccino Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "15.00",
-        },
-        {
-            id: "1878",
-            name: "Decaf Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "8.00",
-        },
-        {
-            id: "1879",
-            name: "Cold Brew Beans",
-            category: "Coffee Beans",
-            availability: "In Stock",
-            price: "9.25",
-        },
-        {
-            id: "1880",
-            name: "Arabica Beans",
-            category: "Coffee Beans",
-            availability: "Out of Stock",
-            price: "13.00",
-        },
-    ];
+export default function Menu ({categories, setCategories}) {
+
+    const fetchCategories = async () => {
+        try { const response = await fetch('http://localhost:8080/menu');
+            const data = await response.json(); 
+            setCategories(data);
+        } catch (error) {
+            console.error('Error fetching categories:', error); 
+        } 
+    };
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
     
-    const [window, setWindow] = useState("Home")
-    const [data, setData] = useState(sampleData);
-    const [currentProduct, setCurrentProduct] = useState(null);
+    const [menuWindow, setMenuWindow] = useState("Home")
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState("")
 
     return (
         <div className= 'menu-page' style={{ backgroundColor: "#E9EED9", minHeight: "100vh", display: 'flex', flexDirection: 'column' }}>
             <div className='new-manage-buttons'>
-                <button onClick={() => setWindow("New Product")}>New Product</button>
-                <button onClick={() => setWindow("New Category")}>New Category</button>
-                <button onClick={() => setWindow("Manage Category")}>Manage Category</button>
+                <button onClick={() => setMenuWindow("New Product")}>New Product</button>
+                <button onClick={() => setMenuWindow("New Category")}>New Category</button>
+                <button onClick={() => setMenuWindow("Manage Category")}>Manage Category</button>
+                {/* for testing */}
+                <button onClick={() => {console.log(categories); fetchCategories();}}>refresh</button>
             </div>
-            <Table window={window} setWindow={setWindow} data={data} setData={setData} setCurrentID={setCurrentProduct}/>
-            {(window === "New Product" || window === "Edit Product") && <AddingProduct  window={window} setWindow={setWindow}  data={data} setData={setData} currentID={currentProduct} setCurrentID={setCurrentProduct}/>}
-            {(window === "New Category" || window === "Edit Category") && <AddingCategory window={window} setWindow={setWindow}/>}
-            {window === "Manage Category" && <ManageCategory window={window} setWindow={setWindow}/>}
+            <Table  window={menuWindow} setWindow={setMenuWindow} 
+                    categories={categories} setCategories={setCategories}
+                    setSelectedProduct={setSelectedProduct}/>
+            {(menuWindow === "New Product" || menuWindow === "Edit Product") && <AddingProduct  
+                menuWindow={menuWindow} setMenuWindow={setMenuWindow}  
+                categories={categories} setCategories={setCategories} 
+                selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct}/>}
+            {(menuWindow === "New Category" || menuWindow === "Edit Category") && <AddingCategory   
+                menuWindow={menuWindow} setMenuWindow={setMenuWindow} 
+                categories={categories} setCategories={setCategories} 
+                selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}/>}
+            {menuWindow === "Manage Category" && <ManageCategory   
+                menuWindow={menuWindow} setMenuWindow={setMenuWindow} 
+                categories={categories} setCategories={setCategories} 
+                selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}/>}
         </div>
     )
 }

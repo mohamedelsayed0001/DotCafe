@@ -7,6 +7,7 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,34 +18,44 @@ public class InventoryService {
         this.itemRepository = itemRepository;
     }
 
-    public ItemDto createitem(ItemDto itemDto) throws CloneNotSupportedException {
-        Optional<Item> searchitem = itemRepository.findByName(itemDto.getName());
-        if (searchitem.isPresent()) {
-            throw new CloneNotSupportedException("Item with the same name already exists.");
+    public ItemDto create(ItemDto itemDto) throws IllegalArgumentException {
+        Optional<Item> searchItem = itemRepository.findByName(itemDto.getName());
+        if (searchItem.isPresent()) {
+            throw new IllegalArgumentException("Item with the same name already exists.");
         }
-        Item newitem = itemRepository.save(itemDto.getitem());
-        return newitem.getitemDto();
+        Item newitem = itemRepository.save(itemDto.getItem());
+        return newitem.getDto();
     }
 
     @SneakyThrows
-    public ItemDto edititem(ItemDto itemDto) throws IllegalArgumentException {
-        Optional<Item> currentitem = itemRepository.findById(itemDto.getId());
-        if (currentitem.isPresent()) {
-            Optional<Item> otheritem = itemRepository.findByName(itemDto.getName());
-            if (otheritem.isPresent() && !otheritem.get().getId().equals(itemDto.getId())) {
+    public ItemDto edit(ItemDto itemDto) throws IllegalArgumentException {
+        Optional<Item> currentItem = itemRepository.findById(itemDto.getId());
+        if (currentItem.isPresent()) {
+            Optional<Item> otherItem = itemRepository.findByName(itemDto.getName());
+            if (otherItem.isPresent() && !otherItem.get().getId().equals(itemDto.getId())) {
                 throw new IllegalArgumentException("Another item with the same name already exists.");
             }
 
-            Item finalitem = itemRepository.save(itemDto.getitem());
-            return finalitem.getitemDto();
+            Item finalitem = itemRepository.save(itemDto.getItem());
+            return finalitem.getDto();
         } else {
             throw new IllegalArgumentException("Item with the given ID does not exist.");
         }
     }
 
-    public void deleteitem(Long id) {
+    public void delete(Long id) {
         Optional<Item> pastItem = itemRepository.findById(id);
         if (pastItem.isPresent()) {
             itemRepository.deleteById(id);
         }
-}}
+    }
+    public List<ItemDto> getItems(){
+        List <Item>  items = itemRepository.findAll();
+        List<ItemDto> itemsDto = new ArrayList<>();
+        for(Item item : items){
+            itemsDto.add(item.getDto());
+        }
+        return itemsDto;
+    }
+
+}

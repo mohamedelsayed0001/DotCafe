@@ -3,78 +3,161 @@ import "./window.css";
 import trashIcon from '../icons/trash.svg';
 import editIcon from '../icons/edit.svg';
 
-export default function AddingProduct({ window, setWindow, data, setData, currentID, setCurrentID }) {
+export default function AddingProduct({ menuWindow, setMenuWindow, categories, setCategories, selectedProduct, setSelectedProduct }) {
     const [name, setName] = useState("");
-    const [category, setCategory] = useState("");
-    const [price, setPrice] = useState("");
-    const [size, setSize] = useState("");
+    const [categoryId, setCategoryId] = useState();
+    const [price, setPrice] = useState();
+    const [description, setDescription] = useState("");
+    const [imageSrc, setImageSrc] = useState("");
 
-    useEffect(() => {
+    useEffect(() => { 
+        if (menuWindow === "Edit Product" && selectedProduct) { 
+            setName(selectedProduct.name || ""); 
+            setCategoryId(selectedProduct.categoryId || ""); 
+            setPrice(selectedProduct.price || ""); 
+            setDescription(selectedProduct.description || ""); 
+            setImageSrc(selectedProduct.src || ""); 
+        } 
+    }, [menuWindow, selectedProduct]);
 
-        if (currentID&&window==="Edit Product") {
-            get_product();
-        }
-    }, [currentID]);
-
-    function get_product() {
-        data.forEach((item) => {
-            if (item.id === currentID) {
-                setCategory(item.category);
-                setName(item.name);
-                setPrice(item.price);
-                setSize(item.size || "Small"); 
+    const addProduct = async (product) => {        
+        try {
+            const response = await fetch('http://localhost:8080/admin/product', {
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json'}, 
+                body: JSON.stringify(product)
             }
-        });
-    }
+        ); 
+
+        if (!response.ok) { 
+            const errorText = await response.text(); 
+            console.error('Server error:', errorText); 
+            return; 
+        }
+        const data = await response.json(); 
+        console.log('adding message:', data);
+
+        const returnedProduct = { 
+            id: data.id,
+            name: data.name,
+            description: data.description || '',
+            categoryId: data.categoryId || 0,
+            inStock: data.inStock,
+            price: data.price,
+            src: data.src
+        };
+
+        setCategories(prevCategories =>
+            prevCategories.map(category => 
+                category.id === returnedProduct.categoryId ? 
+                { ...category, products: [...category.products, returnedProduct] } 
+                : category 
+            ) 
+        );
+
+        } catch (error) {
+          console.error('Error adding product:', error); 
+        } 
+    };
+
+    const editProduct = async (product) => {
+        try {
+            const response = await fetch(`http://localhost:8080/admin/product/edit/${product.id}`, {
+                method: 'PUT', 
+                headers: { 'Content-Type': 'application/json'}, 
+                body: JSON.stringify(product)
+            }
+        ); 
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Server error:', errorText);
+            return;
+        }
+        const data = await response.json(); 
+        console.log('editing message:', data);
+
+        const returnedProduct = { 
+            id: data.id,
+            name: data.name,
+            description: data.description || '',
+            categoryId: data.categoryId || 0,
+            inStock: data.inStock,
+            price: data.price,
+            src: data.src
+        };
+
+        if(selectedProduct.categoryId === returnedProduct.categoryId) {
+            setCategories(prevCategories => 
+                prevCategories.map(category => category.products ?
+                    { ...category, products: category.products.map(product => 
+                                product.id === returnedProduct.id ? 
+                                    { ...product, ...returnedProduct }
+                                : product
+                            )
+                        }
+                    : category
+                )
+            );
+        } else {
+            setCategories(prevCategories => {
+                return prevCategories.map(category => {
+                    if (category.id === selectedProduct.categoryId) {
+                        return {
+                            ...category,
+                            products: category.products.filter(p => p.id !== selectedProduct.id),
+                        };
+                    }
+                    return category;
+                });
+            });
+
+            setCategories(prevCategories => {
+                return prevCategories.map(category => {
+                    if (category.id === returnedProduct.categoryId) {
+                        return {
+                            ...category,
+                            products: [...category.products, returnedProduct],
+                        };
+                    }
+                    return category;
+                });
+            });
+        
+        }
+        } catch (error) {
+          console.error('Error adding product:', error); 
+        } 
+    };
 
     const handleSave = async () => {
-        if (window === "Edit Product") {
-            const updatedProduct = {
-                id: currentID,
-                name: name,
-                category: category,
-                availability: "In Stock",
-                price: price,
-            };
-    
-            const updatedData = data.map((item) =>
-                item.id === currentID ? updatedProduct : item
-            );
-    
-            setData(updatedData);
-            setWindow("Home");
-        } else if (window === "New Product") {
-            const newProduct = {
-                id: 2, 
-                name: name,
-                category: category,
-                availability: "Out of Stock",
-                price: price,
-            };
-             data.push(newProduct);
-             setData(data);
-             setWindow("Home");
-            /*try {
-                const response = await axios.post("localhost:8080/add_product", newProduct);
-                const createdProduct = { ...newProduct, id: response.data.id };
-    
-                setData([...data, createdProduct]); 
-                setWindow("Home");
-            } catch (error) {
-                console.error("Error creating product:", error.response);
-            }
-        }*/}
-    };
-    
+        const newProduct = { 
+            id: selectedProduct?.id || 0,
+            name, 
+            description, 
+            categoryId, 
+            inStock: true, 
+            price, 
+            src: imageSrc 
+        };
+
+        if (menuWindow === "Edit Product") {
+            await editProduct(newProduct)
+        } else if (menuWindow === "New Product") {
+            await addProduct(newProduct);
+        }
+
+        setMenuWindow("Home");
+    };    
 
     const handleCancel = () => {
-        setWindow("Home");
+        setMenuWindow("Home");
     };
 
     return (
         <div className="background">
             <div className="window">
-                <h3>{window === "New Product" ? "Adding Product" : "Editing Product"}</h3>
+                <h3>{menuWindow === "New Product" ? "Adding Product" : "Editing Product"}</h3>
                 <form>
                     <div className="row">
                         <label>Name</label>
@@ -88,13 +171,13 @@ export default function AddingProduct({ window, setWindow, data, setData, curren
 
                     <div className="row">
                         <label>Category</label>
-                        <select
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                        >
+                        <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
                             <option value="">Choose Category</option>
-                            <option value="Coffee Beans">Coffee Beans</option>
-                            <option value="Tea Leaves">Tea Leaves</option>
+                            {categories.map((category) => (
+                                <option key={category.id} value={category.id}>
+                                    {category.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
 
@@ -110,42 +193,11 @@ export default function AddingProduct({ window, setWindow, data, setData, curren
 
                     <div className="row">
                         <label>Description</label>
-                        <textarea placeholder="Type Description"></textarea>
-                    </div>
-
-                    <div className="row">
-                        <label>Size</label>
-                        <div className="size-options">
-                            <input
-                                type="radio"
-                                id="small"
-                                name="size"
-                                value="Small"
-                                checked={size === "Small"}
-                                onChange={(e) => setSize(e.target.value)}
-                            />
-                            <label htmlFor="small" className="size-button">Small</label>
-
-                            <input
-                                type="radio"
-                                id="medium"
-                                name="size"
-                                value="Medium"
-                                checked={size === "Medium"}
-                                onChange={(e) => setSize(e.target.value)}
-                            />
-                            <label htmlFor="medium" className="size-button">Medium</label>
-
-                            <input
-                                type="radio"
-                                id="large"
-                                name="size"
-                                value="Large"
-                                checked={size === "Large"}
-                                onChange={(e) => setSize(e.target.value)}
-                            />
-                            <label htmlFor="large" className="size-button">Large</label>
-                        </div>
+                        <textarea 
+                            placeholder="Type Description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        ></textarea>
                     </div>
 
                     <div className="image-upload">
