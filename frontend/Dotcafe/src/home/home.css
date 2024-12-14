@@ -26,8 +26,8 @@ body.home-body  {
     
     color: #8A521A;  
     position: absolute;
-    left: 4.7%;
-    top: 2.53%;
+    left: 5%;
+    top: 4.7%;
     padding: 3px 25px;  
     font-family: 'Imprima', sans-serif;  
     font-size: 16px;  
@@ -38,25 +38,40 @@ body.home-body  {
     box-shadow: inset 0px 2.9px 5px rgba(0, 0, 0, 0.2); 
 }
 
-.menu-button:hover {
+.menu-button:hover ,  .Log-out-button:hover{
     background-color: #e3c5a4;  
     transform: scale(1.05); 
 }
 
 
-.menu-button:focus {
+.menu-button:focus, .Log-out-button:focus {
     outline: none;  
     box-shadow: 0 0 5px 2px rgba(124, 94, 70, 0.5);  
 }
-
+.Log-out-button{
+    background-color:rgba(251, 165, 165, 0.2); /* 20% opacity for #FBA5A5 */
+    
+    color: #8A521A;  
+    position: absolute;
+    right:10%;
+    top: 4.7%;
+    padding: 3px 25px;  
+    font-family: 'Imprima', sans-serif;  
+    font-size: 16px;  
+    
+    align-items: center;
+    border-radius: 20px;  
+    cursor: pointer;  
+    box-shadow: inset 0px 2.9px 5px rgba(0, 0, 0, 0.2); 
+}
 /* Styling for the menu button */
 .track-button {
     background-color:rgba(251, 165, 165, 0.2); /* 20% opacity for #FBA5A5 */
     
     color: #8A521A;  
     position: absolute;
-    left: 11.76%;
-    top: 2.53%;
+    left: 15%;
+    top: 4.7%;
     padding: 3px 25px;  
     font-family: 'Imprima', sans-serif;  
     font-size: 16px;  

@@ -6,7 +6,6 @@ import Menu from './menu/menu';
 import './App.css';
 
 function App() {
-  
   const [customerDTO, setCustomerDTO] = useState(() => {
     const savedCustomerDTO = sessionStorage.getItem("customerDTO");
     return savedCustomerDTO ? JSON.parse(savedCustomerDTO) : {
@@ -56,6 +55,7 @@ function App() {
       {window === "admin" && <Admin />}
       {window === "home" && (
         <Home
+           setSigned={setSigned}
           signed={signed}
           setWindow={setWindow}
         />

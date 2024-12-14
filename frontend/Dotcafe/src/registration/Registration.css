@@ -84,5 +84,6 @@
     font-weight: 800;
 }
 .signUp:hover, .login:hover{
-    background: rgba(255, 166, 0, 0.568);
+    background-color: #e3c5a4;  
+    transform: scale(1.05); 
 }

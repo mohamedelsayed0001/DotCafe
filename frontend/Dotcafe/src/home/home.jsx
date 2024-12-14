@@ -6,7 +6,7 @@ import SignupButton from './signupbutton';
 import Roll from './roll';
 
 
-function Home({ signed,setWindow }) {
+function Home({ setSigned,signed,setWindow }) {
     useEffect(() => {
         document.body.classList.add('home-body');
         return () => {
@@ -16,12 +16,12 @@ function Home({ signed,setWindow }) {
 
     return(
         <>
-            {signed ? (
-               
-                <Logedinbutton  setwindow ={setWindow}></Logedinbutton>
-            ) : (
+            {
+                signed?(<Logedinbutton  setSigned={setSigned} setwindow ={setWindow}></Logedinbutton>):
                 <SignupButton setwindow={setWindow}></SignupButton>
-            )}
+            }
+                 
+         
             <LogoImage></LogoImage>
             <Roll></Roll>  
         </>
