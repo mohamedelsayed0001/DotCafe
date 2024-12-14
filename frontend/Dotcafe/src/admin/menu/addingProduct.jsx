@@ -33,6 +33,9 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
 
         if (!response.ok) { 
             const errorText = await response.text(); 
+            if(errorText === "Product name exist") {
+                alert("product name already exists")
+            }
             console.error('Server error:', errorText); 
             return; 
         }
@@ -78,6 +81,9 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
         if (!response.ok) {
             const errorText = await response.text();
             console.error('Server error:', errorText);
+            if(errorText === "Another product with the same name already exists.") {
+                alert("another product with the same name exists")
+            }
             return;
         }
         const data = await response.json(); 
@@ -137,10 +143,22 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
     };
 
     const handleSave = async () => {
-        // if(categoryId === null || categoryId === null || categoryId === null ||  categoryId === null ||  categoryId === null) {
-        //     alert("Choose a Category");
-        //     return;
-        // }
+        if(name === "") {
+            alert("write product name");
+            return;
+        } else if (categoryId === null) {
+            alert("Choose a Category");
+            return;
+        } else if (price === null) {
+            alert("Set product price");
+            return;
+        } else if (description === "") {
+            alert("write product description");
+            return;
+        } else if (imageSrc === "") {
+            alert("import product image");
+            return;
+        }
 
         const newProduct = { 
             id: selectedProduct?.id || 0,
@@ -223,35 +241,40 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
                         ></textarea>
                     </div>
 
-                    <div className="image-upload">
+                    <div className="image-upload" >
                         <label>Image</label>
-                        <div className="file-upload">
-                        <input
-                            id="file-input"
-                            className="image-preview"
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            style={{ display: "none" }}
-                            />
-                            {!imageSrc && (
-                                <label htmlFor="file-input" className="custom-file-label">
+                        <div className="file-upload" style={{display: "flex", justifyContent: "center", alignItems: "center", gap: "20%"}}>
+                            <input
+                                id="file-input"
+                                className="image-preview"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleFileChange}
+                                style={{ display: "none" }}
+                                />
+                                {/* {!imageSrc && (
+                                    <label htmlFor="file-input" className="custom-file-label">
                                     +
-                                </label>
-                            )}
-                            { imageSrc && (
-                                <div className="image-container">
-                                    <img src={imageSrc} alt="Preview" className="image-preview" />
-                                </div>
-                            )}
+                                    </label>
+                                    )} */}
+                                { imageSrc && (
+                                    <div className="image-container">
+                                        <img src={imageSrc} alt="Preview" className="image-preview" />
+                                    </div>
+                                )}
+                                {true && (
+                                    <label htmlFor="file-input" className="custom-file-label">
+                                        <img style={{ width: "32px", height: "32px" }} src={editIcon} alt="edit icon" title="Edit Image" />
+                                    </label>
+                                )}
                         </div>
                         <div className="image-buttons">
-                            <button>
+                            <button onClick={() => setImageSrc("")}>
                                 <img style={{ width: "32px", height: "32px" }} src={trashIcon} alt="trash icon" title="Delete Image" />
                             </button>
-                            <button>
+                            {/* <button >
                                 <img style={{ width: "32px", height: "32px" }} src={editIcon} alt="edit icon" title="Edit Image" />
-                            </button>
+                            </button> */}
                         </div>
                     </div>
                 </form>
