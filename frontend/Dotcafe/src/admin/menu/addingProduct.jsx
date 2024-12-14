@@ -5,8 +5,8 @@ import editIcon from '../icons/edit.svg';
 
 export default function AddingProduct({ menuWindow, setMenuWindow, categories, setCategories, selectedProduct, setSelectedProduct }) {
     const [name, setName] = useState("");
-    const [categoryId, setCategoryId] = useState();
-    const [price, setPrice] = useState();
+    const [categoryId, setCategoryId] = useState(null);
+    const [price, setPrice] = useState(null);
     const [description, setDescription] = useState("");
     const [imageSrc, setImageSrc] = useState("");
 
@@ -20,7 +20,9 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
         } 
     }, [menuWindow, selectedProduct]);
 
-    const addProduct = async (product) => {        
+    const addProduct = async (product) => {   
+        console.log(product);
+
         try {
             const response = await fetch('http://localhost:8080/admin/product', {
                 method: 'POST', 
@@ -46,6 +48,10 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
             price: data.price,
             src: data.src
         };
+
+        console.log("returned");
+        
+        console.log(returnedProduct);
 
         setCategories(prevCategories =>
             prevCategories.map(category => 
@@ -131,6 +137,11 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
     };
 
     const handleSave = async () => {
+        // if(categoryId === null || categoryId === null || categoryId === null ||  categoryId === null ||  categoryId === null) {
+        //     alert("Choose a Category");
+        //     return;
+        // }
+
         const newProduct = { 
             id: selectedProduct?.id || 0,
             name, 
@@ -152,6 +163,17 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
 
     const handleCancel = () => {
         setMenuWindow("Home");
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith("image/")) {
+            const reader = new FileReader();
+            reader.onload = () => setImageSrc(String(reader.result));
+            reader.readAsDataURL(file);
+        } else {
+            alert("Please select an image file.");
+        }
     };
 
     return (
@@ -188,6 +210,7 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
                             value={price}
                             placeholder="Type Price"
                             onChange={(e) => setPrice(e.target.value)}
+                            min={0}
                         />
                     </div>
 
@@ -202,7 +225,26 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
 
                     <div className="image-upload">
                         <label>Image</label>
-                        <div className="image-preview">image</div>
+                        <div className="file-upload">
+                        <input
+                            id="file-input"
+                            className="image-preview"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            style={{ display: "none" }}
+                            />
+                            {!imageSrc && (
+                                <label htmlFor="file-input" className="custom-file-label">
+                                    +
+                                </label>
+                            )}
+                            { imageSrc && (
+                                <div className="image-container">
+                                    <img src={imageSrc} alt="Preview" className="image-preview" />
+                                </div>
+                            )}
+                        </div>
                         <div className="image-buttons">
                             <button>
                                 <img style={{ width: "32px", height: "32px" }} src={trashIcon} alt="trash icon" title="Delete Image" />

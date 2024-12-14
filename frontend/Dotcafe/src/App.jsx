@@ -52,7 +52,7 @@ function App() {
         />
       )}
 
-      {window === "admin" && <Admin />}
+      {window === "admin" && <Admin setMainWindow={setWindow} setUserState={setSigned}/>}
       {window === "home" && (
         <Home
            setSigned={setSigned}
