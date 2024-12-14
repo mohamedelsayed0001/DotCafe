@@ -30,6 +30,9 @@ public class ProductService {
         if(isAProduct.isPresent() && isAProduct.get().getInStock()){
             throw new IllegalArgumentException("Product name exist");
         }
+        if(productDto.getCategoryId()==null){
+            throw new IllegalArgumentException("Category not found");
+        }
         Optional<Category> isACategory = categoryRepository.findById(productDto.getCategoryId());
         if (isACategory.isPresent()){
             Product product = productDto.getProduct();
@@ -42,7 +45,10 @@ public class ProductService {
             productDto = newProduct.getDto();
             return productDto;
         }
-        throw new IllegalArgumentException("Category not found");
+        else{
+            throw new IllegalArgumentException("Category not found");
+        }
+
 
     }
 
