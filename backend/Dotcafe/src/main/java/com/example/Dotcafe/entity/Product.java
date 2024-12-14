@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @Data
@@ -36,7 +37,7 @@ public class Product {
                 categoryId(category.getId()).
                 price(price).
                 inStock(inStock).
-                image(image != null ? Base64.getEncoder().encodeToString(image) : null).
+                image(image != null ? new String(image, StandardCharsets.UTF_8): null).
                 description(description).
                 build();
     }
