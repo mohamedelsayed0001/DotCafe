@@ -1,52 +1,48 @@
+import { useState, useEffect } from 'react';
 import Home from './home/home';
-import { useState } from 'react';
-import './App.css';
 import Registration from './registration/registration';
 import Admin from './admin/admin';
 import Menu from './menu/menu';
+import './App.css';
 
 function App() {
-  const [customerDTO, setCustomerDTO] = useState(
-    {
+  
+  const [customerDTO, setCustomerDTO] = useState(() => {
+    const savedCustomerDTO = sessionStorage.getItem("customerDTO");
+    return savedCustomerDTO ? JSON.parse(savedCustomerDTO) : {
       id: null,
       role: null,
-      points:null,
-      name:null,
+      points: null,
+      name: null,
       mail: null,
-      password:null,
+      password: null,
       phoneNumber: null,
-    }
-  );
-  useEffect(() => {
+    };
+  });
+
+  const [signed, setSigned] = useState(() => {
     const savedSigned = sessionStorage.getItem("signed");
-    const savedCustomerDTO = sessionStorage.getItem("customerDTO");
-    const SavedWindow=sessionStorage.getItem("window")
-    if (savedSigned) {
-      setSigned(JSON.parse(savedSigned));
-    }
-    if (savedCustomerDTO) {
-      setCustomerDTO(JSON.parse(savedCustomerDTO));
-    }
-    if(SavedWindow){
-      setWindow(JSON.parse(SavedWindow));
-    }
-  }, []);
+    return savedSigned ? JSON.parse(savedSigned) : false;
+  });
+
+  const [window, setWindow] = useState(()=>{
+    const savedWindow=sessionStorage.getItem("window");
+    return savedWindow?JSON.parse(savedWindow):"home";
+  }
 
 
-  const [signed, setSigned] = useState(false);
-  const [window, setWindow] = useState("admin"); 
+  );
+
+  
   useEffect(() => {
     sessionStorage.setItem("signed", JSON.stringify(signed));
-    sessionStorage.setItem("customerDTO", JSON.stringify(customerDTO));
     sessionStorage.setItem("window", JSON.stringify(window));
-  const [signed, setSigned] = useState(true);
-  const [window, setWindow] = useState("home"); 
+    sessionStorage.setItem("customerDTO", JSON.stringify(customerDTO));
+  }, [signed, customerDTO,window]);
 
-  }, [signed, customerDTO],window);
   return (
     <>
-     
-     {["sign in", "sign up"].includes(window) && (
+      {["sign in", "sign up"].includes(window) && (
         <Registration
           window={window}
           setWindow={setWindow}
@@ -57,14 +53,19 @@ function App() {
         />
       )}
 
-      {window === "admin" && <Admin setMainWindow={setWindow} setUserState={setSigned}/>}
-      {window==="home"&& < Home
-          signed={signed} 
+      {window === "admin" && <Admin />}
+      {window === "home" && (
+        <Home
+          signed={signed}
           setWindow={setWindow}
-          />}
-      {window === "menu" && <Menu  
-          signed = {signed}
-          setWindow =  {setWindow}/>}
+        />
+      )}
+      {window === "menu" && (
+        <Menu
+          signed={signed}
+          setWindow={setWindow}
+        />
+      )}
     </>
   );
 }
