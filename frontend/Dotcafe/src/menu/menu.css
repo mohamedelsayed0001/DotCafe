@@ -212,9 +212,10 @@ body.menu-body  {
 
 
 .item-card img {
-    width: 150px; 
-    height: 150px; 
+    width: 60%; 
+    height: 60%; 
     margin-left: 18%;
+    object-fit:contain ;
     
     transition: transform 0.3s ease-in-out; /* Smooth zoom effect */
 }
