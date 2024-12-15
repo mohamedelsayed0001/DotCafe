@@ -56,6 +56,7 @@ function Registration({ window, setWindow, customerDTO, setCustomerDTO, signed, 
         if (response.status === 201) {
           setCustomerDTO(response.data);
           setSigned(true);
+          console.log(response.data.role)
           setWindow(response.data.role === "admin" ? "admin" : "home");
         } 
       } catch (error) {

@@ -4,11 +4,11 @@ function CategoryList({catlist}){
     const handleClick = (category) => {
         
         console.log(category);
-      };
+    };
 
     return(
         <div className="catlist-container">
-        {catlist.map((item, index) => (
+        {catlist.map((item, index) => ( 
         <button
           key={index}
           onClick={() => handleClick(item)} 
