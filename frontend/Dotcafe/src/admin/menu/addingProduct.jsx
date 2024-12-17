@@ -252,11 +252,11 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
                                 onChange={handleFileChange}
                                 style={{ display: "none" }}
                                 />
-                                {/* {!imageSrc && (
+                                {!imageSrc && (
                                     <label htmlFor="file-input" className="custom-file-label">
                                     +
                                     </label>
-                                    )} */}
+                                    )}
                                 { imageSrc && (
                                     <div className="image-container">
                                         <img src={imageSrc} alt="Preview" className="image-preview" />

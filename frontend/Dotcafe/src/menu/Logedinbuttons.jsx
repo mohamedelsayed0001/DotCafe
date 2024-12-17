@@ -6,7 +6,7 @@ function LogedinButton(){
     };
 
     return (
-        <div>
+        <div className='navigation-container'>
             <button onClick={goToTrack} className="menu-track-button">
                 Track
             </button>
