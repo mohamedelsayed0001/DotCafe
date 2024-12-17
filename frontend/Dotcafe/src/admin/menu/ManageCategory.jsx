@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./window.css";
+import "../window.css";
 // import trashIcon from '../icons/trash.svg'
 import editIcon from '../icons/edit.svg'
 

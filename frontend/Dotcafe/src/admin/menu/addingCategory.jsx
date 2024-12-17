@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./window.css";
+import "../window.css";
 
 export default function AddingCategory({ menuWindow, setMenuWindow, categories, setCategories, selectedCategory, setSelectedCategory}) {
 
