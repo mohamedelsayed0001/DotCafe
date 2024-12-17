@@ -3,7 +3,7 @@ import Table from './table';
 import AddingProduct from './addingProduct';
 import AddingCategory from './addingCategory';
 import ManageCategory from './ManageCategory';
-import './menu.css'
+import '../menu.css'
 
 export default function Menu ({categories, setCategories}) {
 

@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
-import upDownArrowIcon from '../icons/up-down-arrow.svg'
 import trashIcon from '../icons/trash.svg'
 import editIcon from '../icons/edit.svg'
 import '../table.css'
 
-export default function Table({window, setWindow, selectedProduct, setSelectedProduct, categories, setCategories}) {
+export default function Table({window, setWindow, setSelectedItem, items, setItems}) {
 
-    const deleteProduct = async (productId) => {
+    const deleteItem = async (itemtId) => {
         try {
-            const response = await fetch(`http://localhost:8080/admin/product/${productId}`, {
+            const response = await fetch(`http://localhost:8080/admin/item/${itemtId}`, {
                 method: 'DELETE'
             });   
             const data = await response.text(); 
@@ -18,12 +17,9 @@ export default function Table({window, setWindow, selectedProduct, setSelectedPr
         } 
     };
 
-    const handleDelete = async (productId, categoryId) => { 
-        await deleteProduct(productId); 
-        setCategories(categories.map(category => 
-            category.id === categoryId
-                ? { ...category, products: category.products.filter(product => product.id !== productId) } :
-                category ));
+    const handleDelete = async (itemId) => { 
+        await deleteItem(itemId); 
+        setItems(items.filter(item => item.id !== itemId));
     };
     
     return (
@@ -33,28 +29,26 @@ export default function Table({window, setWindow, selectedProduct, setSelectedPr
                     <tr>
                         <th className="header-cell">Item ID</th>
                         <th className="header-cell">Item Name</th>
-                        <th className="header-cell">Category</th>
-                        <th className="header-cell">Availability</th>
+                        <th className="header-cell">Quantity</th>
                         <th className="header-cell">Item Price</th>
+                        <th className="header-cell">Availability</th>
                         <th className="header-cell">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {categories.map((category) => (
-                        category.products.length > 0 ? (
-                        category.products.map((product) => (
-                            <tr key={product.id}>
-                            <td className="table-cell">{product.id}</td>
-                            <td className="table-cell">{product.name}</td>
-                            <td className="table-cell">{category.name}</td> 
-                            <td className="table-cell">{product.inStock ? 'In Stock' : 'Out of Stock'}</td>
-                            <td className="table-cell">${product.price}</td>
+                    {items.map((item) => (
+                            <tr key={item.id}>
+                            <td className="table-cell">{item.id}</td>
+                            <td className="table-cell">{item.name}</td>
+                            <td className="table-cell">{item.quantity}</td> 
+                            <td className="table-cell">${item.price}</td>
+                            <td className="table-cell">{item.quantity !== 0 ? 'In Stock' : 'Out of Stock'}</td>
                             <td className="table-cell">
                                 <button
                                 className="actions-button"
                                 onClick={() => {
-                                    setSelectedProduct(product); 
-                                    handleDelete(product.id, product.categoryId);
+                                    setSelectedItem(item); 
+                                    handleDelete(item.id);
                                 }}
                                 >
                                 <img
@@ -67,8 +61,8 @@ export default function Table({window, setWindow, selectedProduct, setSelectedPr
                                 <button
                                 className="actions-button"
                                 onClick={() => {
-                                    setWindow("Edit Product");
-                                    setSelectedProduct(product);
+                                    setWindow("Edit Item");
+                                    setSelectedItem(item);
                                 }}
                                 >
                                 <img
@@ -80,9 +74,8 @@ export default function Table({window, setWindow, selectedProduct, setSelectedPr
                                 </button>
                             </td>
                             </tr>
-                        ))
-                        ) : null
-                    ))}
+                        )
+                    )}
                 </tbody>
             </table>
         </div>
