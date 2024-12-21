@@ -13,6 +13,9 @@ export default function Navbar({ activeButton, setPage, setMainWindow, setUserSt
             <button className={`button ${activeButton === "Orders" ? "active" : ""}`}
                 onClick={() => setPage("Orders")}
             >Orders</button>
+            <button className={`button ${activeButton === "Users" ? "active" : ""}`}
+                onClick={() => setPage("Users")}
+            >Users</button>
             <button className={`logout-button ${activeButton === "Log Out" ? "active" : ""}`}
                 onClick={() => {
                     setMainWindow("home");

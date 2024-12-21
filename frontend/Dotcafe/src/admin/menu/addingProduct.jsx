@@ -252,11 +252,11 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
                                 onChange={handleFileChange}
                                 style={{ display: "none" }}
                                 />
-                                {!imageSrc && (
+                                {/* {!imageSrc && (
                                     <label htmlFor="file-input" className="custom-file-label">
                                     +
                                     </label>
-                                    )}
+                                    )} */}
                                 { imageSrc && (
                                     <div className="image-container">
                                         <img src={imageSrc} alt="Preview" className="image-preview" />
@@ -269,9 +269,9 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
                                 )}
                         </div>
                         <div className="image-buttons">
-                            <button onClick={() => setImageSrc("")}>
+                            {/* <button onClick={() => setImageSrc("")}>
                                 <img style={{ width: "32px", height: "32px" }} src={trashIcon} alt="trash icon" title="Delete Image" />
-                            </button>
+                            </button> */}
                             {/* <button >
                                 <img style={{ width: "32px", height: "32px" }} src={editIcon} alt="edit icon" title="Edit Image" />
                             </button> */}

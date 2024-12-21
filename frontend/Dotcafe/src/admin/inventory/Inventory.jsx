@@ -3,8 +3,7 @@ import Table from './table';
 import AddingItem from './addingItem';
 import '../menu.css'
 
-export default function Inventory () {
-    const [items, setItems] = useState([]);
+export default function Inventory ({items, setItems}) {
 
     const fetchItems = async () => {
         try { const response = await fetch('http://localhost:8080/admin/item');

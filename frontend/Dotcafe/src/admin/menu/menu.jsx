@@ -22,7 +22,19 @@ export default function Menu ({categories, setCategories}) {
     
     const [menuWindow, setMenuWindow] = useState("Home")
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [selectedCategory, setSelectedCategory] = useState("")
+    const [selectedCategory, setSelectedCategory] = useState("");
+    // const [filterBy, setFilterBy] = useState(0);
+    // const [filteredCategories, setFilteredCategories] = useState([]);
+
+    // useEffect(() => {
+    //     if (categories.length > 0) {
+    //         if (filterBy) {
+    //             setFilteredCategories(categories.filter((category) => category.id === filterBy));
+    //         } else {
+    //             setFilteredCategories(categories);
+    //         }
+    //     }
+    // }, [filterBy, categories]);
 
     return (
         <div className= 'menu-page' style={{ backgroundColor: "#E9EED9", minHeight: "100vh", display: 'flex', flexDirection: 'column' }}>
@@ -32,6 +44,18 @@ export default function Menu ({categories, setCategories}) {
                 <button onClick={() => setMenuWindow("Manage Category")}>Manage Category</button>
                 {/* for testing */}
                 <button onClick={() => {console.log(categories); fetchCategories();}}>refresh</button>
+                {/* <select
+                    className='filter-by'
+                    value={filterBy}
+                    onChange={(e) => setFilterBy(e.target.value)}
+                    >
+                    <option value="">No filter</option>
+                    {categories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                            {category.name}
+                        </option>
+                    ))}
+                </select> */}
             </div>
             <Table  window={menuWindow} setWindow={setMenuWindow} 
                     categories={categories} setCategories={setCategories}

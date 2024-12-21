@@ -5,6 +5,8 @@ import com.example.Dotcafe.entity.Dto.CustomerDto;
 import com.example.Dotcafe.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 @Service
 public class CustomerService {
@@ -44,8 +46,45 @@ public class CustomerService {
 
     }
 
+    public List<CustomerDto> getAllUsers() {
+        List<Customer> cutomers = customerRepository.findAll();
 
+        List<CustomerDto> cutomerDtos = new ArrayList<>();
 
+        for (Customer customer : cutomers) {
+            cutomerDtos.add(customer.getDto());
+        }
+        
+        return cutomerDtos;
+    }
+
+    public CustomerDto updateUser(CustomerDto dto) throws IllegalArgumentException{
+        Optional<Customer> opCustomer = customerRepository.findById(dto.getId());
+
+        if(opCustomer.isPresent()) {
+            Customer customer = opCustomer.get();
+            customer.setRole(dto.getRole());
+            customer.setPoints(dto.getPoints());
+            customerRepository.save(customer);
+
+            return customer.getDto();
+
+        } else {
+            throw new IllegalArgumentException("Customer doesn't exist");
+        }
+    }
+
+    public String deleteUser (Long userId) throws IllegalArgumentException {
+        Optional<Customer> opCustomer = customerRepository.findById(userId);
+
+        if(opCustomer.isPresent()) {
+            Customer customer= opCustomer.get();
+            customerRepository.delete(customer);
+            return "User deleted Successfully";
+        } else {
+            throw new IllegalArgumentException("Customer doesn't exist");
+        }
+    }
 }
 
 
