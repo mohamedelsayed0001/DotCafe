@@ -18,11 +18,9 @@ import java.util.Optional;
 public class OrderItemMapper {
 
     private final ProductRepository productRepository;
-    private final CartRepository cartRepository;
     private final CustomerRepository customerRepository;
-    public OrderItemMapper(ProductRepository productRepository, CartRepository cartRepository, CustomerRepository customerRepository) {
+    public OrderItemMapper(ProductRepository productRepository,CustomerRepository customerRepository) {
         this.productRepository = productRepository;
-        this.cartRepository = cartRepository;
         this.customerRepository = customerRepository;
     }
 
@@ -51,7 +49,7 @@ public class OrderItemMapper {
             throw new IllegalArgumentException("Customer not found");
         }
         Cart cart = customer.get().getCart();
-        
+
         return OrderItem.builder().
                 order(null).
                 cart(cart).
