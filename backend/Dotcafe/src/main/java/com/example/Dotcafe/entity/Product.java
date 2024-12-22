@@ -27,9 +27,8 @@ public class Product {
     private Category category;
     private Boolean inStock;
     @Lob
-    @Basic(fetch = FetchType.EAGER) // to fetch large obj directly
+    @Basic(fetch = FetchType.EAGER)
     private byte[] image;
-    @JsonIgnore
     public ProductDto getDto(){
         return ProductDto.builder().
                 id(id).

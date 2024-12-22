@@ -10,9 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductService {
@@ -87,10 +85,31 @@ public class ProductService {
     }
 
     public List<CategoryDto> menu(){
-        return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
+        return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
                 .stream()
                 .map(Category::getDto)
                 .toList();
 
     }
+
+    public List<ProductDto> search(String keyword) {
+        List<Product> products = productRepository.findByNameContainingIgnoreCaseAndInStockTrue(keyword);
+        List<ProductDto> productDtos = new ArrayList<>(products.stream().map(Product::getDto).toList());
+       productDtos = sortProductsManually(productDtos);
+      return productDtos;
+}
+
+    public List<ProductDto> sortProductsManually(List<ProductDto> products) {
+        products.sort(new Comparator<ProductDto>() {
+            @Override
+            public int compare(ProductDto p1, ProductDto p2) {
+                return p1.getName().compareToIgnoreCase(p2.getName());
+            }
+        });
+        return products;
+    }
+
+
+
+
 }

@@ -24,7 +24,7 @@ public class AdminService {
     }
 
     public CategoryDto createCategory(CategoryDto categoryDto) throws IllegalArgumentException {
-        Optional<Category> pastCategory = categoryRepository.getCategoryByName(categoryDto.getName());
+        Optional<Category> pastCategory = categoryRepository.findByNameIgnoreCase(categoryDto.getName());
         if (pastCategory.isPresent()) {
             throw new IllegalArgumentException("This category already exists");
         }
@@ -41,7 +41,7 @@ public class AdminService {
         Optional<Category> pastCategory = categoryRepository.findById(categoryDto.getId());
         if (pastCategory.isPresent()) {
 
-            Optional<Category> otherCategory = categoryRepository.getCategoryByName(categoryDto.getName());
+            Optional<Category> otherCategory = categoryRepository.findByNameIgnoreCase(categoryDto.getName());
             if(otherCategory.isPresent() && ! categoryDto.getId().equals(otherCategory.get().getId()))
                 throw new IllegalArgumentException("This name already exist");
 
