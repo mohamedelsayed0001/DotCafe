@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Builder
 @Data
 @NoArgsConstructor
@@ -22,8 +24,10 @@ public class Customer {
     private Long points;
     private String password;
     private String phoneNumber;
-
-
+    @OneToOne
+    private Cart cart;
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "customer")
+    private List<Order> orders;
     public CustomerDto getDto() {
          return CustomerDto.builder().
                  name(name).
