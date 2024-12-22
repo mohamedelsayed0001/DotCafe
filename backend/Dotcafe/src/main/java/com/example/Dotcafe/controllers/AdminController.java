@@ -40,6 +40,15 @@ public class AdminController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+    @DeleteMapping ("/category/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id){
+        try {
+            adminService.deleteCategory(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @PostMapping("/product")
     public ResponseEntity<?> create(@RequestBody ProductDto productDto){

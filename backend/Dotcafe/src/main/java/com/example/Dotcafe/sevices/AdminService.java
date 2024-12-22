@@ -1,10 +1,13 @@
 package com.example.Dotcafe.sevices;
 import com.example.Dotcafe.entity.Category;
 import com.example.Dotcafe.entity.Dto.CategoryDto;
+import com.example.Dotcafe.entity.Product;
 import com.example.Dotcafe.repository.CategoryRepository;
+import com.example.Dotcafe.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Optional;
 
 
@@ -13,9 +16,11 @@ import java.util.Optional;
 public class AdminService {
 
    private final CategoryRepository categoryRepository;
+   private final ProductRepository productRepository;
 
-    public AdminService(CategoryRepository categoryRepository) {
+    public AdminService(CategoryRepository categoryRepository, ProductRepository productRepository) {
         this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
     }
 
     public CategoryDto createCategory(CategoryDto categoryDto) throws IllegalArgumentException {
@@ -47,5 +52,21 @@ public class AdminService {
             throw new IllegalArgumentException("This id or category does not exist");
 
     }
+
+    public void deleteCategory(Long id){
+        Optional<Category> category = categoryRepository.findById(id);
+        if(category.isPresent()){
+
+            for(Product p : category.get().getProducts()){
+                p.setCategory(null);
+                p.setInStock(false);
+                productRepository.save(p);
+            }
+            categoryRepository.deleteById(id);
+        }
+
+
+    }
+
 
 }
