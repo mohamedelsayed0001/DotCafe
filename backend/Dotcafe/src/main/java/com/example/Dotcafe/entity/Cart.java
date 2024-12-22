@@ -30,6 +30,7 @@ public class Cart {
     public void updateTotalPrice(){
         totalPrice = 0D;
         for(OrderItem orderItem : orderItems){
+            orderItem.calcPrice();
             totalPrice+=orderItem.getTotalPrice();
         }
     }

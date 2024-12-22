@@ -1,8 +1,10 @@
 package com.example.Dotcafe.controllers;
 
 import com.example.Dotcafe.entity.Dto.CustomerDto;
+import com.example.Dotcafe.repository.CartRepository;
 import com.example.Dotcafe.sevices.CustomerService;
 import lombok.SneakyThrows;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +15,14 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final CartRepository cartRepository;
+
+    public CustomerController(CustomerService customerService, CartRepository cartRepository) {
+        this.customerService = customerService;
+        this.cartRepository = cartRepository;
+    }
 
     @SneakyThrows
-
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-    }
 
     @PostMapping("/signup")
     public ResponseEntity<?> create(@RequestBody CustomerDto customerDto) {
@@ -52,7 +56,10 @@ public class CustomerController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getcart(@PathVariable Long userId) {
+        return new ResponseEntity<>(customerService.getcart(userId), HttpStatus.ACCEPTED);
+    }
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         try {

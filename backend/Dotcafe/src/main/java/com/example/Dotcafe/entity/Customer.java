@@ -24,7 +24,7 @@ public class Customer {
     private Long points;
     private String password;
     private String phoneNumber;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Cart cart;
     @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "customer")
     private List<Order> orders;

@@ -1,5 +1,6 @@
 package com.example.Dotcafe.entity.Dto;
 
+import com.example.Dotcafe.entity.Cart;
 import com.example.Dotcafe.entity.Customer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -18,7 +19,6 @@ public class CustomerDto {
     private Long points;
     private String password;
     private String phoneNumber;
-
     @JsonIgnore
     public Customer getCustomer() {
         return Customer.builder()
