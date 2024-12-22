@@ -54,7 +54,7 @@ public class CustomerService {
         for (Customer customer : cutomers) {
             cutomerDtos.add(customer.getDto());
         }
-        
+
         return cutomerDtos;
     }
 
@@ -79,6 +79,14 @@ public class CustomerService {
 
         if(opCustomer.isPresent()) {
             Customer customer= opCustomer.get();
+
+            if(customer.getRole().equals("admin")) {
+                List<Customer> admins = customerRepository.findByRole("admin");
+                if(admins.size() == 1) {
+                    throw new IllegalArgumentException("Can't delete the last admin");
+                }
+            }
+
             customerRepository.delete(customer);
             return "User deleted Successfully";
         } else {
@@ -86,6 +94,3 @@ public class CustomerService {
         }
     }
 }
-
-
-
