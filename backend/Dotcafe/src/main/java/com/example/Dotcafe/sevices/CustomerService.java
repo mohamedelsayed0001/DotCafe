@@ -81,7 +81,7 @@ public class CustomerService {
             Customer customer= opCustomer.get();
 
             if(customer.getRole().equals("admin")) {
-                List<Customer> admins = customerRepository.findByRole("admin");
+                List<Customer> admins = customerRepository.findByRoleIgnoreCase("admin");
                 if(admins.size() == 1) {
                     throw new IllegalArgumentException("Can't delete the last admin");
                 }
