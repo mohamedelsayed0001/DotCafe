@@ -4,9 +4,11 @@ import com.example.Dotcafe.entity.Dto.CategoryDto;
 import com.example.Dotcafe.entity.Product;
 import com.example.Dotcafe.repository.CategoryRepository;
 import com.example.Dotcafe.repository.ProductRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -65,6 +67,14 @@ public class AdminService {
             categoryRepository.deleteById(id);
         }
 
+
+    }
+
+    public List<CategoryDto> menu(){
+        return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
+                .stream()
+                .map(Category::getDtoAdmin)
+                .toList();
 
     }
 

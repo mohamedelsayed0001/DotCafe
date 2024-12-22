@@ -26,11 +26,24 @@ public class Category {
          .build();
         categoryDto.setProducts(new ArrayList<>());
         for(Product p : products){
+
            if(p.getInStock()) categoryDto.addProductDto(p.getDto());
         }
         return categoryDto;
 
     }
+
+    public CategoryDto getDtoAdmin() {
+        CategoryDto categoryDto = CategoryDto.builder().id(id).name(name)
+                .build();
+        categoryDto.setProducts(new ArrayList<>());
+        for(Product p : products){
+            categoryDto.addProductDto(p.getDto());
+        }
+        return categoryDto;
+
+    }
+
 
 
 

@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/admin")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -18,6 +20,12 @@ public class AdminController {
     public AdminController(AdminService adminService, ProductService productService) {
         this.adminService = adminService;
         this.productService = productService;
+    }
+
+    @GetMapping("/menu")
+    public ResponseEntity<List<CategoryDto>> menu(){
+        return new ResponseEntity<>(adminService.menu(), HttpStatus.OK);
+
     }
 
     @PostMapping(value = "/category")

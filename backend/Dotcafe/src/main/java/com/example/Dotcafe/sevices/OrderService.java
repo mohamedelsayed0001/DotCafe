@@ -1,7 +1,6 @@
 package com.example.Dotcafe.sevices;
 
 import com.example.Dotcafe.entity.Cart;
-import com.example.Dotcafe.entity.Customer;
 import com.example.Dotcafe.entity.Dto.CartDto;
 import com.example.Dotcafe.entity.Dto.OrderItemDto;
 import com.example.Dotcafe.entity.OrderItem;
@@ -16,10 +15,10 @@ import java.util.Optional;
 @Service
 public class OrderService {
 
-   private final OrderItemMapper orderItemMapper;
-   private final OrderItemRepository orderItemRepository;
-   private final CartRepository cartRepository;
-   private final CartMapper cartMapper;
+    private final OrderItemMapper orderItemMapper;
+    private final OrderItemRepository orderItemRepository;
+    private final CartRepository cartRepository;
+    private final CartMapper cartMapper;
 
     public OrderService(OrderItemMapper orderItemMapper, OrderItemRepository orderItemRepository, CartRepository cartRepository, CartMapper cartMapper) {
         this.orderItemMapper = orderItemMapper;
@@ -28,33 +27,35 @@ public class OrderService {
         this.cartMapper = cartMapper;
     }
 
-    public OrderItemDto addToCart(OrderItemDto orderItemDto,Long userId){
+    public OrderItemDto addToCart(OrderItemDto orderItemDto, Long userId) {
         orderItemDto.setId(null);
-        OrderItem orderItem = orderItemMapper.getOrderItem(orderItemDto,userId);
+        OrderItem orderItem = orderItemMapper.getOrderItem(orderItemDto, userId);
         orderItem.calcPrice();
         Optional<Cart> cart = cartRepository.findByCustomerId(userId);
-        if(cart.isEmpty()){
+        if (cart.isEmpty()) {
             throw new IllegalArgumentException("can't find cart ya ahmed !!");
         }
+        orderItemRepository.save(orderItem);
         cart.get().addOrderItem(orderItem);
         cartRepository.save(cart.get());
         return orderItemMapper.getDto(orderItem);
 
     }
 
-    public CartDto updateCart(CartDto cartDto){
+    public CartDto updateCart(CartDto cartDto) {
         Cart cart = cartMapper.getCart(cartDto);
         cart.updateTotalPrice();
         cart = cartRepository.save(cart);
         return cartMapper.getDto(cart);
     }
- public void deleteorderitem(Long orderitemid){
 
-        Optional<OrderItem> deleteditem=orderItemRepository.findById(orderitemid);
-       Cart currentcart=deleteditem.get().getCart();
-        orderItemRepository.delete(deleteditem.get());
-     cartRepository.save(currentcart);
- }
 
+//    public void deleteOrderItem(Long orderitemid) {
+//
+//        Optional<OrderItem> deleteditem = orderItemRepository.findById(orderitemid);
+//        Cart currentcart = deleteditem.get().getCart();
+//        currentcart.getOrderItems().remove(deleteditem.get());
+//        cartRepository.save(currentcart);
+//    }
 
 }
