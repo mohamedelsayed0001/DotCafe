@@ -15,4 +15,5 @@ public class CartDto {
     private Long id;
     private Long customerId;
     private List<OrderItemDto> orderItems;
+    private Double totalPrice = 0D;
 }

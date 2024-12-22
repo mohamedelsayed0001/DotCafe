@@ -31,7 +31,7 @@ public class CartMapper {
         return CartDto.builder().
                 id(cart.getId()).
                 customerId(cart.getCustomer().getId()).
-                orderItems(orderItemDtos).
+                orderItems(orderItemDtos).totalPrice(cart.getTotalPrice()).
                 build();
     }
 

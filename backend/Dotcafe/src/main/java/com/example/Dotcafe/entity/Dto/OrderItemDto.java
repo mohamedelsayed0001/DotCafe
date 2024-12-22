@@ -22,4 +22,6 @@ public class OrderItemDto {
     private Size size;
     private String customize;
     private Double price;
+    private Double totalPrice;
+
 }

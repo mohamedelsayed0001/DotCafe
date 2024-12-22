@@ -21,4 +21,18 @@ public class Cart {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "cart")
     private List<OrderItem> orderItems;
+    private Double totalPrice = 0D;
+
+    public void addOrderItem(OrderItem orderItem){
+        orderItems.add(orderItem);
+        totalPrice+=orderItem.getTotalPrice();
+    }
+    public void updateTotalPrice(){
+        totalPrice = 0D;
+        for(OrderItem orderItem : orderItems){
+            totalPrice+=orderItem.getTotalPrice();
+        }
+    }
+
+
 }

@@ -33,6 +33,7 @@ public class OrderItemMapper {
                 customize(orderItem.getCustomize()).
                 productId(orderItem.getProduct().getId()).
                 productName(orderItem.getProduct().getName()).
+                totalPrice(orderItem.getTotalPrice()).
                 build();
 
     }
@@ -49,6 +50,7 @@ public class OrderItemMapper {
             throw new IllegalArgumentException("Customer not found");
         }
         Cart cart = customer.get().getCart();
+        if(cart == null) throw new IllegalArgumentException("This user has no cart ya samaaaaaaaa");
 
         return OrderItem.builder().
                 order(null).
@@ -56,9 +58,10 @@ public class OrderItemMapper {
                 customize(orderItemDto.getCustomize()).
                 product(product).
                 id(orderItemDto.getId()).
-                price(orderItemDto.getPrice()).
+                price(product.getPrice()).
                 quantity(orderItemDto.getQuantity()).
-                size(orderItemDto.getSize())
+                size(orderItemDto.getSize()).
+                totalPrice(orderItemDto.getTotalPrice())
                 .build();
 
         }
