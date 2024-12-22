@@ -22,7 +22,7 @@ public class OrderController {
     }
 
     @PostMapping("/{userId}")
-    public ResponseEntity<?> addToChart(@RequestBody OrderItemDto orderItemDto, @PathVariable Long userId){
+    public ResponseEntity<?> addToCart(@RequestBody OrderItemDto orderItemDto, @PathVariable Long userId){
 
         try{
             return new ResponseEntity<>(orderService.addToCart(orderItemDto,userId), HttpStatus.CREATED);
@@ -31,7 +31,12 @@ public class OrderController {
         }
 
     }
+@DeleteMapping("/{orderitemId}")
+public ResponseEntity<?> delete( @PathVariable Long orderitemId){
+    orderService.deleteorderitem(orderitemId);
+    return new ResponseEntity<>( HttpStatus.CREATED);
 
+}
 //    @PutMapping("/update/cart/{userId}")
 //    public ResponseEntity<?> updateCart(@RequestParam Long userId, @RequestBody CartDto cartDto){
 ////        cartDto.setCustomerId(userId);

@@ -48,11 +48,12 @@ public class OrderService {
         cart = cartRepository.save(cart);
         return cartMapper.getDto(cart);
     }
- public void deleteorderitem(Long cartid,Long orderitemid){
-        Optional <Cart> currentcart=cartRepository.findById(cartid);
+ public void deleteorderitem(Long orderitemid){
+
         Optional<OrderItem> deleteditem=orderItemRepository.findById(orderitemid);
+       Cart currentcart=deleteditem.get().getCart();
         orderItemRepository.delete(deleteditem.get());
-     cartRepository.save(currentcart.get());
+     cartRepository.save(currentcart);
  }
 
 
