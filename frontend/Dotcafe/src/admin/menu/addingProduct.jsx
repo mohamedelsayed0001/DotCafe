@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "../window.css";
-import trashIcon from '../icons/trash.svg';
 import editIcon from '../icons/edit.svg';
 
 export default function AddingProduct({ menuWindow, setMenuWindow, categories, setCategories, selectedProduct, setSelectedProduct }) {
@@ -15,7 +14,7 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
         if (menuWindow === "Edit Product" && selectedProduct) { 
             setName(selectedProduct.name || ""); 
             setCategoryId(selectedProduct.categoryId || ""); 
-            setCategoryId(selectedProduct.inStock || ""); 
+            setInStock(selectedProduct.inStock === true ? true : false); 
             setPrice(selectedProduct.price || ""); 
             setDescription(selectedProduct.description || ""); 
             setImageSrc(selectedProduct.src || ""); 
@@ -148,10 +147,10 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
         if(name === "") {
             alert("write product name");
             return;
-        } else if (categoryId === null) {
+        } else if (categoryId === "") {
             alert("choose a category");
             return;
-        } else if (inStock === null) {
+        } else if (inStock === "") {
             alert("Choose an availability");
             return;
         } else if (price === null) {

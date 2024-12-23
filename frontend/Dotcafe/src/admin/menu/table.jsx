@@ -31,7 +31,7 @@ export default function Table({window, setWindow, selectedProduct, setSelectedPr
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                     <tr>
-                        {/* <th className="header-cell">Item ID</th> */}
+                        <th className="header-cell">Item ID</th>
                         <th className="header-cell">Product Name</th>
                         <th className="header-cell">Category</th>
                         <th className="header-cell">Availability</th>
@@ -44,7 +44,7 @@ export default function Table({window, setWindow, selectedProduct, setSelectedPr
                         category.products.length > 0 ? (
                         category.products.map((product) => (
                             <tr key={product.id}>
-                            {/* <td className="table-cell">{product.id}</td> */}
+                            <td className="table-cell">{product.id}</td>
                             <td className="table-cell">{product.name}</td>
                             <td className="table-cell">{category.name}</td> 
                             <td className="table-cell">{product.inStock ? 'In Stock' : 'Out of Stock'}</td>
