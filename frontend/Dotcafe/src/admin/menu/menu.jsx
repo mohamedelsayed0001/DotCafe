@@ -8,7 +8,7 @@ import '../menu.css'
 export default function Menu ({categories, setCategories}) {
 
     const fetchCategories = async () => {
-        try { const response = await fetch('http://localhost:8080/menu');
+        try { const response = await fetch('http://localhost:8080/admin/menu');
             const data = await response.json(); 
             setCategories(data);
         } catch (error) {
