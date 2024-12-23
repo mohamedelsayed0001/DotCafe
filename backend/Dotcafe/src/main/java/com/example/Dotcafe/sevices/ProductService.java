@@ -37,9 +37,7 @@ public class ProductService {
             product.setInStock(true);
             product.setDeleted(false);
             product.setCategory(isACategory.get());
-            if(isAProduct.isPresent()){
-                product.setId(isAProduct.get().getId());
-            }
+            isAProduct.ifPresent(value -> product.setId(value.getId()));
             Product newProduct = productRepository.save(product);
             productDto = newProduct.getDto();
             return productDto;

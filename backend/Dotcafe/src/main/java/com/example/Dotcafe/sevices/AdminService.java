@@ -1,9 +1,17 @@
 package com.example.Dotcafe.sevices;
 import com.example.Dotcafe.entity.Category;
 import com.example.Dotcafe.entity.Dto.CategoryDto;
+import com.example.Dotcafe.entity.Dto.OrderDto;
+import com.example.Dotcafe.entity.Order;
+import com.example.Dotcafe.entity.OrderItem;
 import com.example.Dotcafe.entity.Product;
+import com.example.Dotcafe.mappers.OrderMapper;
 import com.example.Dotcafe.repository.CategoryRepository;
+import com.example.Dotcafe.repository.OrderRepository;
 import com.example.Dotcafe.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +27,14 @@ public class AdminService {
 
    private final CategoryRepository categoryRepository;
    private final ProductRepository productRepository;
+   private final OrderRepository orderRepository;
+   private final OrderMapper orderMapper;
 
-    public AdminService(CategoryRepository categoryRepository, ProductRepository productRepository) {
+    public AdminService(CategoryRepository categoryRepository, ProductRepository productRepository, OrderRepository orderRepository, OrderMapper orderMapper) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
+        this.orderRepository = orderRepository;
+        this.orderMapper = orderMapper;
     }
 
     public CategoryDto createCategory(CategoryDto categoryDto) throws IllegalArgumentException {
@@ -62,6 +74,7 @@ public class AdminService {
             for(Product p : category.get().getProducts()){
                 p.setCategory(null);
                 p.setInStock(false);
+                p.setDeleted(true);
                 productRepository.save(p);
             }
             categoryRepository.deleteById(id);
@@ -77,6 +90,20 @@ public class AdminService {
                 .toList();
 
     }
+
+    public List<OrderDto> getOrders(int index,int size){
+        Pageable pageable = PageRequest.of(index, size, Sort.by("localDateTime").descending());
+        Page<Order> page = orderRepository.findAll(pageable);
+        List<OrderDto> orders = new ArrayList<>();
+        for(Order order : page.getContent()){
+            orders.add(orderMapper.getDto(order));
+        }
+        return orders;
+
+
+    }
+
+
 
 
 }
