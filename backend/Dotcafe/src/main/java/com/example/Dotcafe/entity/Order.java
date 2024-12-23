@@ -1,12 +1,9 @@
 package com.example.Dotcafe.entity;
 
-import com.example.Dotcafe.entity.Dto.OrderDto;
-import com.example.Dotcafe.entity.Dto.OrderItemDto;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -23,7 +20,9 @@ public class Order {
     private Long id;
     @ManyToOne
     private Customer customer;
-    private Double totalPrice;
+    private Double orderPrice;
+    private Double taxes;
+    private Double total;
     @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "order")
     private List<OrderItem> orderItems;
     @Enumerated(EnumType.STRING)

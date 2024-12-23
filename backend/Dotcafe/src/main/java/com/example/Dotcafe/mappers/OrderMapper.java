@@ -26,7 +26,9 @@ public class OrderMapper {
                 id(order.getId()).
                 userMail(order.getCustomer().getMail()).
                 orderItems(orderItemDtoList).
-                totalPrice(order.getTotalPrice()).
+                orderPrice(order.getOrderPrice()).
+                total(order.getTotal()).
+                taxes(order.getTaxes()).
                 localDateTime(order.getLocalDateTime()).
                 progress(order.getProgress()).
                 build();

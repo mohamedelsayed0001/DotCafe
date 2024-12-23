@@ -22,18 +22,22 @@ public class Cart {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "cart",orphanRemoval = true)
     private List<OrderItem> orderItems;
-    private Double totalPrice = 0D;
+    private Double orderPrice = 0D;
+    private Double taxes = 0D;
+    private Double total= 0D;
 
     public void addOrderItem(OrderItem orderItem){
         orderItems.add(orderItem);
-        totalPrice+=orderItem.getTotalPrice();
+        orderPrice +=orderItem.getTotalPrice();
     }
     public void updateTotalPrice(){
-        totalPrice = 0D;
+        orderPrice = 0D;
         for(OrderItem orderItem : orderItems){
             orderItem.calcPrice();
-            totalPrice+=orderItem.getTotalPrice();
+            orderPrice +=orderItem.getTotalPrice();
         }
+        taxes = 1.12* orderPrice;
+        total = orderPrice +taxes;
     }
 
 

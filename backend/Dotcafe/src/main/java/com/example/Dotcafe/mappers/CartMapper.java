@@ -31,7 +31,10 @@ public class CartMapper {
         return CartDto.builder().
                 id(cart.getId()).
                 customerId(cart.getCustomer().getId()).
-                orderItems(orderItemDtos).totalPrice(cart.getTotalPrice()).
+                orderItems(orderItemDtos).
+                orderPrice(cart.getOrderPrice()).
+                taxes(cart.getTaxes()).
+                total(cart.getTotal()).
                 build();
     }
 
@@ -47,8 +50,11 @@ public class CartMapper {
         return Cart.builder().
                 customer(customer.get()).
                 orderItems(orderItems).
-                id(cartDto.getId()).totalPrice(cartDto.getTotalPrice())
-                .build();
+                id(cartDto.getId()).
+                orderPrice(cartDto.getOrderPrice()).
+                total(cartDto.getTotal()).
+                taxes(cartDto.getTaxes()).
+                build();
     }
 
 

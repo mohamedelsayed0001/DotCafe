@@ -1,8 +1,5 @@
 package com.example.Dotcafe.entity.Dto;
 
-import com.example.Dotcafe.entity.Customer;
-import com.example.Dotcafe.entity.OrderItem;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -15,5 +12,7 @@ public class CartDto {
     private Long id;
     private Long customerId;
     private List<OrderItemDto> orderItems;
-    private Double totalPrice = 0D;
+    private Double orderPrice = 0D; //order with out taxes
+    private Double taxes = 0D;
+    private Double total = 0D;
 }

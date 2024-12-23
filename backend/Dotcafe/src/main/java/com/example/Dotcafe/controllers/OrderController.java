@@ -28,24 +28,25 @@ public class OrderController {
         }
 
     }
-//@DeleteMapping("/{orderItemId}")
-//public ResponseEntity<?> delete( @PathVariable Long orderItemId) {
-//    orderService.deleteOrderItem(orderItemId);
-//    return new ResponseEntity<>(HttpStatus.CREATED);
-//}
+@DeleteMapping("/{orderItemId}")
+public ResponseEntity<?> delete( @PathVariable Long orderItemId) {
+    orderService.deleteOrderItem(orderItemId);
+    return new ResponseEntity<>(HttpStatus.CREATED);
+}
 @PutMapping("/place/{userId}")
-public ResponseEntity<?> placeorders (@PathVariable Long userId, @RequestBody CartDto cartDto) {
-        return new ResponseEntity<>(  orderService.placeOrder(userId,cartDto),HttpStatus.OK);
+public ResponseEntity<?> placeorders (@PathVariable Long userId) {
+        return new ResponseEntity<>(  orderService.placeOrder(userId),HttpStatus.OK);
     }
-    @PutMapping("/update/cart/{userId}")
-    public ResponseEntity<?> updateCart (@PathVariable Long userId, @RequestBody CartDto cartDto){
-        cartDto.setCustomerId(userId);
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<?> updateCart (@PathVariable Long userId, @RequestBody OrderItemDto orderItemDto){
         try {
-            return new ResponseEntity<>(orderService.updateCart(cartDto), HttpStatus.OK);
+            return new ResponseEntity<>(orderService.updateCart(orderItemDto,userId), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+
 
 }
 

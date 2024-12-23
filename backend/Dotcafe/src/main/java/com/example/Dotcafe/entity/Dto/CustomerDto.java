@@ -19,6 +19,7 @@ public class CustomerDto {
     private Long points;
     private String password;
     private String phoneNumber;
+
     @JsonIgnore
     public Customer getCustomer() {
         return Customer.builder()
