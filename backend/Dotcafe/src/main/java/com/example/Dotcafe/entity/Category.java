@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -38,7 +39,7 @@ public class Category {
                 .build();
         categoryDto.setProducts(new ArrayList<>());
         for(Product p : products){
-            categoryDto.addProductDto(p.getDto());
+          if(!p.isDeleted())  categoryDto.addProductDto(p.getDto());
         }
         return categoryDto;
 

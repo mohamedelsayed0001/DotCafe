@@ -25,7 +25,7 @@ public class ProductService {
     public ProductDto create(ProductDto productDto) throws IllegalArgumentException {
         productDto.setId(null);
         Optional<Product> isAProduct = productRepository.findByNameIgnoreCase(productDto.getName());
-        if(isAProduct.isPresent() && isAProduct.get().getInStock()){
+        if(isAProduct.isPresent() && isAProduct.get().getInStock() && !isAProduct.get().isDeleted()){
             throw new IllegalArgumentException("Product name exist");
         }
         if(productDto.getCategoryId()==null){
@@ -35,6 +35,7 @@ public class ProductService {
         if (isACategory.isPresent()){
             Product product = productDto.getProduct();
             product.setInStock(true);
+            product.setDeleted(false);
             product.setCategory(isACategory.get());
             if(isAProduct.isPresent()){
                 product.setId(isAProduct.get().getId());
@@ -54,6 +55,8 @@ public class ProductService {
         Optional<Product> currentProduct = productRepository.findById(id);
         if (currentProduct.isPresent()) {
             currentProduct.get().setInStock(false);
+            currentProduct.get().setDeleted(true);
+            Product product = currentProduct.get();
             productRepository.save(currentProduct.get());
         } else {
             throw new IllegalArgumentException("This product is not available");

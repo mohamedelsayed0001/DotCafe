@@ -59,26 +59,35 @@ public class OrderService {
         return cartMapper.getDto(cart);
     }
 
-  public OrderDto placeorder(Long userId, CartDto cartDto){
-       Order order=new Order();
+  public OrderDto placeOrder(Long userId, CartDto cartDto){
+       Order order = new Order();
        Cart oldcart=cartMapper.getCart(cartDto);
+       oldcart.updateTotalPrice();
        order.setId(null);
-       order.setOrderItems(oldcart.getOrderItems());
        order.setCustomer(oldcart.getCustomer());
        order.setTotalPrice(oldcart.getTotalPrice());
        order.setProgress(Progress.ORDER_PLACED);
-       oldcart.setOrderItems(new ArrayList<>());
-       orderRepository.save(order);
-       cartRepository.save(oldcart);
+      order.setOrderItems(new ArrayList<>());
+      order = orderRepository.save(order);
+      for(OrderItem orderItem : oldcart.getOrderItems()){
+          orderItem.setCart(null);
+          orderItem.setOrder(order);
+          orderItemRepository.save(orderItem);
+      }
+      oldcart.setOrderItems(new ArrayList<>());
+      oldcart.setTotalPrice(0D);
+      cartRepository.save(oldcart);
+      Optional<Order> fullOrder = orderRepository.findById(order.getId());
+      if(fullOrder.isEmpty()) throw new IllegalArgumentException("can't happen");
+      return orderMapper.getDto(fullOrder.get());
+    }
 
-       return orderMapper.getDto(order);}
+    public void deleteOrderItem(Long orderItemId) {
 
-//    public void deleteOrderItem(Long orderitemid) {
-//
-//        Optional<OrderItem> deleteditem = orderItemRepository.findById(orderitemid);
-//        Cart currentcart = deleteditem.get().getCart();
-//        currentcart.getOrderItems().remove(deleteditem.get());
-//        cartRepository.save(currentcart);
-//    }
+        Optional<OrderItem> deletedItem = orderItemRepository.findById(orderItemId);
+        Cart currentcart = deletedItem.get().getCart();
+        currentcart.getOrderItems().remove(deletedItem.get());
+        cartRepository.save(currentcart);
+    }
 
 }

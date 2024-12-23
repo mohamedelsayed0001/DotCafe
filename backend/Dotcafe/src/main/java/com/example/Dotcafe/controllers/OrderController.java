@@ -35,7 +35,7 @@ public class OrderController {
 //}
 @PutMapping("/place/{userId}")
 public ResponseEntity<?> placeorders (@PathVariable Long userId, @RequestBody CartDto cartDto) {
-        return new ResponseEntity<>(  orderService.placeorder(userId,cartDto),HttpStatus.OK);
+        return new ResponseEntity<>(  orderService.placeOrder(userId,cartDto),HttpStatus.OK);
     }
     @PutMapping("/update/cart/{userId}")
     public ResponseEntity<?> updateCart (@PathVariable Long userId, @RequestBody CartDto cartDto){
