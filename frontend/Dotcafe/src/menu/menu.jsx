@@ -4,9 +4,12 @@ import HomeLogo from './HomeLogo';
 import SignupButtons from'./SignupButtons'
 import LogedinButton from './Logedinbuttons';
 import MainMenu from './mainMenu';
+import ItemCardpage from './itemCardPage';
 
 function Menu({ signed,setWindow }) {
     const [menu, setMenu] = useState([]);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+
     const pull = "http://localhost:8080/"
     async function pullmenu() {
         try {
@@ -38,7 +41,13 @@ function Menu({ signed,setWindow }) {
         ) : (
             <SignupButtons setwindow={setWindow}/>
         )}
-        <MainMenu setwindow = {setWindow}  menu ={menu}/>
+        <MainMenu  menu ={menu} setProduct={setSelectedProduct}/>
+        {selectedProduct && (
+        <ItemCardpage
+          product={selectedProduct}
+          setProduct = {setSelectedProduct}
+        />
+      )}
         </>
     );
 }
