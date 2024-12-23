@@ -33,7 +33,10 @@ public class OrderController {
 //    orderService.deleteOrderItem(orderItemId);
 //    return new ResponseEntity<>(HttpStatus.CREATED);
 //}
-
+@PutMapping("/place/{userId}")
+public ResponseEntity<?> placeorders (@PathVariable Long userId, @RequestBody CartDto cartDto) {
+        return new ResponseEntity<>(  orderService.placeorder(userId,cartDto),HttpStatus.OK);
+    }
     @PutMapping("/update/cart/{userId}")
     public ResponseEntity<?> updateCart (@PathVariable Long userId, @RequestBody CartDto cartDto){
         cartDto.setCustomerId(userId);
