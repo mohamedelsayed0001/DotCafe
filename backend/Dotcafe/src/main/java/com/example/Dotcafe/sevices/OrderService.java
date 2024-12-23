@@ -65,6 +65,13 @@ public CartDto updateCart(OrderItemDto orderItemDto, Long userId) {
     Cart cart = cartOpt.get();
     orderItemRepository.save(orderItem);
     cart.updateTotalPrice();
+    for(OrderItem i : cart.getOrderItems())
+    {
+        if(i.getId().equals(orderItemDto.getId())){
+            cart.getOrderItems().remove(i);
+            cart.getOrderItems().add(orderItemMapper.getOrderItem(orderItemDto,userId));
+        }
+    }
     cartRepository.save(cart);
     return cartMapper.getDto(cart);
 }
@@ -78,6 +85,7 @@ public CartDto updateCart(OrderItemDto orderItemDto, Long userId) {
        Cart oldcart = customer.get().getCart();
        oldcart.updateTotalPrice();
        order.setId(null);
+       order.setTotal(oldcart.getTotal());
        order.setCustomer(customer.get());
        order.setOrderPrice(oldcart.getOrderPrice());
        order.setProgress(Progress.ORDER_PLACED);
