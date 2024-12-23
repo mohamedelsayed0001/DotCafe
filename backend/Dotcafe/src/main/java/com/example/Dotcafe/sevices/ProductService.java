@@ -34,7 +34,6 @@ public class ProductService {
         Optional<Category> isACategory = categoryRepository.findById(productDto.getCategoryId());
         if (isACategory.isPresent()){
             Product product = productDto.getProduct();
-            product.setInStock(true);
             product.setDeleted(false);
             product.setCategory(isACategory.get());
             if(isAProduct.isPresent()){
