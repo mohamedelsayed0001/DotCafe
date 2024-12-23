@@ -18,7 +18,7 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PostMapping("/{userId}")
+    @PostMapping("/cart/{userId}")
     public ResponseEntity<?> addToCart(@RequestBody OrderItemDto orderItemDto, @PathVariable Long userId){
 
         try{
@@ -41,6 +41,14 @@ public ResponseEntity<?> placeorders (@PathVariable Long userId) {
     public ResponseEntity<?> updateCart (@PathVariable Long userId, @RequestBody OrderItemDto orderItemDto){
         try {
             return new ResponseEntity<>(orderService.updateCart(orderItemDto,userId), HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+    @PutMapping("/points/update/{userId}")
+    public ResponseEntity<?> updatepoints (@PathVariable Long userId, @RequestBody CartDto cartDto){
+        try {
+            return new ResponseEntity<>(orderService.updatepoints(userId,cartDto), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

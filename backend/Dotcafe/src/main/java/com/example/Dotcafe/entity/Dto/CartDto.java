@@ -15,4 +15,5 @@ public class CartDto {
     private Double orderPrice = 0D; //order with out taxes
     private Double taxes = 0D;
     private Double total = 0D;
+    private Integer points= 0;
 }

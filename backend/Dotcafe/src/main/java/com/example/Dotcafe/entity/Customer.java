@@ -4,6 +4,7 @@ import com.example.Dotcafe.entity.Dto.CustomerDto;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Builder
@@ -26,6 +27,9 @@ public class Customer {
     private Cart cart;
     @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "customer")
     private List<Order> orders;
+    @Lob
+    @Basic(fetch = FetchType.EAGER)
+    private byte[] image;
     public CustomerDto getDto() {
          return CustomerDto.builder().
                  name(name).
@@ -34,6 +38,7 @@ public class Customer {
                  role(role).
                  points(points).
                  phoneNumber(phoneNumber).
+                 image(image != null ? new String(image, StandardCharsets.UTF_8): null).
                  build();
 
     }

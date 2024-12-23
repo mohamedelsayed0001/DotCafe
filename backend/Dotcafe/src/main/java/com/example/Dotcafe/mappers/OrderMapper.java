@@ -29,6 +29,7 @@ public class OrderMapper {
                 orderPrice(order.getOrderPrice()).
                 total(order.getTotal()).
                 taxes(order.getTaxes()).
+                points(order.getPoints()).
                 localDateTime(order.getLocalDateTime()).
                 progress(order.getProgress()).
                 build();

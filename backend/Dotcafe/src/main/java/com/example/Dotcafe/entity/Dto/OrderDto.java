@@ -18,6 +18,7 @@ public class OrderDto {
     private Double orderPrice;
     private Double taxes;
     private Double total;
+    private Integer points;
     private List<OrderItemDto> orderItems;
     private Progress progress;
     @JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss")

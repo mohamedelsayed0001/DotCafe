@@ -58,14 +58,16 @@ public class OrderService {
 //        cart = cartRepository.save(cart);
 //        return cartMapper.getDto(cart);
 //    }
-    public OrderItemDto updateCart(OrderItemDto orderItemDto,Long userId) {
-        OrderItem orderItem = orderItemMapper.getOrderItem(orderItemDto,userId);
-        orderItem.calcPrice();
-        orderItemRepository.save(orderItem);
-        orderItem.getCart().updateTotalPrice();
-        cartRepository.save(orderItem.getCart());
-        return orderItemMapper.getDto(orderItem);
-    }
+public CartDto updateCart(OrderItemDto orderItemDto, Long userId) {
+    OrderItem orderItem = orderItemMapper.getOrderItem(orderItemDto, userId);
+    orderItem.calcPrice();
+    Optional<Cart> cartOpt = cartRepository.findByCustomerId(userId);
+    Cart cart = cartOpt.get();
+    orderItemRepository.save(orderItem);
+    cart.updateTotalPrice();
+    cartRepository.save(cart);
+    return cartMapper.getDto(cart);
+}
 
   public OrderDto placeOrder(Long userId){
        Order order = new Order();
@@ -79,21 +81,33 @@ public class OrderService {
        order.setCustomer(customer.get());
        order.setOrderPrice(oldcart.getOrderPrice());
        order.setProgress(Progress.ORDER_PLACED);
-      order.setOrderItems(new ArrayList<>());
-      order = orderRepository.save(order);
-      for(OrderItem orderItem : oldcart.getOrderItems()){
+       order.setOrderItems(new ArrayList<>());
+       order.setPoints(oldcart.getPoints());
+       Optional<Customer> customer1= customerRepository.findById(userId);
+       customer1.get().setPoints(customer1.get().getPoints()-oldcart.getPoints());
+       order = orderRepository.save(order);
+       customerRepository.save(customer1.get());
+       for(OrderItem orderItem : oldcart.getOrderItems()){
           orderItem.setCart(null);
           orderItem.setOrder(order);
           orderItemRepository.save(orderItem);
-      }
-      oldcart.setOrderItems(new ArrayList<>());
-      oldcart.setOrderPrice(0D);
-      cartRepository.save(oldcart);
-      Optional<Order> fullOrder = orderRepository.findById(order.getId());
-      if(fullOrder.isEmpty()) throw new IllegalArgumentException("can't happen");
-      return orderMapper.getDto(fullOrder.get());
+       }
+       oldcart.setOrderItems(new ArrayList<>());
+       oldcart.setOrderPrice(0D);
+       oldcart.setTotal(0D);
+       oldcart.setTaxes(0D);
+       oldcart.setPoints(0);
+       cartRepository.save(oldcart);
+       Optional<Order> fullOrder = orderRepository.findById(order.getId());
+       if(fullOrder.isEmpty()) throw new IllegalArgumentException("can't happen");
+       return orderMapper.getDto(fullOrder.get());
     }
-
+    public CartDto updatepoints(Long userId,CartDto cartDto){
+        Optional<Cart> usercart=cartRepository.findByCustomerId(userId);
+        usercart.get().setPoints(cartDto.getPoints());
+        cartRepository.save(usercart.get());
+        return cartMapper.getDto(usercart.get());
+    }
     public void deleteOrderItem(Long orderItemId) {
         Optional<OrderItem> deletedItem = orderItemRepository.findById(orderItemId);
         Cart currentcart = deletedItem.get().getCart();

@@ -25,7 +25,7 @@ public class Cart {
     private Double orderPrice = 0D;
     private Double taxes = 0D;
     private Double total= 0D;
-
+    private Integer points=0;
     public void addOrderItem(OrderItem orderItem){
         orderItems.add(orderItem);
         orderPrice +=orderItem.getTotalPrice();
@@ -36,8 +36,8 @@ public class Cart {
             orderItem.calcPrice();
             orderPrice +=orderItem.getTotalPrice();
         }
-        taxes = 1.12* orderPrice;
-        total = orderPrice +taxes;
+        taxes = .12* orderPrice;
+        total = orderPrice +taxes-(points/100);
     }
 
 

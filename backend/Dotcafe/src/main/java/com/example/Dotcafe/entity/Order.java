@@ -23,6 +23,7 @@ public class Order {
     private Double orderPrice;
     private Double taxes;
     private Double total;
+    private Integer points;
     @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "order")
     private List<OrderItem> orderItems;
     @Enumerated(EnumType.STRING)

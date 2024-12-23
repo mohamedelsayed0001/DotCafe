@@ -4,9 +4,13 @@ import com.example.Dotcafe.entity.Cart;
 import com.example.Dotcafe.entity.Customer;
 import com.example.Dotcafe.entity.Dto.CartDto;
 import com.example.Dotcafe.entity.Dto.CustomerDto;
+import com.example.Dotcafe.entity.Dto.OrderDto;
+import com.example.Dotcafe.entity.Order;
 import com.example.Dotcafe.mappers.CartMapper;
+import com.example.Dotcafe.mappers.OrderMapper;
 import com.example.Dotcafe.repository.CartRepository;
 import com.example.Dotcafe.repository.CustomerRepository;
+import com.example.Dotcafe.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,12 +23,16 @@ public class CustomerService {
     private final PasswordEncoder passwordEncoder;
     private final CartRepository cartRepository;
     private  final CartMapper cartMapper;
+    private OrderRepository orderRepository;
+    private OrderMapper orderMapper;
 
-    public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder, CartRepository cartRepository, CartMapper cartMapper) {
+    public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder, CartRepository cartRepository, CartMapper cartMapper, OrderRepository orderRepository, OrderMapper orderMapper) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
         this.cartRepository = cartRepository;
         this.cartMapper = cartMapper;
+        this.orderRepository = orderRepository;
+        this.orderMapper = orderMapper;
     }
 
     public CustomerDto login(CustomerDto customerDto) throws IllegalArgumentException{
@@ -112,5 +120,27 @@ public class CustomerService {
         } else {
             throw new IllegalArgumentException("Customer doesn't exist");
         }
+    }
+    public CustomerDto getprofile(Long userid){
+        Optional<Customer> userprofile=customerRepository.findById(userid);
+        if (userprofile.isEmpty())
+            throw new IllegalArgumentException("this user doesn't exist");
+        List<Order> allorders=orderRepository.findAllByCustomer_Id(userid);
+       List<OrderDto> userorders=new ArrayList<>();
+       for (Order o:allorders){
+          userorders.add(orderMapper.getDto(o));
+       }
+       CustomerDto profile=userprofile.get().getDto();
+       profile.setOrders(userorders);
+    return profile;
+    }
+    public  CustomerDto editprofile(Long userid,CustomerDto customerDto){
+        Optional<Customer> customer = customerRepository.getCustomerByMail(customerDto.getMail());
+         if(customer.isPresent()&&customer.get().getId()!=customerDto.getId()){
+             throw new IllegalArgumentException("this emailaddress is used");
+         }
+        customerRepository.save(customerDto.getCustomer());
+         customerDto.setId(null);
+         return customerDto;
     }
 }
