@@ -1,0 +1,16 @@
+.body{
+    background-color:#FEEFAE;
+    height: 100vh;
+    width: 100vw;
+}
+body{
+    background-color: #FEEFAE;
+}
+
+.logo {
+    margin: 10px;
+    width: 15%;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    border: none;
+}
