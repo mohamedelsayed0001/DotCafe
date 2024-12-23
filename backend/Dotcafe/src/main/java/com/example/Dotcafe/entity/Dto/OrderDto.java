@@ -17,6 +17,7 @@ import java.util.List;
 @Builder
 public class OrderDto {
     private Long id;
+    private String userMail;
     private Double totalPrice;
     private List<OrderItemDto> orderItems;
     private Progress progress;

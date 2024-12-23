@@ -24,6 +24,7 @@ public class OrderMapper {
         }
         return OrderDto.builder().
                 id(order.getId()).
+                userMail(order.getCustomer().getMail()).
                 orderItems(orderItemDtoList).
                 totalPrice(order.getTotalPrice()).
                 localDateTime(order.getLocalDateTime()).

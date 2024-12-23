@@ -89,6 +89,19 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/orders")
+    public ResponseEntity<?> getOrders(
+            @RequestParam(required = false,defaultValue = "0") Integer page,
+            @RequestParam(required = false,defaultValue = "10") Integer size
+    ) {
+        try {
+            return new ResponseEntity<>(adminService.getOrders(page,size),HttpStatus.OK);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
+    }
+
 
 
 }
