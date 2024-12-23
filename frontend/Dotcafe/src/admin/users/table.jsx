@@ -22,18 +22,13 @@ export default function Table({window, setWindow, setSelectedUser, users, setUse
             console.error('Error deleting user:', error); 
         } 
     };
-
-    // const handleDelete = async (userId) => { 
-    //     await deleteUser(userId); 
-    //     setUsers(users.filter(user => user.id !== userId));
-    // };
     
     return (
         <div style={{ backgroundColor: "#E9EED9", padding: "0.5% 4% 0px 4%" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                     <tr>
-                        {/* <th className="header-cell">User ID</th> */}
+                        <th className="header-cell">User ID</th>
                         <th className="header-cell">User Name</th>
                         <th className="header-cell">Role</th>
                         <th className="header-cell">Address</th>
@@ -45,7 +40,7 @@ export default function Table({window, setWindow, setSelectedUser, users, setUse
                 <tbody>
                     {users.map((user) => (
                             <tr key={user.id}>
-                            {/* <td className="table-cell">{user.id}</td> */}
+                            <td className="table-cell">{user.id}</td>
                             <td className="table-cell">{user.name}</td>
                             <td className="table-cell">{user.role}</td> 
                             <td className="table-cell">{user.mail}</td>

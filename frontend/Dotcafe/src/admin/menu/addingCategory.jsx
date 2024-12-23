@@ -21,8 +21,9 @@ export default function AddingCategory({ menuWindow, setMenuWindow, categories, 
             ); 
 
             if (!response.ok) { 
-                const errorText = await response.text(); 
-                console.error('Server error:', errorText); 
+                const errorText = await response.text();
+                alert(errorText);
+                // console.error('Server error:', errorText); 
                 return; 
             }
             const data = await response.json(); 
@@ -52,7 +53,8 @@ export default function AddingCategory({ menuWindow, setMenuWindow, categories, 
 
             if (!response.ok) { 
                 const errorText = await response.text(); 
-                console.error('Server error:', errorText); 
+                alert(errorText);
+                // console.error('Server error:', errorText); 
                 return; 
             }
             const data = await response.json(); 
@@ -95,7 +97,7 @@ export default function AddingCategory({ menuWindow, setMenuWindow, categories, 
 
     const handleCancel = () => {
         setNewCategoryName('')
-        setMenuWindow("Home");
+        setMenuWindow("Manage Category");
     }
 
   return (

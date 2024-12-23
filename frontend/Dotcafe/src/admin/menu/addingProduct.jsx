@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "../window.css";
-import trashIcon from '../icons/trash.svg';
 import editIcon from '../icons/edit.svg';
 
 export default function AddingProduct({ menuWindow, setMenuWindow, categories, setCategories, selectedProduct, setSelectedProduct }) {
@@ -9,11 +8,13 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
     const [price, setPrice] = useState(null);
     const [description, setDescription] = useState("");
     const [imageSrc, setImageSrc] = useState("");
+    const [inStock, setInStock] = useState(null)
 
     useEffect(() => { 
         if (menuWindow === "Edit Product" && selectedProduct) { 
             setName(selectedProduct.name || ""); 
             setCategoryId(selectedProduct.categoryId || ""); 
+            setInStock(selectedProduct.inStock === true ? true : false); 
             setPrice(selectedProduct.price || ""); 
             setDescription(selectedProduct.description || ""); 
             setImageSrc(selectedProduct.src || ""); 
@@ -34,7 +35,7 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
         if (!response.ok) { 
             const errorText = await response.text(); 
             if(errorText === "Product name exist") {
-                alert("product name already exists")
+                alert("Product name exist")
             }
             console.error('Server error:', errorText); 
             return; 
@@ -82,7 +83,7 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
             const errorText = await response.text();
             console.error('Server error:', errorText);
             if(errorText === "Another product with the same name already exists.") {
-                alert("another product with the same name exists")
+                alert("Another product with the same name already exists")
             }
             return;
         }
@@ -146,11 +147,14 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
         if(name === "") {
             alert("write product name");
             return;
-        } else if (categoryId === null) {
-            alert("Choose a Category");
+        } else if (categoryId === "") {
+            alert("choose a category");
+            return;
+        } else if (inStock === "") {
+            alert("Choose an availability");
             return;
         } else if (price === null) {
-            alert("Set product price");
+            alert("set product price");
             return;
         } else if (description === "") {
             alert("write product description");
@@ -165,7 +169,7 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
             name, 
             description, 
             categoryId, 
-            inStock: true, 
+            inStock, 
             price, 
             src: imageSrc 
         };
@@ -218,6 +222,16 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
                                     {category.name}
                                 </option>
                             ))}
+                        </select>
+                    </div>
+
+                    <div className="row">
+                        <label>Availability</label>
+                        <select value={inStock} onChange={(e) => setInStock(e.target.value)}>
+                            <option value="">Choose Availability</option>
+                            <option value={false}>Out of Stock</option>
+                            <option value={true}>In Stock</option>
+                            
                         </select>
                     </div>
 
