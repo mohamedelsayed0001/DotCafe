@@ -3,9 +3,10 @@ import Home from './home/home';
 import Registration from './registration/registration';
 import Admin from './admin/admin';
 import Menu from './menu/menu';
-import Profile from './profile/profile';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-
+import OrderReview from './Orders/OrderReview'
+import Track from './Track/Track'
 function App() {
   const [customerDTO, setCustomerDTO] = useState(() => {
     const savedCustomerDTO = sessionStorage.getItem("customerDTO");
@@ -27,8 +28,12 @@ function App() {
 
   const [window, setWindow] = useState(()=>{
     const savedWindow=sessionStorage.getItem("window");
-    return savedWindow?JSON.parse(savedWindow):"home";
-  });
+    return savedWindow?JSON.parse(savedWindow):"reviewOrder";
+  }
+
+
+  );
+
   
   useEffect(() => {
     sessionStorage.setItem("signed", JSON.stringify(signed));
@@ -38,7 +43,61 @@ function App() {
 
   return (
     <>
-      {["sign in", "sign up"].includes(window) && (
+    {/*
+       
+    <Router>
+      <Routes>
+      <Route path='/'menu>
+      <Menu
+          signed={signed}
+          setWindow={setWindow}
+        />
+        </Route>
+        <Route path='/'>
+        <Home
+          setSigned={setSigned}
+          signed={signed}
+          setWindow={setWindow}
+        />
+          </Route>
+          <Route path='/admin'>
+          <Admin setMainWindow={setWindow} setUserState={setSigned}/>
+          </Route>
+          <Route path='/order-review'>
+          <OrderReview customerDTO={customerDTO} setWindow={setWindow}></OrderReview>
+
+          </Route>
+          <Route path='/sign-in'>
+          <Registration
+          window={window}
+          setWindow={setWindow}
+          customerDTO={customerDTO}
+          setCustomerDTO={setCustomerDTO}
+          signed={signed}
+          setSigned={setSigned}
+        />
+
+          </Route>
+          <Route path='/sign-up'>
+          <Registration
+          window={window}
+          setWindow={setWindow}
+          customerDTO={customerDTO}
+          setCustomerDTO={setCustomerDTO}
+          signed={signed}
+          setSigned={setSigned}
+        />
+          </Route>
+      </Routes>
+    </Router>
+    
+    */}
+    {/*
+         {
+      window==="reviewOrder"&&(<OrderReview setWindow={setWindow}></OrderReview>)
+    } 
+    
+        {["sign in", "sign up"].includes(window) && (
         <Registration
           window={window}
           setWindow={setWindow}
@@ -56,18 +115,22 @@ function App() {
           signed={signed}
           setWindow={setWindow}
         />
-      )}
+      )}   
       {window === "menu" && (
         <Menu
           signed={signed}
           setWindow={setWindow}
-          customerDTO={customerDTO}
         />
+
       )}
-      {window === "profile" && (
+         {window === "profile" && (
         <Profile
         setWindow={setWindow}></Profile>
       )}
+
+        
+     */}
+      <OrderReview customerDTO={customerDTO} setWindow={setWindow}></OrderReview>
     </>
   );
 }
