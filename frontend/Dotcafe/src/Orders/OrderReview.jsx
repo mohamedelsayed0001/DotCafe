@@ -17,7 +17,28 @@ function OrderReview({ customerDTO, setWindow }) {
   const [taxes, setTaxes] = useState(0);
   const [total, setTotal] = useState(0);
   const [orderPrice, setOrderPrice] = useState(0);
+  const [points,setPoints] = useState(0); // 
+  const customerPoints = 0;
+
   async function fetchItems() {
+    try {
+      const response = await axios.get(`http://localhost:8080/customer/user/${customerDTO.id}`);
+
+      if (response.status === 200) {
+        customerPoints = response.data.points
+      }
+    } catch (error) {
+      if (error.response?.status === 400) {
+        // Account not found or other bad request error
+        console.error("Error 400:", error.response.data);
+
+      } else {
+        // Generic error handler
+        console.error("Unexpected Error:", error);
+
+      }
+    }
+
     try {
       const response = await axios.get(`http://localhost:8080/customer/cart/${customerDTO.id}`);
 
@@ -53,8 +74,6 @@ function OrderReview({ customerDTO, setWindow }) {
         setTaxes(response.data.taxes);
         setTotal(response.data.total)
 
-        console.log(response.data.role)
-
 
 
       }
@@ -70,6 +89,8 @@ function OrderReview({ customerDTO, setWindow }) {
       }
     }
   }
+
+
   const [items, setItems] = useState([
 
   ]);
@@ -102,9 +123,10 @@ function OrderReview({ customerDTO, setWindow }) {
     setOrderNumber(randomOrderNumber);
     setDialogOpen(true); // Open the popup
     try {
-      const response = await axios.put(`http://localhost:8080/order/place/${customerDTO.id}`);
+      const response = await axios.put(`http://localhost:8080/order/place/1`);
 
       if (response.status === 200) {
+        
 
 
         console.log(response.data)
@@ -127,10 +149,29 @@ function OrderReview({ customerDTO, setWindow }) {
   const handleCancel = () => {
     setItems([]); // Clear all items
   };
-  const handleDelete = (index) => {
-    const newItems = items.filter((_, i) => i !== index);
-    setItems(newItems);
-    handleUpdate(index);
+  async function  handleDelete(index){
+    console.log(items)
+    try {
+      const response = await axios.delete(`http://localhost:8080/order/${items[index].id}`);
+
+      if (response.status === 200) {
+        console.log(response.data)
+        setItems(response.data.orderItems);
+        setOrderPrice(response.data.orderPrice);
+        setTaxes(response.data.taxes);
+        setTotal(response.data.total)
+        
+      }
+    } catch (error) {
+      if (error.response?.status === 400) {
+        console.error("Error 400:", error.response.data);
+
+      } else {
+        // Generic error handler
+        console.error("Unexpected Error:", error);
+
+      }
+    }
   };
 
   function handleOnClose() {
