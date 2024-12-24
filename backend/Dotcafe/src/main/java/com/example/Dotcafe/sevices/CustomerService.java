@@ -5,6 +5,7 @@ import com.example.Dotcafe.entity.Customer;
 import com.example.Dotcafe.entity.Dto.CartDto;
 import com.example.Dotcafe.entity.Dto.CustomerDto;
 import com.example.Dotcafe.entity.Dto.OrderDto;
+import com.example.Dotcafe.entity.Dto.OrderItemDto;
 import com.example.Dotcafe.entity.Order;
 import com.example.Dotcafe.mappers.CartMapper;
 import com.example.Dotcafe.mappers.OrderMapper;
@@ -13,10 +14,8 @@ import com.example.Dotcafe.repository.CustomerRepository;
 import com.example.Dotcafe.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+
 @Service
 public class CustomerService {
 
@@ -24,15 +23,13 @@ public class CustomerService {
     private final PasswordEncoder passwordEncoder;
     private final CartRepository cartRepository;
     private  final CartMapper cartMapper;
-    private OrderRepository orderRepository;
-    private OrderMapper orderMapper;
+    private final OrderMapper orderMapper;
 
-    public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder, CartRepository cartRepository, CartMapper cartMapper, OrderRepository orderRepository, OrderMapper orderMapper) {
+    public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder, CartRepository cartRepository, CartMapper cartMapper, OrderMapper orderMapper) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
         this.cartRepository = cartRepository;
         this.cartMapper = cartMapper;
-        this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
     }
 
@@ -101,13 +98,14 @@ public class CustomerService {
         if (userprofile.isEmpty())
             throw new IllegalArgumentException("this user doesn't exist");
 
-        List<Order> allorders = userprofile.get().getOrders();
-        List<OrderDto> userorders = new ArrayList<>();
-        for (Order o : allorders) {
-            userorders.add(orderMapper.getDto(o));
+        List<Order> allOrders = userprofile.get().getOrders();
+        List<OrderDto> orderDtoList = new ArrayList<>();
+        for (Order order : allOrders) {
+            orderDtoList.add(orderMapper.getDto(order));
         }
+        orderDtoList.sort(Comparator.comparingLong(OrderDto::getId));
         CustomerDto profile = userprofile.get().getDto();
-        profile.setOrders(userorders);
+        profile.setOrders(orderDtoList);
         return profile;
     }
     public  CustomerDto editProfile(Long userid, CustomerDto customerDto){
@@ -123,10 +121,11 @@ public class CustomerService {
          customer.setPhoneNumber(customerDto.getPhoneNumber());
          customerRepository.save(customer);
          customerDto = customer.getDto();
-         List<OrderDto> orderDtoList =new ArrayList<>();
-         for (Order o:customer.getOrders()){
-            orderDtoList.add(orderMapper.getDto(o));
+         List<OrderDto> orderDtoList = new ArrayList<>();
+         for (Order order : customer.getOrders()){
+            orderDtoList.add(orderMapper.getDto(order));
          }
+         orderDtoList.sort(Comparator.comparingLong(OrderDto::getId));
          customerDto.setOrders(orderDtoList);
          return customerDto;
     }

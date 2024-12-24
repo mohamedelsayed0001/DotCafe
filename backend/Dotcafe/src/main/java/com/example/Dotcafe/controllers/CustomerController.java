@@ -53,23 +53,23 @@ public class CustomerController {
     }
 
     @GetMapping("/cart/{userId}")
-    public ResponseEntity<?> getcart(@PathVariable Long userId) {
+    public ResponseEntity<?> getCart(@PathVariable Long userId) {
         return new ResponseEntity<>(customerService.getCart(userId), HttpStatus.ACCEPTED);
     }
 
 
     @GetMapping("/profile/{userId}")
-    public ResponseEntity<?> getprofile(@PathVariable Long userId){
+    public ResponseEntity<?> getProfile(@PathVariable Long userId){
         try {
-            return new ResponseEntity<>(customerService.getProfile(userId), HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(customerService.getProfile(userId), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
     @PutMapping("/profile/edit/{userId}")
-    public ResponseEntity<?> editprofile(@PathVariable Long userId,@RequestBody CustomerDto customerDto){
+    public ResponseEntity<?> editProfile(@PathVariable Long userId, @RequestBody CustomerDto customerDto){
         try {
-            return new ResponseEntity<>(customerService.editProfile(userId,customerDto), HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(customerService.editProfile(userId,customerDto), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

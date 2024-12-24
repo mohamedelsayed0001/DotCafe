@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -25,13 +26,15 @@ public class AdminService {
    private final OrderRepository orderRepository;
    private final OrderMapper orderMapper;
    private final CustomerRepository customerRepository;
+   private final SimpMessagingTemplate messagingTemplate;
 
-    public AdminService(CategoryRepository categoryRepository, ProductRepository productRepository, OrderRepository orderRepository, OrderMapper orderMapper, CustomerRepository customerRepository) {
+    public AdminService(CategoryRepository categoryRepository, ProductRepository productRepository, OrderRepository orderRepository, OrderMapper orderMapper, CustomerRepository customerRepository, SimpMessagingTemplate messagingTemplate) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
         this.customerRepository = customerRepository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public CategoryDto createCategory(CategoryDto categoryDto) throws IllegalArgumentException {
@@ -144,6 +147,18 @@ public class AdminService {
         } else {
             throw new IllegalArgumentException("Customer doesn't exist");
         }
+    }
+
+    public OrderDto updateOrder(Long orderId, Progress progress){
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(()-> new IllegalArgumentException("Order not found"));
+        order.setProgress(progress);
+        orderRepository.save(order);
+        //web socket
+        messagingTemplate.convertAndSend("/topic/order/" + orderId,"fhsdkjhfjkds");
+        System.out.println("/topic/order/" + orderId );
+        return orderMapper.getDto(order);
+
     }
 
 

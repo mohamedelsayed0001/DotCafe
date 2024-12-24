@@ -2,6 +2,7 @@ package com.example.Dotcafe.controllers;
 import com.example.Dotcafe.entity.Dto.CategoryDto;
 import com.example.Dotcafe.entity.Dto.CustomerDto;
 import com.example.Dotcafe.entity.Dto.ProductDto;
+import com.example.Dotcafe.entity.Progress;
 import com.example.Dotcafe.sevices.AdminService;
 import com.example.Dotcafe.sevices.CustomerService;
 import com.example.Dotcafe.sevices.ProductService;
@@ -124,6 +125,16 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
 
+    }
+
+
+    @PutMapping("/order/{id}")
+    public ResponseEntity<?> updateOrder(@PathVariable Long id, @RequestBody Progress progress){
+        try {
+            return new ResponseEntity<>(adminService.updateOrder(id,progress),HttpStatus.OK);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
 

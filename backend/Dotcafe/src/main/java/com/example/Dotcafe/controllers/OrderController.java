@@ -29,8 +29,12 @@ public class OrderController {
     }
 @DeleteMapping("/{orderItemId}")
 public ResponseEntity<?> delete( @PathVariable Long orderItemId) {
-    orderService.deleteOrderItem(orderItemId);
-    return new ResponseEntity<>(HttpStatus.CREATED);
+   try{
+       return new ResponseEntity<>(orderService.deleteOrderItem(orderItemId),HttpStatus.OK);
+   }catch (Exception e){
+       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+   }
+
 }
 @PutMapping("/place/{userId}")
 public ResponseEntity<?> placeorders (@PathVariable Long userId) {
@@ -44,11 +48,10 @@ public ResponseEntity<?> placeorders (@PathVariable Long userId) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-    @PutMapping("/points/{userId}")
-    public ResponseEntity<?> updatepoints (@PathVariable Long userId, @RequestParam Integer points){
+    @PostMapping("/points/{userId}")
+    public ResponseEntity<?> updatePoints(@PathVariable Long userId, @RequestParam Integer points){
         try {
-            orderService.updatePoints(userId,points);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(orderService.updatePoints(userId,points),HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

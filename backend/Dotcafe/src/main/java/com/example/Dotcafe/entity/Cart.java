@@ -36,8 +36,11 @@ public class Cart {
             orderItem.calcPrice();
             orderPrice +=orderItem.getTotalPrice();
         }
+        orderPrice = Math.round(orderPrice*1000)/1000.0;
         taxes = .12* orderPrice;
+        taxes = Math.round(taxes*1000)/1000.0;
         total = orderPrice +taxes- ((double)points/100);
+        total = Math.round(total*1000)/1000.0;
     }
 
 

@@ -96,7 +96,7 @@ public CartDto updateCart(OrderItemDto orderItemDto, Long userId) {
        if(fullOrder.isEmpty()) throw new IllegalArgumentException("can't happen");
        return orderMapper.getDto(fullOrder.get());
     }
-    public void updatePoints(Long userId, Integer points){
+    public CartDto updatePoints(Long userId, Integer points){
         Customer customer = customerRepository.findById(userId).
         orElseThrow(()-> new IllegalArgumentException("Cart not found"));
         Cart cart = customer.getCart();
@@ -105,15 +105,17 @@ public CartDto updateCart(OrderItemDto orderItemDto, Long userId) {
         }
         cart.setPoints(points);
         cart.updateCart();
-        cartRepository.save(cart);
+        return cartMapper.getDto(cartRepository.save(cart));
 
     }
-    public void deleteOrderItem(Long orderItemId) {
+
+    public CartDto deleteOrderItem(Long orderItemId) {
         OrderItem deletedItem = orderItemRepository.findById(orderItemId).
                 orElseThrow(()->new IllegalArgumentException("Item not found"));;
         Cart currentcart = deletedItem.getCart();
         currentcart.getOrderItems().remove(deletedItem);
-        cartRepository.save(currentcart);
+        currentcart.updateCart();
+        return cartMapper.getDto(cartRepository.save(currentcart));
     }
 
 }
