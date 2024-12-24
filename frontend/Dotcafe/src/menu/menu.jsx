@@ -6,7 +6,7 @@ import LogedinButton from './Logedinbuttons';
 import MainMenu from './mainMenu';
 import ItemCardpage from './itemCardPage';
 
-function Menu({ signed,setWindow }) {
+function Menu({ signed,setWindow ,customerDTO}) {
     const [menu, setMenu] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -46,6 +46,9 @@ function Menu({ signed,setWindow }) {
         <ItemCardpage
           product={selectedProduct}
           setProduct = {setSelectedProduct}
+          signed={signed}
+          customerDTO={customerDTO}
+          setWindow={setWindow}
         />
       )}
         </>

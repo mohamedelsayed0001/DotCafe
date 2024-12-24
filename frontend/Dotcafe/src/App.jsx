@@ -3,7 +3,7 @@ import Home from './home/home';
 import Registration from './registration/registration';
 import Admin from './admin/admin';
 import Menu from './menu/menu';
-import ItemCardpage from './menu/itemCardPage';
+import Profile from './profile/profile';
 import './App.css';
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
     const savedSigned = sessionStorage.getItem("signed");
     return savedSigned ? JSON.parse(savedSigned) : false;
   });
-  
+
   const [window, setWindow] = useState(()=>{
     const savedWindow=sessionStorage.getItem("window");
     return savedWindow?JSON.parse(savedWindow):"home";
@@ -61,7 +61,12 @@ function App() {
         <Menu
           signed={signed}
           setWindow={setWindow}
+          customerDTO={customerDTO}
         />
+      )}
+      {window === "profile" && (
+        <Profile
+        setWindow={setWindow}></Profile>
       )}
     </>
   );

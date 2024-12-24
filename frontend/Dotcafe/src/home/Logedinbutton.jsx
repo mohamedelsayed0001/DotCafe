@@ -16,7 +16,7 @@ function LogedinButton({setwindow,setSigned}){
                 Track
             </button>
             <button className="Log-out-button"  onClick={()=>{setwindow("home" );setSigned(false)}}>Log out</button>
-            <img src={profile} alt="profile"  className='profile'/>
+            <img src={profile} alt="profile"  className='profile' onClick={()=>{setwindow("profile")}}/>
          
         </div>
     );

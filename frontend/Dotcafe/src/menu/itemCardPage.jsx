@@ -10,18 +10,57 @@ import {
 import Background from "../assets/background.jpg";
 import sizeIcon from "../assets/size.svg";
 
-function ItemCardpage({ product,setProduct}) {
+function ItemCardpage({ product,setProduct,signed,customerDTO,setWindow}) {
   const [size, setSize] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [open, setOpen] = useState(true);
   const [customize,setCustomize] = useState("");
   const [customizeflag,setCustomizeflag] = useState(false);
+  let factor = Math.round(product.description.length / 52);
+  if (factor ===4)
+    {factor=3}
+  console.log(factor)
 
   const handleClose = () =>{ 
     setProduct(null)
     setOpen(false)
   }
-    
+  const addtocart = async () => {
+    const userId = customerDTO.id; 
+    const apiUrl = `http://localhost:8080/order/cart/${userId}`;
+
+    // Data to send in the POST request
+    const requestData = {
+        productId: product.id,
+        quantity: quantity,
+        size: size,
+        customize: customize,
+    };
+
+    try {
+        // Sending a POST request
+        const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestData),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Parsing the JSON response
+        const data = await response.json();
+        console.log("Response received:", data);
+
+        // Perform actions with the returned data (e.g., updating UI or state)
+    } catch (error) {
+        console.error("Error while adding to cart:", error);
+    }
+  };
+
 
   return (
     <Dialog
@@ -68,7 +107,8 @@ function ItemCardpage({ product,setProduct}) {
                 borderRadius: "50%",
                 margin: "0 auto",
                 marginTop: -4.4,
-                marginLeft:4.9
+                marginLeft:4.9,
+                marginBottom:0,
               }}
             />
           </Box>
@@ -81,12 +121,24 @@ function ItemCardpage({ product,setProduct}) {
               padding: 2,
               backgroundColor: "#FEFCE7",
               borderRadius: 4,
+              
               boxShadow: 2,
-              marginLeft:48
+              marginLeft:48,
+              marginBottom: -9 ,
+                       
             }}
           >
             <Typography variant="h6">{product.name}</Typography>
-            <Typography variant="body1">{product.description}</Typography>
+            <Typography
+                variant="body1"
+                sx={{
+                width: '100%', // Ensures that the description takes up the full width
+                overflow: 'hidden', // Prevents overflow
+                textOverflow: 'ellipsis', // Adds ellipsis if the text overflows (optional)
+                wordWrap: 'break-word', // Ensures words break and wrap to the next line if necessary
+                
+                }}
+             >{product.description}</Typography>
           </Box>
 
           {/* Size Selector */}
@@ -101,7 +153,7 @@ function ItemCardpage({ product,setProduct}) {
                 padding: 2,
                 borderRadius: 4,
                 boxShadow: 2,
-                marginTop:-13.8,
+                marginTop:-5.3-factor*3,
                 marginLeft:-57,
             }}
           >
@@ -160,7 +212,7 @@ function ItemCardpage({ product,setProduct}) {
 
           {/* Price and Quantity */}
           <Box display="flex" justifyContent="space-between"  alignItems="center"width="50%"
-            gap="11%" position="relative" textAlign="center" sx={{marginTop:-7 ,marginLeft:50}}>
+            gap="2%" position="relative" textAlign="center" sx={{marginTop:-7 ,marginLeft:50 }}>
             <Typography variant="h6" 
              sx={{ flex: 1
               , textAlign: "center"
@@ -191,17 +243,21 @@ function ItemCardpage({ product,setProduct}) {
 
           {/* Actions */}
           <Box display="flex" justifyContent="space-around" width="100%" mt={2}>
-            <Button variant="contained"  sx={{
-                backgroundColor: "#FEFCE7",
-                borderRadius: 4,
-                color: "black",
-                boxShadow: 2,
-                "&:hover": {
-                  backgroundColor: "#E6E4D8",
-                },
+          <Button
+              variant="contained"
+              onClick={() => (signed ? addtocart() : setWindow("sign up"))}
+              sx={{
+                    backgroundColor: "#FEFCE7",
+                    borderRadius: 4,
+                    color: "black",
+                    boxShadow: 2,
+                    "&:hover": {
+                        backgroundColor: "#E6E4D8",
+                    },
               }}>
-              Add to Cart
-            </Button>
+                Add to Cart
+          </Button>
+
             <Button variant="contained" onClick={() => setCustomizeflag(true)} sx={{
                 backgroundColor: "#FEFCE7",
                 borderRadius: 4,
