@@ -97,17 +97,17 @@ function ItemCardpage({ product,setProduct,signed,customerDTO,setWindow}) {
               component="img"
               src={product.src || Background}
               alt={product.name || "Product Image"}
-              sx={{ width: 150, height: 150, borderRadius: "50%" ,marginTop: 2, gap: 3}}
+              sx={{  objectFit: "contain", width: 150, height: 150, borderRadius: "50%" ,marginTop: 2, gap: 3}}
             />
             <Box
               sx={{
-                width: 90,
+                width: 60,
                 height: 20,
                 backgroundColor: "rgba(0, 0, 0, 0.2)",
                 borderRadius: "50%",
                 margin: "0 auto",
                 marginTop: -4.4,
-                marginLeft:4.9,
+                marginLeft:6.3,
                 marginBottom:0,
               }}
             />

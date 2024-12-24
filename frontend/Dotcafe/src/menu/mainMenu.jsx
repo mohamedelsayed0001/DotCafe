@@ -19,7 +19,7 @@ function MainMenu ({menu,setProduct}) {
         <div className='main-menu'>
             {Array.isArray(menu) ? (
                <>
-                <SearchBar/>
+                <SearchBar setSelectedProduct={setProduct}/>
                 <CategoryList catlist={catlist} handleScroll={handleScroll} />
                 {
                     menu.map((category, index) => (
