@@ -4,7 +4,6 @@ import com.example.Dotcafe.entity.Dto.CustomerDto;
 import com.example.Dotcafe.repository.CartRepository;
 import com.example.Dotcafe.sevices.CustomerService;
 import lombok.SneakyThrows;
-import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,14 +54,14 @@ public class CustomerController {
 
     @GetMapping("/cart/{userId}")
     public ResponseEntity<?> getcart(@PathVariable Long userId) {
-        return new ResponseEntity<>(customerService.getcart(userId), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(customerService.getCart(userId), HttpStatus.ACCEPTED);
     }
 
 
     @GetMapping("/profile/{userId}")
     public ResponseEntity<?> getprofile(@PathVariable Long userId){
         try {
-            return new ResponseEntity<>(customerService.getprofile(userId), HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(customerService.getProfile(userId), HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -70,7 +69,7 @@ public class CustomerController {
     @PutMapping("/profile/edit/{userId}")
     public ResponseEntity<?> editprofile(@PathVariable Long userId,@RequestBody CustomerDto customerDto){
         try {
-            return new ResponseEntity<>(customerService.editprofile(userId,customerDto), HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(customerService.editProfile(userId,customerDto), HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

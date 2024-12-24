@@ -78,12 +78,12 @@ public class CustomerService {
         customerDto.setRole("customer");
         customerDto.setPoints(0L);
         Customer newcustomer= customerRepository.save(customerDto.getCustomer());
-        newcustomer.setCart(createcart(newcustomer));
+        newcustomer.setCart(createCart(newcustomer));
         customerRepository.save(newcustomer);
         return newcustomer.getDto();
 
     }
-    public Cart createcart(Customer newcustomer){
+    public Cart createCart(Customer newcustomer){
         Cart cart=new Cart();
         cart.setId(null);
         cart.setCustomer(newcustomer);
@@ -91,14 +91,12 @@ public class CustomerService {
 
      return cartRepository.save(cart);
     }
-    public CartDto getcart(Long id){
-        Optional <Cart>cart= cartRepository.findByCustomerId(id);
-        return cartMapper.getDto(cart.get());
+    public CartDto getCart(Long id){
+        Cart cart= cartRepository.findByCustomerId(id).
+                orElseThrow(()->new IllegalArgumentException("Cart not found"));;
+        return cartMapper.getDto(cart);
     }
-
-    // move this to admin ??
-
-    public CustomerDto getprofile(Long userid) {
+    public CustomerDto getProfile(Long userid) {
         Optional<Customer> userprofile = customerRepository.findById(userid);
         if (userprofile.isEmpty())
             throw new IllegalArgumentException("this user doesn't exist");
@@ -112,7 +110,7 @@ public class CustomerService {
         profile.setOrders(userorders);
         return profile;
     }
-    public  CustomerDto editprofile(Long userid,CustomerDto customerDto){
+    public  CustomerDto editProfile(Long userid, CustomerDto customerDto){
         Optional<Customer> anotherCustomer = customerRepository.getCustomerByMail(customerDto.getMail());
          if(anotherCustomer.isPresent()&& !Objects.equals(anotherCustomer.get().getId(), userid)){
              throw new IllegalArgumentException("this email address is used");
@@ -125,11 +123,11 @@ public class CustomerService {
          customer.setPhoneNumber(customerDto.getPhoneNumber());
          customerRepository.save(customer);
          customerDto = customer.getDto();
-         List<OrderDto> userorders=new ArrayList<>();
+         List<OrderDto> orderDtoList =new ArrayList<>();
          for (Order o:customer.getOrders()){
-            userorders.add(orderMapper.getDto(o));
+            orderDtoList.add(orderMapper.getDto(o));
          }
-         customerDto.setOrders(userorders);
+         customerDto.setOrders(orderDtoList);
          return customerDto;
     }
 }

@@ -52,26 +52,12 @@ public class OrderService {
         return orderItemMapper.getDto(orderItem);
 
     }
-
-//    public CartDto updateCart(CartDto cartDto) {
-//        Cart cart = cartMapper.getCart(cartDto);
-//        cart.updateTotalPrice();
-//        cart = cartRepository.save(cart);
-//        return cartMapper.getDto(cart);
-//    }
 public CartDto updateCart(OrderItemDto orderItemDto, Long userId) {
     OrderItem orderItem = orderItemMapper.getOrderItem(orderItemDto, userId);
     orderItem.calcPrice();
     orderItemRepository.save(orderItem);
-//    for(OrderItem i : cart.getOrderItems())
-//    {
-//        if(i.getId().equals(orderItemDto.getId())){
-//            cart.getOrderItems().remove(i);
-//            cart.getOrderItems().add(orderItemMapper.getOrderItem(orderItemDto,userId));
-//        }
-//    }
-    Optional<Cart> cartOpt = cartRepository.findByCustomerId(userId);
-    Cart cart = cartOpt.get();
+    Cart cart = cartRepository.findByCustomerId(userId).
+            orElseThrow(()->new IllegalArgumentException("Cart not found"));
     cart.updateCart();
     cartRepository.save(cart);
     return cartMapper.getDto(cart);
@@ -79,11 +65,8 @@ public CartDto updateCart(OrderItemDto orderItemDto, Long userId) {
 
   public OrderDto placeOrder(Long userId){
        Order order = new Order();
-      Optional<Customer> customerExist = customerRepository.findById(userId);
-      if(customerExist.isEmpty()) {
-          throw new IllegalArgumentException("cust not found");
-      }
-      Customer customer = customerExist.get();
+      Customer customer = customerRepository.findById(userId).
+              orElseThrow(()->new IllegalArgumentException("Customer not found"));
 
        Cart cart = customer.getCart();
        cart.updateCart();
@@ -113,7 +96,7 @@ public CartDto updateCart(OrderItemDto orderItemDto, Long userId) {
        if(fullOrder.isEmpty()) throw new IllegalArgumentException("can't happen");
        return orderMapper.getDto(fullOrder.get());
     }
-    public void updatepoints(Long userId,Integer points){
+    public void updatePoints(Long userId, Integer points){
         Customer customer = customerRepository.findById(userId).
         orElseThrow(()-> new IllegalArgumentException("Cart not found"));
         Cart cart = customer.getCart();
@@ -126,9 +109,10 @@ public CartDto updateCart(OrderItemDto orderItemDto, Long userId) {
 
     }
     public void deleteOrderItem(Long orderItemId) {
-        Optional<OrderItem> deletedItem = orderItemRepository.findById(orderItemId);
-        Cart currentcart = deletedItem.get().getCart();
-        currentcart.getOrderItems().remove(deletedItem.get());
+        OrderItem deletedItem = orderItemRepository.findById(orderItemId).
+                orElseThrow(()->new IllegalArgumentException("Item not found"));;
+        Cart currentcart = deletedItem.getCart();
+        currentcart.getOrderItems().remove(deletedItem);
         cartRepository.save(currentcart);
     }
 

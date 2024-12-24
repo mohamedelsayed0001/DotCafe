@@ -1,6 +1,5 @@
 package com.example.Dotcafe.controllers;
 
-import com.example.Dotcafe.entity.Dto.CartDto;
 import com.example.Dotcafe.entity.Dto.OrderItemDto;
 import com.example.Dotcafe.sevices.OrderService;
 import org.springframework.http.HttpStatus;
@@ -48,7 +47,7 @@ public ResponseEntity<?> placeorders (@PathVariable Long userId) {
     @PutMapping("/points/{userId}")
     public ResponseEntity<?> updatepoints (@PathVariable Long userId, @RequestParam Integer points){
         try {
-            orderService.updatepoints(userId,points);
+            orderService.updatePoints(userId,points);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
