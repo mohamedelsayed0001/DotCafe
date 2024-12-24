@@ -121,7 +121,14 @@ function App() {
           signed={signed}
           setWindow={setWindow}
         />
+
       )}
+         {window === "profile" && (
+        <Profile
+        setWindow={setWindow}></Profile>
+      )}
+
+        
      */}
       <OrderReview customerDTO={customerDTO} setWindow={setWindow}></OrderReview>
     </>

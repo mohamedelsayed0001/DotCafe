@@ -1,17 +1,12 @@
 import './menu.css';
 
-function CategoryList({catlist}){
-    const handleClick = (category) => {
-        
-        console.log(category);
-    };
-
+function CategoryList({catlist, handleScroll }){
     return(
         <div className="catlist-container">
         {catlist.map((item, index) => ( 
         <button
           key={index}
-          onClick={() => handleClick(item)} 
+          onClick={() => handleScroll(item)} 
           className="catlist"
             >
           {item}

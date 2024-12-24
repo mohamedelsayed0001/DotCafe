@@ -1,33 +1,38 @@
 import './menu.css';
-
+import { useRef } from 'react';
 import SearchBar from './searchBar';
 import CategoryList from './categoryList';
 import Categories from './categories';
 
-function MainMenu ({setwindow,menu}) {
+function MainMenu ({menu,setProduct}) {
     const catlist = menu.map(item => item.name);
+    const categoryRefs = useRef({});
+
+    const handleScroll = (category) => {
+        const categoryElement = categoryRefs.current[category];
+        if (categoryElement) {
+            categoryElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
 
     return (
         <div className='main-menu'>
             {Array.isArray(menu) ? (
-                /*menu.map((category, index) => (
-                    <div key={index}>
-                        <h2>{category.name}</h2>
-                        <ul>
-                            {category.products.map((product, productIndex) => (
-                                <li key={productIndex}>{product.name}</li>
-                            ))}
-                        </ul>
-                    </div>
-                )*/
-               
                <>
                 <SearchBar/>
-                <CategoryList catlist={catlist}/>
+                <CategoryList catlist={catlist} handleScroll={handleScroll} />
                 {
                     menu.map((category, index) => (
-                        <Categories key={index} category={category}></Categories>
-                    ))
+                    <div
+                      key={index}
+                      ref={(el) => (categoryRefs.current[category.name] = el)}
+                    >
+                      <Categories
+                          category={category} 
+                          setProduct={setProduct}
+                      />
+                  </div>
+                       ))
                 }
                </>
             ) : (
