@@ -75,7 +75,7 @@ public CartDto updateCart(OrderItemDto orderItemDto, Long userId) {
        order.setTaxes(cart.getTaxes());
        order.setCustomer(customer);
        order.setOrderPrice(cart.getOrderPrice());
-       order.setProgress(Progress.ORDER_PLACED);
+       order.setProgress(Progress.PLACED);
        order.setOrderItems(new ArrayList<>());
        order.setPoints(cart.getPoints());
        customer.setPoints(customer.getPoints()-cart.getPoints()+10);

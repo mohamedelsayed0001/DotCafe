@@ -8,6 +8,7 @@ import com.example.Dotcafe.repository.CategoryRepository;
 import com.example.Dotcafe.repository.CustomerRepository;
 import com.example.Dotcafe.repository.OrderRepository;
 import com.example.Dotcafe.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +27,8 @@ public class AdminService {
    private final OrderRepository orderRepository;
    private final OrderMapper orderMapper;
    private final CustomerRepository customerRepository;
-   private final SimpMessagingTemplate messagingTemplate;
+   @Autowired
+   private SimpMessagingTemplate messagingTemplate;
 
     public AdminService(CategoryRepository categoryRepository, ProductRepository productRepository, OrderRepository orderRepository, OrderMapper orderMapper, CustomerRepository customerRepository, SimpMessagingTemplate messagingTemplate) {
         this.categoryRepository = categoryRepository;
@@ -155,8 +157,7 @@ public class AdminService {
         order.setProgress(progress);
         orderRepository.save(order);
         //web socket
-        messagingTemplate.convertAndSend("/topic/order/" + orderId,"fhsdkjhfjkds");
-        System.out.println("/topic/order/" + orderId );
+        messagingTemplate.convertAndSend("/topic/order/" + orderId, progress.toString());
         return orderMapper.getDto(order);
 
     }

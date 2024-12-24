@@ -4,6 +4,7 @@ import Registration from './registration/registration';
 import Admin from './admin/admin';
 import Menu from './menu/menu';
 import './App.css';
+import OrderTracker from './OrderTracker';
 
 function App() {
   const [customerDTO, setCustomerDTO] = useState(() => {
@@ -41,7 +42,7 @@ function App() {
 
   return (
     <>
-      {["sign in", "sign up"].includes(window) && (
+      {/* {["sign in", "sign up"].includes(window) && (
         <Registration
           window={window}
           setWindow={setWindow}
@@ -65,7 +66,8 @@ function App() {
           signed={signed}
           setWindow={setWindow}
         />
-      )}
+      )} */}
+      <OrderTracker/>
     </>
   );
 }
