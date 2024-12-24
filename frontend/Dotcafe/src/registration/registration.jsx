@@ -1,9 +1,11 @@
 import "./Registration.css";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import logo_icon from "/public/logo.svg";
 import axios from 'axios'
 
 function Registration({ window, setWindow, customerDTO, setCustomerDTO, signed, setSigned }) {
+  const navigate =useNavigate();
   const [noteMessage, setNoteMessage] = useState("");//to handle massage error to be visible in form  
   function showNoteMessage(message) {
     setNoteMessage(message);
@@ -57,7 +59,9 @@ function Registration({ window, setWindow, customerDTO, setCustomerDTO, signed, 
           setCustomerDTO(response.data);
           setSigned(true);
           console.log(response.data.role)
-          setWindow(response.data.role === "admin" ? "admin" : "home");
+        ///  setWindow(response.data.role === "admin" ? "admin" : "home");
+        navigate(response.data.role === "admin" ? "/admin" : "/home");
+
         } 
       } catch (error) {
         if (error.response?.status === 400) {
@@ -234,14 +238,14 @@ function Registration({ window, setWindow, customerDTO, setCustomerDTO, signed, 
               href="##"
               style={{ color: "blue" }}
               onClick={() => {
-                setWindow("sign up")
+                navigate("/sign-up")
               }}
             >
               Create new Account
             </a>
           )}
         </div>
-        {window == "sign up" && <button className="login" onClick={() => { setWindow("sign in") }}>Login</button>}
+        {window == "sign up" && <button className="login" onClick={() => { navigate("/sign-in") }}>Login</button>}
       </div>
     </>
   );
