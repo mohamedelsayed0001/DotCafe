@@ -18,7 +18,7 @@ function OrderReview({ customerDTO, setWindow }) {
   const [total, setTotal] = useState(0);
   const [orderPrice, setOrderPrice] = useState(0);
   const [points,setPoints] = useState(0); // 
-  const customerPoints = 0;
+  let customerPoints = 8;
 
   async function fetchItems() {
     try {
@@ -173,6 +173,37 @@ function OrderReview({ customerDTO, setWindow }) {
       }
     }
   };
+  async function  applyPoints(e){
+    if (e.target.value<=customerPoints){
+      setPoints(e.target.value);
+      console.log(items)
+      try {
+        const response = await axios.put(`http://localhost:8080/order/points/${customerDTO.id}`,
+        {
+          params: {
+            points:points
+          }
+           
+        }
+         
+        );
+  
+        if (response.status === 200) {
+          setTotal(response.data.total)
+        }
+      } catch (error) {
+        if (error.response?.status === 400) {
+          console.error("Error 400:", error.response.data);
+  
+        } else {
+          // Generic error handler
+          console.error("Unexpected Error:", error);
+  
+        }
+      }
+    }
+    
+  };
 
   function handleOnClose() {
     setDialogOpen(false);
@@ -277,7 +308,7 @@ function OrderReview({ customerDTO, setWindow }) {
         direction="column"
         alignItems="center"
         style={{
-          marginTop: "12px",
+          marginTop: "20px",
           borderRadius: "10px",
           background: "white",
           padding: "10px",
@@ -285,13 +316,13 @@ function OrderReview({ customerDTO, setWindow }) {
           borderRadius: "20px",
 
           margin: "auto",
-          width: "60%",
+          width: "50%",
         }}
 
       >
-        {/* Payment Method */}
+        {/* Payment Method 
 
-        <Stack
+                   <Stack
           direction="row"
           justifyContent="space-between"
           alignItems="center"
@@ -316,6 +347,30 @@ function OrderReview({ customerDTO, setWindow }) {
             <MenuItem value="Cash on Delivery">Cash on Delivery</MenuItem>
           </Select>
         </Stack>
+
+        */}
+  <div
+        
+         
+         
+          style={{ marginBottom: "20px",width: "100%" ,display:"flex", alignItems:"center", justifyContent:"center",gap:'15px'}}
+        >
+<div htmlFor="">Enter points</div>
+<div style={{width:"20%"}}>
+<input
+  type="number"
+  placeholder="Enter points"
+  value={points}
+  onChange={(e) =>applyPoints(e) }
+  style={{ padding: "8px", marginBottom: "10px" , width: "100%",        
+    borderRadius: "8px",   
+    border: "2px solid #ccc", 
+    }}
+/>
+</div>
+
+</div>
+      
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px" }}>
           <div> order: {orderPrice} EGP</div>
           <div> + taxes : {taxes} EGP</div>
