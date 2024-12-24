@@ -29,6 +29,11 @@ public class CustomerDto {
     @JsonProperty("src")
     private String image;
 
+    @JsonIgnore
+    public byte[] image(){
+        return image!=null ?image.getBytes(StandardCharsets.UTF_8) : null;
+    }
+
 
     @JsonIgnore
     public Customer getCustomer() {
@@ -41,7 +46,6 @@ public class CustomerDto {
                 .password(password)
                 .phoneNumber(phoneNumber)
                 .image(image!=null ?image.getBytes(StandardCharsets.UTF_8) : null)
-
                 .build();
     }
 

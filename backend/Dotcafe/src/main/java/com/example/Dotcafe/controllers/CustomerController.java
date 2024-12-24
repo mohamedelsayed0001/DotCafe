@@ -43,31 +43,22 @@ public class CustomerController {
         }
     }
 
-    @GetMapping("/users")
-    public ResponseEntity<?> getUsers() {
-        return new ResponseEntity<>(customerService.getAllUsers(), HttpStatus.ACCEPTED);
-    }
 
-    @PostMapping("/update")
-    public ResponseEntity<?> updateUser(@RequestBody CustomerDto customerDto) {
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> getUser(@PathVariable Long id) {
         try {
-            return new ResponseEntity<>(customerService.updateUser(customerDto), HttpStatus.ACCEPTED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(customerService.getCustomer(id), HttpStatus.OK);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
     @GetMapping("/cart/{userId}")
     public ResponseEntity<?> getcart(@PathVariable Long userId) {
         return new ResponseEntity<>(customerService.getcart(userId), HttpStatus.ACCEPTED);
     }
-    @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
-        try {
-            return new ResponseEntity<>(customerService.deleteUser(userId), HttpStatus.ACCEPTED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
+
+
     @GetMapping("/profile/{userId}")
     public ResponseEntity<?> getprofile(@PathVariable Long userId){
         try {

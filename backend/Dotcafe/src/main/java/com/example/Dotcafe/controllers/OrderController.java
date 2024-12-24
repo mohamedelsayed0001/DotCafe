@@ -45,10 +45,11 @@ public ResponseEntity<?> placeorders (@PathVariable Long userId) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-    @PutMapping("/points/update/{userId}")
-    public ResponseEntity<?> updatepoints (@PathVariable Long userId, @RequestBody CartDto cartDto){
+    @PutMapping("/points/{userId}")
+    public ResponseEntity<?> updatepoints (@PathVariable Long userId, @RequestParam Integer points){
         try {
-            return new ResponseEntity<>(orderService.updatepoints(userId,cartDto), HttpStatus.OK);
+            orderService.updatepoints(userId,points);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

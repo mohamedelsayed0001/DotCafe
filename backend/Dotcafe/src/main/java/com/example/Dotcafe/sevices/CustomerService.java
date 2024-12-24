@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 @Service
 public class CustomerService {
@@ -36,16 +37,35 @@ public class CustomerService {
     }
 
     public CustomerDto login(CustomerDto customerDto) throws IllegalArgumentException{
-        Optional<Customer> customer = customerRepository.getCustomerByMail(customerDto.getMail());
-        if(customer.isEmpty()){
-            throw new IllegalArgumentException("Account not found signup to continue");
-        }
-        else if(!passwordEncoder.checkPassword(customerDto.getPassword(),customer.get().getPassword())){
+        Customer customer = customerRepository.getCustomerByMail(customerDto.getMail()).
+        orElseThrow(()-> new IllegalArgumentException("Account not found signup to continue"));;
+
+       if(!passwordEncoder.checkPassword(customerDto.getPassword(),customer.getPassword())){
             throw new IllegalArgumentException("Wrong password");
         }
-        else{
-            return customer.get().getDto();
-        }
+
+        CustomerDto response = new CustomerDto();
+        response.setName(customer.getName());
+        response.setRole(customer.getRole());
+        response.setMail(customer.getMail());
+        response.setId(customer.getId());
+        response.setPoints(customer.getPoints());
+        response.setPhoneNumber(customer.getPhoneNumber());
+        return response;
+
+    }
+    public CustomerDto getCustomer(Long id) throws IllegalArgumentException{
+        Customer customer = customerRepository.findById(id).
+                orElseThrow(()-> new IllegalArgumentException("Customer not found"));;
+        CustomerDto response = new CustomerDto();
+        response.setName(customer.getName());
+        response.setRole(customer.getRole());
+        response.setMail(customer.getMail());
+        response.setId(customer.getId());
+        response.setPoints(customer.getPoints());
+        response.setPhoneNumber(customer.getPhoneNumber());
+        return response;
+
     }
     public CustomerDto signup(CustomerDto customerDto) throws IllegalArgumentException {
         Optional<Customer> customer = customerRepository.getCustomerByMail(customerDto.getMail());
@@ -71,76 +91,45 @@ public class CustomerService {
 
      return cartRepository.save(cart);
     }
-
-    public List<CustomerDto> getAllUsers() {
-        List<Customer> cutomers = customerRepository.findAll();
-        List<CustomerDto> cutomerDtos = new ArrayList<>();
-
-        for (Customer customer : cutomers) {
-            cutomerDtos.add(customer.getDto());
-        }
-
-        return cutomerDtos;
-    }
     public CartDto getcart(Long id){
         Optional <Cart>cart= cartRepository.findByCustomerId(id);
         return cartMapper.getDto(cart.get());
     }
-    public CustomerDto updateUser(CustomerDto dto) throws IllegalArgumentException{
-        Optional<Customer> opCustomer = customerRepository.findById(dto.getId());
 
-        if(opCustomer.isPresent()) {
-            Customer customer = opCustomer.get();
-            customer.setRole(dto.getRole());
-            customer.setPoints(dto.getPoints());
-            customerRepository.save(customer);
+    // move this to admin ??
 
-            return customer.getDto();
-
-        } else {
-            throw new IllegalArgumentException("Customer doesn't exist");
-        }
-    }
-
-    public String deleteUser (Long userId) throws IllegalArgumentException {
-        Optional<Customer> opCustomer = customerRepository.findById(userId);
-
-        if(opCustomer.isPresent()) {
-            Customer customer= opCustomer.get();
-
-            if(customer.getRole().equals("admin")) {
-                List<Customer> admins = customerRepository.findByRoleIgnoreCase("admin");
-                if(admins.size() == 1) {
-                    throw new IllegalArgumentException("Can't delete the last admin");
-                }
-            }
-
-            customerRepository.delete(customer);
-            return "User deleted Successfully";
-        } else {
-            throw new IllegalArgumentException("Customer doesn't exist");
-        }
-    }
-    public CustomerDto getprofile(Long userid){
-        Optional<Customer> userprofile=customerRepository.findById(userid);
+    public CustomerDto getprofile(Long userid) {
+        Optional<Customer> userprofile = customerRepository.findById(userid);
         if (userprofile.isEmpty())
             throw new IllegalArgumentException("this user doesn't exist");
-        List<Order> allorders=orderRepository.findAllByCustomer_Id(userid);
-       List<OrderDto> userorders=new ArrayList<>();
-       for (Order o:allorders){
-          userorders.add(orderMapper.getDto(o));
-       }
-       CustomerDto profile=userprofile.get().getDto();
-       profile.setOrders(userorders);
-    return profile;
+
+        List<Order> allorders = userprofile.get().getOrders();
+        List<OrderDto> userorders = new ArrayList<>();
+        for (Order o : allorders) {
+            userorders.add(orderMapper.getDto(o));
+        }
+        CustomerDto profile = userprofile.get().getDto();
+        profile.setOrders(userorders);
+        return profile;
     }
     public  CustomerDto editprofile(Long userid,CustomerDto customerDto){
-        Optional<Customer> customer = customerRepository.getCustomerByMail(customerDto.getMail());
-         if(customer.isPresent()&&customer.get().getId()!=customerDto.getId()){
-             throw new IllegalArgumentException("this emailaddress is used");
+        Optional<Customer> anotherCustomer = customerRepository.getCustomerByMail(customerDto.getMail());
+         if(anotherCustomer.isPresent()&& !Objects.equals(anotherCustomer.get().getId(), userid)){
+             throw new IllegalArgumentException("this email address is used");
          }
-        customerRepository.save(customerDto.getCustomer());
-         customerDto.setId(null);
+         Customer customer = customerRepository.findById(userid).
+         orElseThrow(()-> new IllegalArgumentException("User not Found"));
+         customer.setMail(customerDto.getMail());
+         customer.setName(customerDto.getName());
+         customer.setImage(customerDto.image());
+         customer.setPhoneNumber(customerDto.getPhoneNumber());
+         customerRepository.save(customer);
+         customerDto = customer.getDto();
+         List<OrderDto> userorders=new ArrayList<>();
+         for (Order o:customer.getOrders()){
+            userorders.add(orderMapper.getDto(o));
+         }
+         customerDto.setOrders(userorders);
          return customerDto;
     }
 }

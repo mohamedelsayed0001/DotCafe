@@ -85,10 +85,12 @@ public class ProductService {
     }
 
     public List<CategoryDto> menu(){
-        return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
+        List<CategoryDto> categoryDtoList = new ArrayList<>(categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
                 .stream()
                 .map(Category::getDto)
-                .toList();
+                .toList());
+        categoryDtoList.sort(Comparator.comparingLong(CategoryDto::getId));
+        return categoryDtoList;
 
     }
 

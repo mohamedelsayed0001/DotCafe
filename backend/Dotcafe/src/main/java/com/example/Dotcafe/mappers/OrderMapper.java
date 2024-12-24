@@ -7,6 +7,7 @@ import com.example.Dotcafe.entity.OrderItem;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -22,6 +23,7 @@ public class OrderMapper {
         for(OrderItem orderItem :order.getOrderItems()){
             orderItemDtoList.add(orderItemMapper.getDto(orderItem));
         }
+        orderItemDtoList.sort(Comparator.comparingLong(OrderItemDto::getId));
         return OrderDto.builder().
                 id(order.getId()).
                 userMail(order.getCustomer().getMail()).

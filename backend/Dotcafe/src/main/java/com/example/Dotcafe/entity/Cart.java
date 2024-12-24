@@ -30,14 +30,14 @@ public class Cart {
         orderItems.add(orderItem);
         orderPrice +=orderItem.getTotalPrice();
     }
-    public void updateTotalPrice(){
+    public void updateCart(){
         orderPrice = 0D;
         for(OrderItem orderItem : orderItems){
             orderItem.calcPrice();
             orderPrice +=orderItem.getTotalPrice();
         }
         taxes = .12* orderPrice;
-        total = orderPrice +taxes-(points/100);
+        total = orderPrice +taxes- ((double)points/100);
     }
 
 

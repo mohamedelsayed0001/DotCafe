@@ -1,7 +1,9 @@
 package com.example.Dotcafe.controllers;
 import com.example.Dotcafe.entity.Dto.CategoryDto;
+import com.example.Dotcafe.entity.Dto.CustomerDto;
 import com.example.Dotcafe.entity.Dto.ProductDto;
 import com.example.Dotcafe.sevices.AdminService;
+import com.example.Dotcafe.sevices.CustomerService;
 import com.example.Dotcafe.sevices.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +19,31 @@ public class AdminController {
     private final AdminService adminService;
     private final ProductService productService;
 
+
     public AdminController(AdminService adminService, ProductService productService) {
         this.adminService = adminService;
         this.productService = productService;
+    }
+    @GetMapping("/users")
+    public ResponseEntity<?> getUsers() {
+        return new ResponseEntity<>(adminService.getAllUsers(), HttpStatus.ACCEPTED);
+    }
+    @PostMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestBody CustomerDto customerDto) {
+        try {
+            return new ResponseEntity<>(adminService.updateUser(customerDto), HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    // movw to admin
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+        try {
+            return new ResponseEntity<>(adminService.deleteUser(userId), HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/menu")

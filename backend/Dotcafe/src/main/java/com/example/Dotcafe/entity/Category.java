@@ -1,11 +1,14 @@
 package com.example.Dotcafe.entity;
 
 import com.example.Dotcafe.entity.Dto.CategoryDto;
+import com.example.Dotcafe.entity.Dto.OrderItemDto;
+import com.example.Dotcafe.entity.Dto.ProductDto;
 import jakarta.persistence.*;
 import lombok.*;
 
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Entity
@@ -30,6 +33,7 @@ public class Category {
 
            if(p.getInStock()) categoryDto.addProductDto(p.getDto());
         }
+        categoryDto.getProducts().sort(Comparator.comparingLong(ProductDto::getId));
         return categoryDto;
 
     }
@@ -41,6 +45,7 @@ public class Category {
         for(Product p : products){
           if(!p.isDeleted())  categoryDto.addProductDto(p.getDto());
         }
+        categoryDto.getProducts().sort(Comparator.comparingLong(ProductDto::getId));
         return categoryDto;
 
     }

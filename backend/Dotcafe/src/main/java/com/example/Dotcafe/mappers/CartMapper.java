@@ -4,11 +4,13 @@ import com.example.Dotcafe.entity.Cart;
 import com.example.Dotcafe.entity.Customer;
 import com.example.Dotcafe.entity.Dto.CartDto;
 import com.example.Dotcafe.entity.Dto.OrderItemDto;
+import com.example.Dotcafe.entity.Dto.ProductDto;
 import com.example.Dotcafe.entity.OrderItem;
 import com.example.Dotcafe.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +30,7 @@ public class CartMapper {
         for(OrderItem orderItem : cart.getOrderItems()) {
             orderItemDtos.add(orderItemMapper.getDto(orderItem));
         }
+        orderItemDtos.sort(Comparator.comparingLong(OrderItemDto::getId));
         return CartDto.builder().
                 id(cart.getId()).
                 customerId(cart.getCustomer().getId()).
@@ -58,6 +61,7 @@ public class CartMapper {
                 taxes(cartDto.getTaxes()).
                 build();
     }
+
 
 
 }
