@@ -16,7 +16,7 @@ import HomeLogo from "../menu/HomeLogo";
 import Background from "../assets/background.jpg";
 import Controlbuttons from "./controlbuttons";
 
-function Profile({ setWindow }) {
+function Profile({ setWindow ,cart}) {
   const [user, setUser] = useState({
     name: "John Doe",
     email: "john.doe@example.com",

@@ -26,10 +26,15 @@ function App() {
     return savedSigned ? JSON.parse(savedSigned) : false;
   });
 
+  const [cart, setCart] = useState(() => {
+    const savedCart = sessionStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : false;
+  });
   const [window, setWindow] = useState(()=>{
     const savedWindow=sessionStorage.getItem("window");
-    return savedWindow?JSON.parse(savedWindow):"reviewOrder";
+    return savedWindow?JSON.parse(savedWindow):"sign up";
   }
+
 
 
   );
@@ -92,13 +97,14 @@ function App() {
     </Router>
     
     */}
-    {/*
+   
          {
       window==="reviewOrder"&&(<OrderReview setWindow={setWindow}></OrderReview>)
     } 
     
         {["sign in", "sign up"].includes(window) && (
         <Registration
+        setCart={setCart}
           window={window}
           setWindow={setWindow}
           customerDTO={customerDTO}
@@ -118,19 +124,26 @@ function App() {
       )}   
       {window === "menu" && (
         <Menu
+        cart={cart}
           signed={signed}
           setWindow={setWindow}
         />
 
       )}
          {window === "profile" && (
-        <Profile
+        <Profile 
+        cart={cart}
         setWindow={setWindow}></Profile>
       )}
-
-        
-     */}
+       
+       {window === "orderReview" && (
       <OrderReview customerDTO={customerDTO} setWindow={setWindow}></OrderReview>
+      )}
+
+{window === "track" && (
+      <Track setWindow={setWindow} cutomerDTO={cutomerDTO}></Track>
+      )}
+      
     </>
   );
 }
