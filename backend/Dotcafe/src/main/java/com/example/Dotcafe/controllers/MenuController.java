@@ -4,10 +4,7 @@ import com.example.Dotcafe.entity.Dto.CategoryDto;
 import com.example.Dotcafe.sevices.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,10 +20,24 @@ public class MenuController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryDto>> menu(){
-        return new ResponseEntity<>(productService.menu(), HttpStatus.OK);
+    public ResponseEntity<?> menu(){
+        try {
+            return new ResponseEntity<>(productService.menu(), HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
 
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> search(@RequestParam String keyword){
+        try {
+            return new ResponseEntity<>(productService.search(keyword),HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
 
 
 }

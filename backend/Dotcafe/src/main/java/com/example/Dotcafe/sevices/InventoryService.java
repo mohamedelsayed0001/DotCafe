@@ -19,7 +19,7 @@ public class InventoryService {
     }
 
     public ItemDto create(ItemDto itemDto) throws IllegalArgumentException {
-        Optional<Item> searchItem = itemRepository.findByName(itemDto.getName());
+        Optional<Item> searchItem = itemRepository.findByNameIgnoreCase(itemDto.getName());
         if (searchItem.isPresent()) {
             throw new IllegalArgumentException("Item with the same name already exists.");
         }
@@ -31,7 +31,7 @@ public class InventoryService {
     public ItemDto edit(ItemDto itemDto) throws IllegalArgumentException {
         Optional<Item> currentItem = itemRepository.findById(itemDto.getId());
         if (currentItem.isPresent()) {
-            Optional<Item> otherItem = itemRepository.findByName(itemDto.getName());
+            Optional<Item> otherItem = itemRepository.findByNameIgnoreCase(itemDto.getName());
             if (otherItem.isPresent() && !otherItem.get().getId().equals(itemDto.getId())) {
                 throw new IllegalArgumentException("Another item with the same name already exists.");
             }

@@ -36,12 +36,21 @@ public class InventoryController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable  Long id) {
+        try {
             inventoryService.delete(id);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
+
     @GetMapping
-    public ResponseEntity<?> getItems(){
-        return new ResponseEntity<>(inventoryService.getItems(),HttpStatus.OK);
+    public ResponseEntity<?> getItems() {
+        try {
+            return new ResponseEntity<>(inventoryService.getItems(), HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
 }
