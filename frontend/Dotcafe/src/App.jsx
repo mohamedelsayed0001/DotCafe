@@ -127,6 +127,7 @@ function App() {
         cart={cart}
           signed={signed}
           setWindow={setWindow}
+          customerDTO={customerDTO}
         />
 
       )}
@@ -141,7 +142,7 @@ function App() {
       )}
 
 {window === "track" && (
-      <Track setWindow={setWindow} cutomerDTO={cutomerDTO}></Track>
+      <Track setWindow={setWindow} cutomerDTO={customerDTO}></Track>
       )}
       
     </>

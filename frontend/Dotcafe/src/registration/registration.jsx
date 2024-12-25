@@ -58,6 +58,7 @@ function Registration({ window, setWindow, customerDTO, setCustomerDTO, signed,s
         if (response.status === 201) {
           setCustomerDTO(response.data);
           setSigned(true);
+          console.log(response.data)
           console.log(response.data.role)
          setWindow(response.data.role === "admin" ? "admin" : "home");
          fetchItems();

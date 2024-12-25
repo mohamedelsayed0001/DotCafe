@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Ensure axios is imported
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Button,
@@ -13,18 +13,18 @@ import {
 import logo_icon from "/public/logo.svg";
 
 function Track({ cutomerDTO, setWindow }) {
-  const [orders, setOrders] = useState([
-  
-  ]);
+  const [orders, setOrders] = useState([]);
   const [selectedOrderNumber, setSelectedOrderNumber] = useState(null);
-  const [orderState, setOrderState] = useState();
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/customer/profile/${cutomerDTO.id}`);
+      const response = await axios.get(
+        `http://localhost:8080/customer/profile/${cutomerDTO.id}`
+      );
 
       if (response.status === 200) {
         setOrders(response.data.orders);
+        console.log(response.data.orders);
       }
     } catch (error) {
       if (error.response?.status === 400) {
@@ -39,20 +39,23 @@ function Track({ cutomerDTO, setWindow }) {
     fetchOrders();
   }, []);
 
-  const trackOrder = (orderNumber) => {
-    setSelectedOrderNumber(orderNumber);
-  };
+  
 
   const getOrderState = (orderNumber) => {
-    const order = orders.find((o) => o.id === orderNumber); // Use id here
-    setOrderState(order.progress);
-    return orderState;
+    const order = orders.find((o) => o.id === orderNumber);
+    return order?.progress || "Unknown";
   };
 
   return (
     <div>
-      {/* Orders List */}
-      <div style={{ display: "flex", gap: "10px", flexDirection: "column", marginTop: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          flexDirection: "column",
+          marginTop: "20px",
+        }}
+      >
         {/* Header Section */}
         <Stack
           spacing={{ xs: 1, sm: 2 }}
@@ -75,7 +78,9 @@ function Track({ cutomerDTO, setWindow }) {
               width: "10%",
               borderRadius: "10px",
             }}
-            onClick={() => { setWindow("menu") }}
+            onClick={() => {
+              setWindow("menu");
+            }}
           >
             Menu
           </Button>
@@ -101,7 +106,7 @@ function Track({ cutomerDTO, setWindow }) {
               borderRadius: "10px",
               background: "white",
               padding: "10px",
-              maxHeight: "300x",
+              maxHeight: "300px",
               borderRadius: "20px",
               overflowY: "auto",
               margin: "auto",
@@ -110,7 +115,10 @@ function Track({ cutomerDTO, setWindow }) {
             }}
           >
             {orders.map((order, index) => (
-              <div style={{ width: "100%", display: "flex", alignItems: 'center' }}>
+              <div
+                key={index}
+                style={{ width: "100%", display: "flex", alignItems: "center" }}
+              >
                 <Accordion
                   key={index}
                   style={{
@@ -118,7 +126,7 @@ function Track({ cutomerDTO, setWindow }) {
                     borderRadius: "20px",
                     background: "#ffffffd0",
                   }}
-                  >
+                >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls={`panel${index}-content`}
@@ -136,7 +144,7 @@ function Track({ cutomerDTO, setWindow }) {
                   <AccordionDetails>
                     <Typography variant="h6">Details:</Typography>
                     <ul>
-                      {order.items.map((item, itemIndex) => (
+                      {order.orderItems.map((item, itemIndex) => (
                         <div key={itemIndex}>
                           <li>Product Name : {item.productName}</li>
                           <li>Size : {item.size}</li>
@@ -153,7 +161,7 @@ function Track({ cutomerDTO, setWindow }) {
                 <Button
                   variant="text"
                   style={{ marginLeft: "auto" }}
-                  onClick={() => trackOrder(order.id)} 
+                  onClick={() => setSelectedOrderNumber(order.id)}
                 >
                   Track Order
                 </Button>
@@ -168,19 +176,19 @@ function Track({ cutomerDTO, setWindow }) {
               variant="h5"
               component="h2"
               style={{
-                marginTop: '20px',
-                marginBottom: '10px',
-                fontWeight: '900',
-                fontStyle: 'italic',
+                marginTop: "20px",
+                marginBottom: "10px",
+                fontWeight: "900",
+                fontStyle: "italic",
               }}
             >
-              Order Number:{' '}
+              Order Number:
               <span
                 style={{
-                  marginLeft: '10px',
-                  display: 'inline-block',
-                  padding: '5px',
-                  borderRadius: '5px',
+                  marginLeft: "10px",
+                  display: "inline-block",
+                  padding: "5px",
+                  borderRadius: "5px",
                 }}
               >
                 {selectedOrderNumber}
@@ -191,26 +199,31 @@ function Track({ cutomerDTO, setWindow }) {
               spacing={2}
               justifyContent="center"
               alignItems="center"
-              style={{ width: '90%', margin: 'auto' }}
+              style={{ width: "90%", margin: "auto" }}
             >
-              {['Order Placed', 'Preparing Order', 'Delivered Order'].map((state) => (
-                <Button
-                  key={state}
-                  variant="contained"
-                  style={{
-                    marginTop: "40px",
-                    background: getOrderState(selectedOrderNumber) === state ? 'green' : 'white',
-                    color: 'black',
-                    padding: '10px',
-                    borderRadius: '10px',
-                    width: '30%',
-                    fontSize: "1.2rem",
-                    textAlign: 'center',
-                  }}
-                >
-                  <strong>{state}</strong>
-                </Button>
-              ))}
+              {["Placed", "Preparing", "Ready"].map(
+                (state) => (
+                  <Button
+                    key={state}
+                    variant="contained"
+                    style={{
+                      marginTop: "40px",
+                      background:
+                        getOrderState(selectedOrderNumber) === state
+                          ? "green"
+                          : "white",
+                      color: "black",
+                      padding: "10px",
+                      borderRadius: "10px",
+                      width: "30%",
+                      fontSize: "1.2rem",
+                      textAlign: "center",
+                    }}
+                  >
+                    <strong>{state}</strong>
+                  </Button>
+                )
+              )}
             </Stack>
           </Stack>
         )}
