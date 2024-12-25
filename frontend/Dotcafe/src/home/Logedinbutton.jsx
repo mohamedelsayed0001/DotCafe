@@ -4,7 +4,7 @@ function LogedinButton({setwindow,setSigned}){
   
     
     const goToTrack = () => {
-       
+       setwindow("track")
     };
 
     return (

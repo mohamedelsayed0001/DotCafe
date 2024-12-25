@@ -18,7 +18,17 @@ import Controlbuttons from "./controlbuttons";
 
 function Profile({ setWindow ,customerDTO}) {
   const [user, setUser] = useState({
-    customerDTO
+    name: "John Doe",
+    email: "john.doe@example.com",
+    phone: "+1 234 567 890",
+    image: "https://via.placeholder.com/150",
+    points: 120,
+    discount: "15%",
+    lastOrders: [
+      { id: 1, name: "Order #001", date: "2024-12-20" },
+      { id: 2, name: "Order #002", date: "2024-12-19" },
+      { id: 3, name: "Order #003", date: "2024-12-18" },
+    ],
   });
 
   const [isEditing, setIsEditing] = useState(false);

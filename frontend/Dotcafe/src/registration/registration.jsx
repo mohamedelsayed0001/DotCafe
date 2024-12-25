@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import logo_icon from "/public/logo.svg";
 import axios from 'axios'
 
-function Registration({ window, setWindow, customerDTO, setCustomerDTO, signed, setSigned }) {
+function Registration({ window, setWindow, customerDTO, setCustomerDTO, signed,setCart, setSigned }) {
   
   const [noteMessage, setNoteMessage] = useState("");//to handle massage error to be visible in form  
   function showNoteMessage(message) {
@@ -59,8 +59,10 @@ function Registration({ window, setWindow, customerDTO, setCustomerDTO, signed, 
           setCustomerDTO(response.data);
           setSigned(true);
           console.log(response.data.role)
-          setWindow(response.data.role === "admin" ? "admin" : "home");
-        //navigate(response.data.role === "admin" ? "/admin" : "/home");
+         setWindow(response.data.role === "admin" ? "admin" : "home");
+         fetchItems();
+       /// navigate(response.data.role === "admin" ? "/admin" : "/home");
+
 
         } 
       } catch (error) {
@@ -78,6 +80,32 @@ function Registration({ window, setWindow, customerDTO, setCustomerDTO, signed, 
   }
 
 
+  async function fetchItems() {
+
+    try {
+      const response = await axios.get(`http://localhost:8080/customer/cart/${customerDTO.id}`);
+
+        if (response.status === 202) {
+          if (response.data.orderItems.length > 0) {
+            setCart(true);
+          }
+        }
+        
+
+
+      
+    } catch (error) {
+      if (error.response?.status === 400) {
+        // Account not found or other bad request error
+        console.error("Error 400:", error.response.data);
+
+      } else {
+        // Generic error handler
+        console.error("Unexpected Error:", error);
+
+      }
+    }
+  }
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -238,14 +266,14 @@ function Registration({ window, setWindow, customerDTO, setCustomerDTO, signed, 
               href="##"
               style={{ color: "blue" }}
               onClick={() => {
-                navigate("/sign-up")
+                setWindow("sign up")
               }}
             >
               Create new Account
             </a>
           )}
         </div>
-        {window == "sign up" && <button className="login" onClick={() => { navigate("/sign-in") }}>Login</button>}
+        {window == "sign up" && <button className="login" onClick={() => { setWindow("sign in") }}>Login</button>}
       </div>
     </>
   );
