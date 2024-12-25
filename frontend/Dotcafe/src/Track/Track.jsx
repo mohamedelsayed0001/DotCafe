@@ -140,7 +140,6 @@ function Track({ cutomerDTO, setWindow }) {
             direction="column"
             alignItems="center"
             style={{
-              borderRadius: "10px",
               background: "white",
               padding: "10px",
               maxHeight: "300px",

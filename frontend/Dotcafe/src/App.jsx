@@ -33,7 +33,7 @@ function App() {
   });
   const [window, setWindow] = useState(()=>{
     const savedWindow=sessionStorage.getItem("window");
-    return savedWindow?JSON.parse(savedWindow):"sign up";
+    return savedWindow?JSON.parse(savedWindow):"home";
   }
 
 
@@ -100,7 +100,7 @@ function App() {
     */}
    
          {
-      window==="reviewOrder"&&(<OrderReview setWindow={setWindow}></OrderReview>)
+      window==="reviewOrder"&&(<OrderReview setWindow={setWindow} customerDTO={customerDTO}></OrderReview>)
     } 
     
         {["sign in", "sign up"].includes(window) && (

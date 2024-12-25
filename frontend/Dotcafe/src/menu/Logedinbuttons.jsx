@@ -11,7 +11,7 @@ function LogedinButton({setWindow,cart}){
                 Track
                 </button>
         
-                <img src={Orders} alt="Order Icon" className="Orders" style={{cursor:"pointer"}} aria-disabled={cart} onClick={()=>{setWindow("orderReview")}} />
+                <img src={Orders} alt="Order Icon" className="Orders" style={{cursor:"pointer"}} aria-disabled={cart} onClick={()=>{setWindow("reviewOrder")}} />
               
            
         </div>

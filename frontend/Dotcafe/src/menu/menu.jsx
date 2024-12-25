@@ -5,10 +5,15 @@ import SignupButtons from'./SignupButtons'
 import LogedinButton from './Logedinbuttons';
 import MainMenu from './mainMenu';
 import ItemCardpage from './itemCardPage';
-
+import { Snackbar, SnackbarContent } from '@mui/material';
 function Menu({ cart ,signed,setWindow ,customerDTO}) {
     const [menu, setMenu] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [itemAddedToCart, setItemAddedToCart] = useState(false);
+    const handleCloseSnackbar = () => {
+        setItemAddedToCart(false);
+       
+      };
 
     const pull = "http://localhost:8080/"
     async function pullmenu() {
@@ -49,8 +54,27 @@ function Menu({ cart ,signed,setWindow ,customerDTO}) {
           signed={signed}
           customerDTO={customerDTO}
           setWindow={setWindow}
+          setItemAddedToCart={setItemAddedToCart}
         />
       )}
+      <Snackbar
+        open={itemAddedToCart}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <SnackbarContent
+          style={{
+            backgroundColor: '#4caf50',  // Green color for success message
+            color: '#fff',
+            fontWeight: 'bold',
+            borderRadius: '8px',
+            padding: '10px',
+          }}
+          message={"Item added to cart"}
+        />
+      </Snackbar>
+    
         </>
     );
 }

@@ -10,8 +10,8 @@ import {
 import Background from "../assets/background.jpg";
 import sizeIcon from "../assets/size.svg";
 
-function ItemCardpage({ product,setProduct,signed,customerDTO,setWindow}) {
-  const [size, setSize] = useState("");
+function ItemCardpage({ product,setProduct,signed,customerDTO,setWindow,setItemAddedToCart}) {
+  const [size, setSize] = useState("Small");
   const [quantity, setQuantity] = useState(1);
   const [open, setOpen] = useState(true);
   const [customize,setCustomize] = useState("");
@@ -26,6 +26,8 @@ function ItemCardpage({ product,setProduct,signed,customerDTO,setWindow}) {
     setOpen(false)
   }
   const addtocart = async () => {
+    setProduct(null)
+    setOpen(false)
     const userId = customerDTO.id; 
     const apiUrl = `http://localhost:8080/order/cart/${userId}`;
 
@@ -53,6 +55,7 @@ function ItemCardpage({ product,setProduct,signed,customerDTO,setWindow}) {
         
         const data = await response.json();
         console.log("Response received:", data);
+        setItemAddedToCart(true);
 
     } catch (error) {
         console.error("Error while adding to cart:", error);
