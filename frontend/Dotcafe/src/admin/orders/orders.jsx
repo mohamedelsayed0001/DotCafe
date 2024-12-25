@@ -3,10 +3,12 @@ import Table from './table';
 import '../menu.css'
 import OrderDetails from './orderDetails'
 import EditOrder from './editOrder'
+import { Client } from "@stomp/stompjs";
 
 export default function Orders ({orders, setOrders}) {
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(5);
+    const [size, setSize] = useState(50);
+     const [connected, setConnected] = useState(false);
 
     const fetchOrders = async () => {
         try { const response = await fetch(`http://localhost:8080/admin/orders?page=${page}&size=${size}`);
@@ -23,6 +25,43 @@ export default function Orders ({orders, setOrders}) {
         } 
     };
 
+      useEffect(() => {
+        fetchOrders();
+      }, []);
+    
+    
+      useEffect(() => {
+        // Create a new STOMP client
+        const client = new Client({
+          brokerURL: "ws://localhost:8080/ws",
+          reconnectDelay: 1000,
+          onConnect: () => {
+            console.log("Connected to WebSocket");
+            setConnected(true);
+    
+            client.subscribe(`/track/admin/order`, (message) => {
+                setOrders(prevOrders => [message.body, ...prevOrders]);
+                console.log(message.body)
+                console.log(orders)
+              
+            });
+          },
+          onDisconnect: () => {
+            console.log("Disconnected from WebSocket");
+            setConnected(false);
+          },
+          onStompError: (error) => {
+            console.error("STOMP error:", error);
+          },
+        });
+    
+        client.activate();
+    
+        return () => {
+          client.deactivate();
+        };
+      }, []);
+
     const handlePrevious = async () => {
         if(page === 0) {
             return;
@@ -35,7 +74,7 @@ export default function Orders ({orders, setOrders}) {
         if(page === 0) {
             return;
         } else {
-            setPage(page - 1);
+            setPage(page + 1);
         }
     }
 

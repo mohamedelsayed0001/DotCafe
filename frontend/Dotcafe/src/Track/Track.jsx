@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Client } from "@stomp/stompjs";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Button,
@@ -15,6 +16,7 @@ import logo_icon from "/public/logo.svg";
 function Track({ cutomerDTO, setWindow }) {
   const [orders, setOrders] = useState([]);
   const [selectedOrderNumber, setSelectedOrderNumber] = useState(null);
+  const [connected, setConnected] = useState(false);
 
   const fetchOrders = async () => {
     try {
@@ -39,7 +41,42 @@ function Track({ cutomerDTO, setWindow }) {
     fetchOrders();
   }, []);
 
-  
+
+  useEffect(() => {
+    // Create a new STOMP client
+    const client = new Client({
+      brokerURL: "ws://localhost:8080/ws",
+      reconnectDelay: 1000,
+      onConnect: () => {
+        console.log("Connected to WebSocket");
+        setConnected(true);
+
+        client.subscribe(`/track/order/${selectedOrderNumber}`, (message) => {
+          setOrders(orders.map((order) => 
+            order.id === selectedOrderNumber ? { ...order, progress: message.body } : order
+          ));
+          console.log(message.body)
+          
+        });
+      },
+      onDisconnect: () => {
+        console.log("Disconnected from WebSocket");
+        setConnected(false);
+      },
+      onStompError: (error) => {
+        console.error("STOMP error:", error);
+      },
+    });
+
+    client.activate();
+
+    return () => {
+      client.deactivate();
+    };
+  }, [selectedOrderNumber]);
+
+
+
 
   const getOrderState = (orderNumber) => {
     const order = orders.find((o) => o.id === orderNumber);

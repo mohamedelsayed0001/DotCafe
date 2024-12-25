@@ -63,7 +63,7 @@ export default function EditOrder({ ordersWindow, setOrdersWindow, orders, setOr
                   <label><strong> Current Progress:</strong></label>
                      <select value={newProgress} onChange={(e) => setNewProgress(e.target.value)}>
                         <option value="Placed">Placed</option>
-                        <option value="Prepairing">Prepairing</option>
+                        <option value="Preparing">Preparing</option>
                         <option value="Ready">Ready</option>
                      </select>
                   </div>
