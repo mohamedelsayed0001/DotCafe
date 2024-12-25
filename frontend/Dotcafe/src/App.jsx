@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import OrderReview from './Orders/OrderReview'
 import Track from './Track/Track'
+import Profile from './profile/profile';
 function App() {
   const [customerDTO, setCustomerDTO] = useState(() => {
     const savedCustomerDTO = sessionStorage.getItem("customerDTO");
@@ -30,8 +31,6 @@ function App() {
     const savedWindow=sessionStorage.getItem("window");
     return savedWindow?JSON.parse(savedWindow):"reviewOrder";
   }
-
-
   );
 
   
@@ -92,7 +91,7 @@ function App() {
     </Router>
     
     */}
-    {/*
+    
          {
       window==="reviewOrder"&&(<OrderReview setWindow={setWindow}></OrderReview>)
     } 
@@ -125,12 +124,10 @@ function App() {
       )}
          {window === "profile" && (
         <Profile
-        setWindow={setWindow}></Profile>
+        setWindow={setWindow} customerDTO ={customerDTO}></Profile>
       )}
 
         
-     */}
-      <OrderReview customerDTO={customerDTO} setWindow={setWindow}></OrderReview>
     </>
   );
 }

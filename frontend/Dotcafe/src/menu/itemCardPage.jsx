@@ -29,7 +29,6 @@ function ItemCardpage({ product,setProduct,signed,customerDTO,setWindow}) {
     const userId = customerDTO.id; 
     const apiUrl = `http://localhost:8080/order/cart/${userId}`;
 
-    // Data to send in the POST request
     const requestData = {
         productId: product.id,
         quantity: quantity,
@@ -38,7 +37,7 @@ function ItemCardpage({ product,setProduct,signed,customerDTO,setWindow}) {
     };
 
     try {
-        // Sending a POST request
+        
         const response = await fetch(apiUrl, {
             method: "POST",
             headers: {
@@ -51,11 +50,10 @@ function ItemCardpage({ product,setProduct,signed,customerDTO,setWindow}) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        // Parsing the JSON response
+        
         const data = await response.json();
         console.log("Response received:", data);
 
-        // Perform actions with the returned data (e.g., updating UI or state)
     } catch (error) {
         console.error("Error while adding to cart:", error);
     }

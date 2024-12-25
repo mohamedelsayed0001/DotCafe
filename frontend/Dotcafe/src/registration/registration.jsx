@@ -1,11 +1,11 @@
 import "./Registration.css";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import logo_icon from "/public/logo.svg";
 import axios from 'axios'
 
 function Registration({ window, setWindow, customerDTO, setCustomerDTO, signed, setSigned }) {
-  const navigate =useNavigate();
+  
   const [noteMessage, setNoteMessage] = useState("");//to handle massage error to be visible in form  
   function showNoteMessage(message) {
     setNoteMessage(message);
@@ -59,8 +59,8 @@ function Registration({ window, setWindow, customerDTO, setCustomerDTO, signed, 
           setCustomerDTO(response.data);
           setSigned(true);
           console.log(response.data.role)
-        ///  setWindow(response.data.role === "admin" ? "admin" : "home");
-        navigate(response.data.role === "admin" ? "/admin" : "/home");
+          setWindow(response.data.role === "admin" ? "admin" : "home");
+        //navigate(response.data.role === "admin" ? "/admin" : "/home");
 
         } 
       } catch (error) {

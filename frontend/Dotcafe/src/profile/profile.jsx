@@ -16,22 +16,13 @@ import HomeLogo from "../menu/HomeLogo";
 import Background from "../assets/background.jpg";
 import Controlbuttons from "./controlbuttons";
 
-function Profile({ setWindow }) {
+function Profile({ setWindow ,customerDTO}) {
   const [user, setUser] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "+1 234 567 890",
-    image: "https://via.placeholder.com/150",
-    points: 120,
-    discount: "15%",
-    lastOrders: [
-      { id: 1, name: "Order #001", date: "2024-12-20" },
-      { id: 2, name: "Order #002", date: "2024-12-19" },
-      { id: 3, name: "Order #003", date: "2024-12-18" },
-    ],
+    customerDTO
   });
 
   const [isEditing, setIsEditing] = useState(false);
+  
 
   const handleChange = (field, value) => {
     setUser((prev) => ({ ...prev, [field]: value }));
@@ -63,8 +54,8 @@ function Profile({ setWindow }) {
         backgroundSize: 'cover',
         
         overflow: 'hidden',
-        position: 'absolute', // Position relative to the viewport
-        top: 0, // Align to the top of the page
+        position: 'absolute', 
+        top: 0, 
         left: 0, 
       }}
     >
