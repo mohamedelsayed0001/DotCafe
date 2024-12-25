@@ -14,7 +14,7 @@ export default function EditingUser({ usersWindow, setUsersWindow, users, setUse
 
     const editUser = async (user) => {
         try {
-            const response = await fetch(`http://localhost:8080/customer/update`, {
+            const response = await fetch(`http://localhost:8080/admin/update`, {
                 method: 'Post', 
                 headers: { 'Content-Type': 'application/json'}, 
                 body: JSON.stringify(user)

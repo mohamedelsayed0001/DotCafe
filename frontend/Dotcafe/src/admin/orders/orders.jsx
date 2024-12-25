@@ -5,19 +5,43 @@ import OrderDetails from './orderDetails'
 import EditOrder from './editOrder'
 
 export default function Orders ({orders, setOrders}) {
+    const [page, setPage] = useState(0);
+    const [size, setSize] = useState(5);
 
-    // const fetchOrders = async () => {
-    //     try { const response = await fetch('http://localhost:8080/admin/orders');
-    //         const data = await response.json(); 
-    //         setOrders(data);
-    //     } catch (error) {
-    //         console.error('Error fetching items:', error); 
-    //     } 
-    // };
+    const fetchOrders = async () => {
+        try { const response = await fetch(`http://localhost:8080/admin/orders?page=${page}&size=${size}`);
+            if (!response.ok) {
+                const response = await response.text();
+                alert(response);
+                return;
+            } else {
+                const data = await response.json();
+                setOrders(data);
+            }
+        } catch (error) {
+            console.error('Error fetching items:', error); 
+        } 
+    };
 
-    // useEffect(() => {
-    //     fetchOrders();
-    // }, []);
+    const handlePrevious = async () => {
+        if(page === 0) {
+            return;
+        } else {
+            setPage(page - 1);
+        }
+    }
+
+    const handleNext = async () => {
+        if(page === 0) {
+            return;
+        } else {
+            setPage(page - 1);
+        }
+    }
+
+    useEffect(() => {
+        fetchOrders();
+    }, [page, size]);
     
     const [ordersWindow, setOrdersWindow] = useState("Home")
     const [selectedOrder, setSelectedOrder] = useState(null);
@@ -25,8 +49,10 @@ export default function Orders ({orders, setOrders}) {
     return (
         <div className= 'menu-page' style={{ backgroundColor: "#E9EED9", minHeight: "100vh", display: 'flex', flexDirection: 'column' }}>
             <div className='new-manage-buttons'>
-                {/* for testing */}
                 <button onClick={() => {fetchOrders();}}>refresh</button>
+                <button onClick={() => {handlePrevious();}} style={{padding:'0 1% 0 1%', marginLeft:'auto'}}>Previous</button>
+                <button disabled style={{padding:'0 2% 0 2%', cursor:'default'}}>1</button>
+                <button onClick={() => {handleNext();}} style={{padding:'0 1% 0 1%'}}>Next</button>
             </div>
             <Table  window={ordersWindow} setWindow={setOrdersWindow} 
                     orders={orders} setOrders={setOrders}

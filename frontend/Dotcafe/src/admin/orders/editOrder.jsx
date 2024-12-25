@@ -13,19 +13,23 @@ export default function EditOrder({ ordersWindow, setOrdersWindow, orders, setOr
 
    const editOrder = async (orderId) => {
       try {
-         // const response = await fetch(`http://localhost:8080/admin/category/edit/${orderId}`, {
-         //          method: 'PUT'
-         //       }
-         // ); 
+         const response = await fetch(`http://localhost:8080/admin/order/${orderId}`, {
+            method: 'PUT',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(
+               newProgress
+            )
+         }); 
 
-         // if (!response.ok) { 
-         //       const errorText = await response.text(); 
-         //       alert(errorText);
-         //       // console.error('Server error:', errorText); 
-         //       return; 
-         // }
-         // const data = await response.json(); 
-         // console.log('editing progress message :', data);
+         if (!response.ok) { 
+               const errorText = await response.text(); 
+               alert(errorText);
+               return; 
+         }
+         const data = await response.json(); 
+         console.log('editing progress message :', data);
 
          setOrders((prevOrders) =>
             prevOrders.map((order) =>
@@ -58,9 +62,9 @@ export default function EditOrder({ ordersWindow, setOrdersWindow, orders, setOr
                   <div className="row">
                   <label><strong> Current Progress:</strong></label>
                      <select value={newProgress} onChange={(e) => setNewProgress(e.target.value)}>
-                        <option value="ORDER_PLACED">ORDER_PLACED</option>
-                        <option value="PREPARING">PREPARING</option>
-                        <option value="READY">READY</option>
+                        <option value="Placed">Placed</option>
+                        <option value="Prepairing">Prepairing</option>
+                        <option value="Ready">Ready</option>
                      </select>
                   </div>
                </form>
