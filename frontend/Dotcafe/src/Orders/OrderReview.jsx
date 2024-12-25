@@ -14,6 +14,16 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
     fetchItems();
 
   }, [])
+  const [isEmpty,setIsEmpty]=useState(false);
+
+  useEffect(()=>{
+      if(items.length===0){
+        setCart(false);
+       setIsEmpty(true);
+        
+      }
+  },[items]
+  )
 
   const [taxes, setTaxes] = useState(0);
   const [total, setTotal] = useState(0);
@@ -233,7 +243,11 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
   }
   return (
     <div className="body" >
-      <Stack
+     {isEmpty?(
+       <Typography variant="h5" style={{ width: "20%", fontWeight: "850" }}>Your Cart Is Empty</Typography>
+         ):
+         (<>
+                   <Stack
         spacing={{ xs: 1, sm: 2 }}
         direction="row"
         sx={{
@@ -588,7 +602,10 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
           </Button>
         </DialogActions>
       </Dialog>
-
+         </>
+   
+         )
+         }
     </div>
   );
 }
