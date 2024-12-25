@@ -157,7 +157,7 @@ public class AdminService {
         order.setProgress(progress);
         orderRepository.save(order);
         //web socket
-        messagingTemplate.convertAndSend("/topic/order/" + orderId, progress.toString());
+        messagingTemplate.convertAndSend("/track/order/" + orderId, progress.toString());
         return orderMapper.getDto(order);
 
     }

@@ -11,6 +11,7 @@ import com.example.Dotcafe.repository.CartRepository;
 import com.example.Dotcafe.repository.CustomerRepository;
 import com.example.Dotcafe.repository.OrderItemRepository;
 import com.example.Dotcafe.repository.OrderRepository;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,8 +27,9 @@ public class OrderService {
     private  final OrderRepository orderRepository;
     private  final OrderMapper orderMapper;
     private final CustomerRepository customerRepository;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public OrderService(OrderItemMapper orderItemMapper, OrderItemRepository orderItemRepository, CartRepository cartRepository, CartMapper cartMapper, OrderRepository orderRepository, OrderMapper orderMapper, CustomerRepository customerRepository) {
+    public OrderService(OrderItemMapper orderItemMapper, OrderItemRepository orderItemRepository, CartRepository cartRepository, CartMapper cartMapper, OrderRepository orderRepository, OrderMapper orderMapper, CustomerRepository customerRepository, SimpMessagingTemplate simpMessagingTemplate) {
         this.orderItemMapper = orderItemMapper;
         this.orderItemRepository = orderItemRepository;
         this.cartRepository = cartRepository;
@@ -35,6 +37,7 @@ public class OrderService {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
         this.customerRepository = customerRepository;
+        this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
     public OrderItemDto addToCart(OrderItemDto orderItemDto, Long userId) {
@@ -94,6 +97,7 @@ public CartDto updateCart(OrderItemDto orderItemDto, Long userId) {
        cartRepository.save(cart);
        Optional<Order> fullOrder = orderRepository.findById(order.getId());
        if(fullOrder.isEmpty()) throw new IllegalArgumentException("can't happen");
+       simpMessagingTemplate.convertAndSend("/track/admin/order",orderMapper.getDto(fullOrder.get()));
        return orderMapper.getDto(fullOrder.get());
     }
     public CartDto updatePoints(Long userId, Integer points){

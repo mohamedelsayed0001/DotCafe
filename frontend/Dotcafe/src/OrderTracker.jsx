@@ -15,10 +15,11 @@ import { Client } from "@stomp/stompjs";
         setConnected(true);
 
         // Subscribe to the order topic
-        client.subscribe(`/topic/order/${1}`, (message) => {
+        client.subscribe(`/topic/admin/order`, (message) => {
           // Handle incoming messages
           setOrderState(message.body);
-          console.log(`Order ${1} update:`, message.body);
+          console.log(message.body)
+          // console.log(`Order ${1} update:`, message.body);
         });
       },
       onDisconnect: () => {
@@ -43,7 +44,7 @@ import { Client } from "@stomp/stompjs";
       <p>Tracking Order ID: {1}</p>
       <p>Status: {connected ? "Connected" : "Disconnected"}</p>
       <h2>Order State:</h2>
-      <p>{orderState ? orderState : "Waiting for updates..."}</p>
+      <p>{orderState ? "orderState" : "Waiting for updates..."}</p>
     </div>
   );
 };

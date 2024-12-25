@@ -17,7 +17,7 @@ public class OrderWebSocketController {
     @MessageMapping("/order/{orderId}")
     public void receiveOrderUpdate(String orderId, String orderState) {
         // You can process incoming WebSocket messages if needed
-        messagingTemplate.convertAndSend("/topic/order/" + orderId, orderState);
+        messagingTemplate.convertAndSend("/track/order/" + orderId, orderState);
         System.out.println(orderState);
     }
 }
