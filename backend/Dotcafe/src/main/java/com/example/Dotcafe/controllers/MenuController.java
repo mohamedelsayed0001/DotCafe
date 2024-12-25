@@ -20,14 +20,22 @@ public class MenuController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryDto>> menu(){
-        return new ResponseEntity<>(productService.menu(), HttpStatus.OK);
+    public ResponseEntity<?> menu(){
+        try {
+            return new ResponseEntity<>(productService.menu(), HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
 
     }
 
     @GetMapping("/search")
     public ResponseEntity<?> search(@RequestParam String keyword){
+        try {
             return new ResponseEntity<>(productService.search(keyword),HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
 

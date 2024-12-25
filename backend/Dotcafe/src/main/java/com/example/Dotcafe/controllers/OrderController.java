@@ -38,7 +38,12 @@ public ResponseEntity<?> delete( @PathVariable Long orderItemId) {
 }
 @PutMapping("/place/{userId}")
 public ResponseEntity<?> placeorders (@PathVariable Long userId) {
-        return new ResponseEntity<>(  orderService.placeOrder(userId),HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(  orderService.placeOrder(userId),HttpStatus.OK);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
     }
     @PutMapping("/update/{userId}")
     public ResponseEntity<?> updateCart (@PathVariable Long userId, @RequestBody OrderItemDto orderItemDto){

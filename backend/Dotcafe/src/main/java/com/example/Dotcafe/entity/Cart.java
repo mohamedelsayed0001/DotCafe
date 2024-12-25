@@ -41,6 +41,9 @@ public class Cart {
         taxes = Math.round(taxes*1000)/1000.0;
         total = orderPrice +taxes- ((double)points/100);
         total = Math.round(total*1000)/1000.0;
+        if(orderItems.isEmpty()){
+            total = 0D;
+        }
     }
 
 

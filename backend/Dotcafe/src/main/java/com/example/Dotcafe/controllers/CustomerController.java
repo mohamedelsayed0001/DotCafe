@@ -54,7 +54,11 @@ public class CustomerController {
 
     @GetMapping("/cart/{userId}")
     public ResponseEntity<?> getCart(@PathVariable Long userId) {
-        return new ResponseEntity<>(customerService.getCart(userId), HttpStatus.ACCEPTED);
+        try {
+            return new ResponseEntity<>(customerService.getCart(userId), HttpStatus.ACCEPTED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
 
@@ -62,7 +66,7 @@ public class CustomerController {
     public ResponseEntity<?> getProfile(@PathVariable Long userId){
         try {
             return new ResponseEntity<>(customerService.getProfile(userId), HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -70,7 +74,7 @@ public class CustomerController {
     public ResponseEntity<?> editProfile(@PathVariable Long userId, @RequestBody CustomerDto customerDto){
         try {
             return new ResponseEntity<>(customerService.editProfile(userId,customerDto), HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

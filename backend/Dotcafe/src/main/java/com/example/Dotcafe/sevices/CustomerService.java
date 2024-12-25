@@ -103,7 +103,7 @@ public class CustomerService {
         for (Order order : allOrders) {
             orderDtoList.add(orderMapper.getDto(order));
         }
-        orderDtoList.sort(Comparator.comparingLong(OrderDto::getId));
+        orderDtoList.sort(Comparator.comparing(OrderDto::getLocalDateTime).reversed());
         CustomerDto profile = userprofile.get().getDto();
         profile.setOrders(orderDtoList);
         return profile;
@@ -125,8 +125,8 @@ public class CustomerService {
          for (Order order : customer.getOrders()){
             orderDtoList.add(orderMapper.getDto(order));
          }
-         orderDtoList.sort(Comparator.comparingLong(OrderDto::getId));
-         customerDto.setOrders(orderDtoList);
+        orderDtoList.sort(Comparator.comparing(OrderDto::getLocalDateTime).reversed());
+        customerDto.setOrders(orderDtoList);
          return customerDto;
     }
 }
