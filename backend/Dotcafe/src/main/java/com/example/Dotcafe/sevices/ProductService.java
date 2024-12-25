@@ -10,9 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductService {
@@ -26,8 +24,8 @@ public class ProductService {
 
     public ProductDto create(ProductDto productDto) throws IllegalArgumentException {
         productDto.setId(null);
-        Optional<Product> isAProduct = productRepository.getProductByName(productDto.getName());
-        if(isAProduct.isPresent() && isAProduct.get().getInStock()){
+        Optional<Product> isAProduct = productRepository.findByNameIgnoreCase(productDto.getName());
+        if(isAProduct.isPresent() && isAProduct.get().getInStock() && !isAProduct.get().isDeleted()){
             throw new IllegalArgumentException("Product name exist");
         }
         if(productDto.getCategoryId()==null){
@@ -36,11 +34,9 @@ public class ProductService {
         Optional<Category> isACategory = categoryRepository.findById(productDto.getCategoryId());
         if (isACategory.isPresent()){
             Product product = productDto.getProduct();
-            product.setInStock(true);
+            product.setDeleted(false);
             product.setCategory(isACategory.get());
-            if(isAProduct.isPresent()){
-                product.setId(isAProduct.get().getId());
-            }
+            isAProduct.ifPresent(value -> product.setId(value.getId()));
             Product newProduct = productRepository.save(product);
             productDto = newProduct.getDto();
             return productDto;
@@ -56,6 +52,8 @@ public class ProductService {
         Optional<Product> currentProduct = productRepository.findById(id);
         if (currentProduct.isPresent()) {
             currentProduct.get().setInStock(false);
+            currentProduct.get().setDeleted(true);
+            Product product = currentProduct.get();
             productRepository.save(currentProduct.get());
         } else {
             throw new IllegalArgumentException("This product is not available");
@@ -66,7 +64,7 @@ public class ProductService {
         Optional<Product> currentProduct = productRepository.findById(productDto.getId());
 
         if (currentProduct.isPresent() ) {
-            Optional<Product> otherItem = productRepository.getProductByName(productDto.getName());
+            Optional<Product> otherItem = productRepository.findByNameIgnoreCase(productDto.getName());
             if (otherItem.isPresent() && !otherItem.get().getId().equals(productDto.getId())) {
                 throw new IllegalArgumentException("Another product with the same name already exists.");
             }
@@ -87,10 +85,33 @@ public class ProductService {
     }
 
     public List<CategoryDto> menu(){
-        return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
+        List<CategoryDto> categoryDtoList = new ArrayList<>(categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
                 .stream()
                 .map(Category::getDto)
-                .toList();
+                .toList());
+        categoryDtoList.sort(Comparator.comparingLong(CategoryDto::getId));
+        return categoryDtoList;
 
     }
+
+    public List<ProductDto> search(String keyword) {
+        List<Product> products = productRepository.findByNameContainingIgnoreCaseAndInStockTrue(keyword);
+        List<ProductDto> productDtos = new ArrayList<>(products.stream().map(Product::getDto).toList());
+       productDtos = sortProductsManually(productDtos);
+      return productDtos;
+}
+
+    public List<ProductDto> sortProductsManually(List<ProductDto> products) {
+        products.sort(new Comparator<ProductDto>() {
+            @Override
+            public int compare(ProductDto p1, ProductDto p2) {
+                return p1.getName().compareToIgnoreCase(p2.getName());
+            }
+        });
+        return products;
+    }
+
+
+
+
 }

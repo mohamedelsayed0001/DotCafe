@@ -20,9 +20,9 @@ export default function ManageCategory({ menuWindow, setMenuWindow, categories, 
                     console.error('Server error:', errorText);
                     return;
                 } else {
+                    const data = await response.text();
+                    console.log('deleting category message:', data);
                     setCategories(categories.filter(category => category.id !== categoryId));
-                    // const data = await response.text();
-                    // console.log('deleting category message:', data);
                 }
 
             } catch (error) {
@@ -37,7 +37,7 @@ export default function ManageCategory({ menuWindow, setMenuWindow, categories, 
 
   return (
     <div className="background">
-        <div className="window" style={{width: "750px", maxHeight: "600px" , overflowY: "auto"}}>
+        <div className="window" style={{width: "750px", maxHeight: "750px" , overflowY: "auto"}}>
             <div style={{display:"flex", gap: "60%"}}>
                 <h3>Manage Category</h3>
                 <div className="actions">

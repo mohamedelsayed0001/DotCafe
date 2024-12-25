@@ -23,9 +23,9 @@ export default function Table({window, setWindow, setSelectedOrder, orders, setO
                             <tr key={order.id}>
                             <td className="table-cell">{order.id}</td>
                             <td className="table-cell">{order.userMail}</td>
-                            <td className="table-cell">{order.localDateTime}</td>
+                            <td className="table-cell">{order.localDateTime.replace('\'T\'', ' ')}</td>
                             <td className="table-cell">{order.progress}</td> 
-                            <td className="table-cell">${order.totalPrice}</td>
+                            <td className="table-cell">${order.total}</td>
                             <td className="table-cell" 
                                 style={{ textDecoration: "underline", cursor:'pointer' }}
                                 onClick={() => {

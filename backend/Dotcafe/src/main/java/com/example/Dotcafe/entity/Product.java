@@ -3,15 +3,14 @@ package com.example.Dotcafe.entity;
 import com.example.Dotcafe.entity.Dto.ProductDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.List;
 
-@Data
+@Setter
+@Getter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,10 +25,10 @@ public class Product {
     @ManyToOne
     private Category category;
     private Boolean inStock;
+    private boolean deleted;
     @Lob
-    @Basic(fetch = FetchType.EAGER) // to fetch large obj directly
+    @Basic(fetch = FetchType.EAGER)
     private byte[] image;
-    @JsonIgnore
     public ProductDto getDto(){
         return ProductDto.builder().
                 id(id).

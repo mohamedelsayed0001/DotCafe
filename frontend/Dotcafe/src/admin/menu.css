@@ -1,7 +1,9 @@
 /* color 3  CBD2A4*/
 /* color 4  E9EED9*/
 .new-manage-buttons {
+    display: flex;
     margin-left: 4%;
+    margin-right: 4.5%;
     margin-top: 0.5%;
 }
 

@@ -7,7 +7,7 @@ export default function Table({window, setWindow, setSelectedUser, users, setUse
 
     const handleDelete = async (userId) => {
         try {
-            const response = await fetch(`http://localhost:8080/customer/delete/${userId}`, {
+            const response = await fetch(`http://localhost:8080/admin/delete/${userId}`, {
                 method: 'DELETE'
             });
             const data = await response.text(); 

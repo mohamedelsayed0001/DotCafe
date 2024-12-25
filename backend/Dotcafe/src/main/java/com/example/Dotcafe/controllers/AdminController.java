@@ -1,11 +1,16 @@
 package com.example.Dotcafe.controllers;
 import com.example.Dotcafe.entity.Dto.CategoryDto;
+import com.example.Dotcafe.entity.Dto.CustomerDto;
 import com.example.Dotcafe.entity.Dto.ProductDto;
+import com.example.Dotcafe.entity.Progress;
 import com.example.Dotcafe.sevices.AdminService;
+import com.example.Dotcafe.sevices.CustomerService;
 import com.example.Dotcafe.sevices.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -15,9 +20,37 @@ public class AdminController {
     private final AdminService adminService;
     private final ProductService productService;
 
+
     public AdminController(AdminService adminService, ProductService productService) {
         this.adminService = adminService;
         this.productService = productService;
+    }
+    @GetMapping("/users")
+    public ResponseEntity<?> getUsers() {
+        return new ResponseEntity<>(adminService.getAllUsers(), HttpStatus.ACCEPTED);
+    }
+    @PostMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestBody CustomerDto customerDto) {
+        try {
+            return new ResponseEntity<>(adminService.updateUser(customerDto), HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    // movw to admin
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+        try {
+            return new ResponseEntity<>(adminService.deleteUser(userId), HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/menu")
+    public ResponseEntity<List<CategoryDto>> menu(){
+        return new ResponseEntity<>(adminService.menu(), HttpStatus.OK);
+
     }
 
     @PostMapping(value = "/category")
@@ -36,6 +69,15 @@ public class AdminController {
             categoryDto.setId(id);
             CategoryDto editedCategory = adminService.editCategory(categoryDto);
             return new ResponseEntity<>(editedCategory, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+    @DeleteMapping ("/category/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id){
+        try {
+            adminService.deleteCategory(id);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
@@ -69,6 +111,29 @@ public class AdminController {
             return new ResponseEntity<>(productService.edit(productDto), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>( e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity<?> getOrders(
+            @RequestParam(required = false,defaultValue = "0") Integer page,
+            @RequestParam(required = false,defaultValue = "10") Integer size
+    ) {
+        try {
+            return new ResponseEntity<>(adminService.getOrders(page,size),HttpStatus.OK);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
+    }
+
+
+    @PutMapping("/order/{id}")
+    public ResponseEntity<?> updateOrder(@PathVariable Long id, @RequestBody Progress progress){
+        try {
+            return new ResponseEntity<>(adminService.updateOrder(id,progress),HttpStatus.OK);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

@@ -14,11 +14,12 @@ export default function Menu ({categories, setCategories}) {
         } catch (error) {
             console.error('Error fetching categories:', error); 
         } 
-        console.log("categories");
-        console.log(categories); 
-        console.log("filered categories");
-        console.log(filteredCategories);
-        setFilterBy(0); // still not sure
+        // console.log("categories");
+        // console.log(categories); 
+        // console.log("filered categories");
+        // console.log(filteredCategories);
+        
+        // setFilterBy(0); // still not sure
         setFilteredCategories(categories);
     };
 
@@ -33,12 +34,10 @@ export default function Menu ({categories, setCategories}) {
     const [filteredCategories, setFilteredCategories] = useState([]);
 
     useEffect(() => {
-        if (categories.length > 0) {
-            if (filterBy !== 0) {
-                setFilteredCategories(categories.filter((category) => category.id === filterBy));
-            } else {
-                setFilteredCategories(categories);
-            }
+        if (filterBy !== 0) {
+            setFilteredCategories(categories.filter((category) => category.id === filterBy));
+        } else {
+            setFilteredCategories(categories);
         }
     }, [filterBy, categories]);
 

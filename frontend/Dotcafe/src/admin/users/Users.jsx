@@ -17,10 +17,11 @@ export default function Users ({users, setUsers}) {
         } else {
             setFilteredUsers(users);
         }
+        console.log(users); 
     }, [filterBy, users]);
 
-    const fetchItems = async () => {
-        try { const response = await fetch('http://localhost:8080/customer/users');
+    const fetchUsers = async () => {
+        try { const response = await fetch('http://localhost:8080/admin/users');
             const data = await response.json(); 
             setUsers(data);
         } catch (error) {
@@ -29,23 +30,24 @@ export default function Users ({users, setUsers}) {
     };
 
     useEffect(() => {
-        fetchItems();
+        fetchUsers();
     }, []);
     
     return (
         <div className= 'menu-page' style={{ backgroundColor: "#E9EED9", minHeight: "100vh", display: 'flex', flexDirection: 'column' }}>
             <div className='new-manage-buttons'>
                 {/* for testing */}
-                <button onClick={() => {console.log(users); fetchItems();}}>refresh</button>
-                    <select
-                        className='filter-by'
-                        value={filterBy}
-                        onChange={(e) => setFilterBy(e.target.value)}
-                        >
-                        <option value="">No filter</option>
-                        <option value="admin">Admin</option>
-                        <option value="customer">Customer</option>
-                    </select>
+                <button onClick={() => {fetchUsers();}}>refresh</button>
+                
+                <select
+                    className='filter-by'
+                    value={filterBy}
+                    onChange={(e) => setFilterBy(e.target.value)}
+                    >
+                    <option value="">No filter</option>
+                    <option value="admin">Admin</option>
+                    <option value="customer">Customer</option>
+                </select>
             </div>
 
             <Table  window={usersWindow} setWindow={setUsersWindow} 
