@@ -10,7 +10,7 @@ import {
 import Background from "../assets/background.jpg";
 import sizeIcon from "../assets/size.svg";
 
-function ItemCardpage({ product,setProduct,signed,customerDTO,setWindow,setItemAddedToCart}) {
+function ItemCardpage({setCart, product,setProduct,signed,customerDTO,setWindow,setItemAddedToCart}) {
   const [size, setSize] = useState("Small");
   const [quantity, setQuantity] = useState(1);
   const [open, setOpen] = useState(true);
@@ -28,6 +28,7 @@ function ItemCardpage({ product,setProduct,signed,customerDTO,setWindow,setItemA
   const addtocart = async () => {
     setProduct(null)
     setOpen(false)
+    setCart(true)
     const userId = customerDTO.id; 
     const apiUrl = `http://localhost:8080/order/cart/${userId}`;
 

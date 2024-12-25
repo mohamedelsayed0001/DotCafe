@@ -6,7 +6,7 @@ import LogedinButton from './Logedinbuttons';
 import MainMenu from './mainMenu';
 import ItemCardpage from './itemCardPage';
 import { Snackbar, SnackbarContent } from '@mui/material';
-function Menu({ cart ,signed,setWindow ,customerDTO}) {
+function Menu({setCart, cart ,signed,setWindow ,customerDTO}) {
     const [menu, setMenu] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [itemAddedToCart, setItemAddedToCart] = useState(false);
@@ -49,6 +49,7 @@ function Menu({ cart ,signed,setWindow ,customerDTO}) {
         <MainMenu  menu ={menu} setProduct={setSelectedProduct}/>
         {selectedProduct && (
         <ItemCardpage
+        setCart={setCart}
           product={selectedProduct}
           setProduct = {setSelectedProduct}
           signed={signed}

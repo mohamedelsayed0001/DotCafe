@@ -100,12 +100,12 @@ function App() {
     */}
    
          {
-      window==="reviewOrder"&&(<OrderReview setWindow={setWindow} customerDTO={customerDTO}></OrderReview>)
+      window==="reviewOrder"&&(<OrderReview setWindow={setWindow} setCartButton ={setCart} customerDTO={customerDTO}></OrderReview>)
     } 
     
         {["sign in", "sign up"].includes(window) && (
         <Registration
-        setCart={setCart}
+         setCart={setCart}
           window={window}
           setWindow={setWindow}
           customerDTO={customerDTO}
@@ -125,6 +125,7 @@ function App() {
       )}   
       {window === "menu" && (
         <Menu
+        setCart={setCart}
           cart={cart}
           signed={signed}
           setWindow={setWindow}

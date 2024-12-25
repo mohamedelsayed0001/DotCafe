@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "../Orders/order.css";
 import { Client } from "@stomp/stompjs";
+import Background from "../assets/background.jpg";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Button,
@@ -107,20 +109,14 @@ function Track({ cutomerDTO, setWindow }) {
             <img src={logo_icon} alt="Logo Icon" style={{ width: "100%" }} />
           </button>
 
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: "white",
-              color: "black",
-              width: "10%",
-              borderRadius: "10px",
-            }}
+          <button
+           className="menu-class"
             onClick={() => {
               setWindow("menu");
             }}
           >
             Menu
-          </Button>
+          </button>
         </Stack>
 
         {/* Track Orders Section */}
@@ -140,7 +136,7 @@ function Track({ cutomerDTO, setWindow }) {
             direction="column"
             alignItems="center"
             style={{
-              background: "white",
+             backgroundImage:`url(${Background})`,
               padding: "10px",
               maxHeight: "300px",
               borderRadius: "20px",

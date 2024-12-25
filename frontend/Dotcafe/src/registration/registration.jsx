@@ -58,6 +58,7 @@ function Registration({ window, setWindow, customerDTO, setCustomerDTO, signed,s
         if (response.status === 201) {
           setCustomerDTO(response.data);
           setSigned(true);
+      
           console.log(response.data)
           console.log(response.data.role)
          setWindow(response.data.role === "admin" ? "admin" : "home");
@@ -84,9 +85,10 @@ function Registration({ window, setWindow, customerDTO, setCustomerDTO, signed,s
   async function fetchItems() {
 
     try {
-      const response = await axios.get(`http://localhost:8080/customer/cart/${customerDTO.id}`);
+      const response =  await axios.get(`http://localhost:8080/customer/cart/${customerDTO.id}`);
 
         if (response.status === 202) {
+          console.log(response.data.orderItems.length);
           if (response.data.orderItems.length > 0) {
             setCart(true);
           }
