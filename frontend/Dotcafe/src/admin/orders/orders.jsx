@@ -40,10 +40,8 @@ export default function Orders ({orders, setOrders}) {
             setConnected(true);
     
             client.subscribe(`/track/admin/order`, (message) => {
-                setOrders(prevOrders => [message.body, ...prevOrders]);
-                console.log(message.body)
-                console.log(orders)
-              
+                const order = JSON.parse(message.body)
+                setOrders(prevOrders => [order, ...prevOrders]);
             });
           },
           onDisconnect: () => {
