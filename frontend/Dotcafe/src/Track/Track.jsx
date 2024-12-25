@@ -242,6 +242,7 @@ function Track({ cutomerDTO, setWindow }) {
                 (state) => (
                   <Button
                     key={state}
+                    disabled
                     variant="contained"
                     style={{
                       marginTop: "40px",
