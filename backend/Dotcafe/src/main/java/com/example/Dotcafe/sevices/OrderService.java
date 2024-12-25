@@ -81,7 +81,7 @@ public CartDto updateCart(OrderItemDto orderItemDto, Long userId) {
        order.setProgress(Progress.PLACED);
        order.setOrderItems(new ArrayList<>());
        order.setPoints(cart.getPoints());
-       customer.setPoints(customer.getPoints()-cart.getPoints()+10);
+       customer.setPoints(customer.getPoints()-cart.getPoints()+Math.round(cart.getOrderPrice()));
        order = orderRepository.save(order);
        customerRepository.save(customer);
        for(OrderItem orderItem : cart.getOrderItems()){
