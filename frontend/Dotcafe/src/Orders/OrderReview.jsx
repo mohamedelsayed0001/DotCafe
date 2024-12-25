@@ -7,6 +7,7 @@ import axios from "axios";
 import { Button, IconButton, Stack, Typography, Select, MenuItem, DialogTitle, Dialog, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 import logo_icon from "/public/logo.svg";
 import { useEffect, useState } from "react";
+import Orders from "../admin/orders/orders";
 
 function OrderReview({ customerDTO, setWindow }) {
   useEffect(() => {
@@ -18,6 +19,7 @@ function OrderReview({ customerDTO, setWindow }) {
   const [total, setTotal] = useState(0);
   const [orderPrice, setOrderPrice] = useState(0);
   const [points,setPoints] = useState(0); 
+  const [cart,setCart] = useState([])
   let customerPoints ;
 
   async function fetchItems() {
@@ -120,17 +122,15 @@ function OrderReview({ customerDTO, setWindow }) {
     handleUpdate(index);
   };
   // Handle Confirm
-  let cart=[];
   async function handleConfirm() {
     confirmOrTrack="Track Your Order";
-    isReview=false;
     setDialogOpen(true); 
     try {
       const response = await axios.put(`http://localhost:8080/order/place/${customerDTO.id}`);
      
       if (response.status === 200) {
-        cart=response.data;
-        setWindow("menu");
+        setCart(response.data);
+        console.log(cart)
 
       }
     } catch (error) {
@@ -208,8 +208,21 @@ function OrderReview({ customerDTO, setWindow }) {
   };
 
   function handleOnClose() {
+    setItems([]);
+    setPoints(0);
+    setOrderPrice(0);
+    setTaxes(0);
+    setTotal(0)
+    setCart([])
     setDialogOpen(false);
    
+  }
+  function isEmpty (){
+    if(items.length>0){
+      return false
+    }
+    return true;
+    
   }
   return (
     <div className="body">
@@ -374,7 +387,7 @@ function OrderReview({ customerDTO, setWindow }) {
      
             variant="contained"
             color={confirmOrTrack==="Confirm"?"success":"info"}
-            disable={isReview}
+            disabled= {isEmpty()}
             style={{ width: "30%", borderRadius: "20px" }}
             onClick={()=>{
               confirmOrTrack==="Confirm"?handleConfirm():setWindow("track")
@@ -443,7 +456,7 @@ function OrderReview({ customerDTO, setWindow }) {
         backgroundColor: "#f9f9f9",
       }}
     >
-      {cart.orderItems.map((item, itemIndex) => (
+      {cart.orderItems?.length>0 ?(cart.orderItems.map((item, itemIndex) => (
         <div
           key={itemIndex}
           style={{
@@ -462,10 +475,10 @@ function OrderReview({ customerDTO, setWindow }) {
             <strong>Quantity:</strong> {item.quantity}
           </Typography>
           <Typography variant="body1">
-            <strong>Item Price:</strong> {item.price} EGP
+            <strong>Item Price:</strong> {items.price} EGP
           </Typography>
-        </div>
-      ))}
+        </div>)
+      )):(<></>)}
     </div>
     <Typography
       variant="h6"
