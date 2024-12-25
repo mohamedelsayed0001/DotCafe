@@ -14,16 +14,6 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
     fetchItems();
 
   }, [])
-  const [isEmpty,setIsEmpty]=useState(false);
-
-  useEffect(()=>{
-      if(items.length===0){
-        setCart(false);
-       setIsEmpty(true);
-        
-      }
-  },[items]
-  )
 
   const [taxes, setTaxes] = useState(0);
   const [total, setTotal] = useState(0);
@@ -33,7 +23,7 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
   const [customerPoints, setCustomerPoints] = useState(0);
 
   async function fetchItems() {
-    console.log("samaa")
+  
     try {
       const response = await axios.get(`http://localhost:8080/customer/user/${customerDTO.id}`);
       if (response.status === 200) {
@@ -64,7 +54,6 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
         setOrderPrice(response.data.orderPrice);
         setTaxes(response.data.taxes);
         setTotal(response.data.total)
-        setPoints(response.data.points)
 
         console.log(response.data)
 
@@ -190,15 +179,14 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
   };
 
   async function applyPoints(e) {
-    if (e.target.value <= customerPoints && e.target.value >= 0) {
-      const newPoints = e.target.value
-      setPoints(newPoints);
-      
+    if (e.target.value <= customerPoints && e.target.value > 0) {
+      setPoints(e.target.value);
+      console.log(points)
       try {
         const response = await axios.post(`http://localhost:8080/order/points/${customerDTO.id}`, null,
           {
             params: {
-              points: newPoints
+              points: points
             }
 
           }
@@ -243,11 +231,7 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
   }
   return (
     <div className="body" >
-     {isEmpty?(
-       <Typography variant="h5" style={{ width: "20%", fontWeight: "850" }}>Your Cart Is Empty</Typography>
-         ):
-         (<>
-                   <Stack
+      <Stack
         spacing={{ xs: 1, sm: 2 }}
         direction="row"
         sx={{
@@ -268,11 +252,14 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
           Menu
         </button>
       </Stack>
-      <Stack>
+     
+
+     {items.length>0?
+      (<>
+              <Stack>
         <Typography variant="h5" component="h2" style={{ marginBottom: "10px", fontWeight: "900", fontStyle: "italic" }}>
           Review Order
         </Typography>
-
 
         <Stack
           direction="column"
@@ -337,6 +324,14 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
         </Stack>
       </Stack>
 
+      </>):
+      (
+        <>
+           <Typography variant="h5" style={{ width: "20%", fontWeight: "850" }}>Your Cart Is Empty!!</Typography>
+        </>
+      )
+     }
+    
       <Stack
         direction="column"
         alignItems="center"
@@ -386,16 +381,6 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
               }}
             />
           </Box>
-          <Typography
-            sx={{
-              fontWeight: "500",
-              fontSize: "16px",
-              color: "#555",
-              paddingLeft:"20px"
-            }}
-          >
-            Your Points : {customerPoints}
-          </Typography>
         </Box>
 
         {/* Price Details Section */}
@@ -602,10 +587,7 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
           </Button>
         </DialogActions>
       </Dialog>
-         </>
-   
-         )
-         }
+
     </div>
   );
 }
