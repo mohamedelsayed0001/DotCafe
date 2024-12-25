@@ -96,7 +96,6 @@ function OrderReview({ customerDTO, setWindow }) {
   const [items, setItems] = useState([
 
   ]);
-  const [orderNumber, setOrderNumber] = useState(null);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("Cash on Delivery");
 
@@ -121,20 +120,17 @@ function OrderReview({ customerDTO, setWindow }) {
     handleUpdate(index);
   };
   // Handle Confirm
- 
+  let cart=[];
   async function handleConfirm() {
-
     confirmOrTrack="Track Your Order";
     isReview=false;
-    setOrderNumber(randomOrderNumber);
-    setDialogOpen(true); // Open the popup
+    setDialogOpen(true); 
     try {
-      const response = await axios.put(`http://localhost:8080/order/place/1`);
-
+      const response = await axios.put(`http://localhost:8080/order/place/${customerDTO.id}`);
+     
       if (response.status === 200) {
-   
-         setWindow("menu");
-        console.log(response.data)
+        cart=response.data;
+        setWindow("menu");
 
       }
     } catch (error) {
@@ -152,7 +148,7 @@ function OrderReview({ customerDTO, setWindow }) {
 
   // Handle Cancel
   const handleCancel = () => {
-    setWindow("home");
+    setWindow("menu");
   };
   async function  handleDelete(index){
     console.log(items)
@@ -178,6 +174,7 @@ function OrderReview({ customerDTO, setWindow }) {
       }
     }
   };
+
   async function  applyPoints(e){
     if (e.target.value<=customerPoints){
       setPoints(e.target.value);
@@ -212,7 +209,7 @@ function OrderReview({ customerDTO, setWindow }) {
 
   function handleOnClose() {
     setDialogOpen(false);
-    setWindow("menu");
+   
   }
   return (
     <div className="body">
@@ -252,7 +249,7 @@ function OrderReview({ customerDTO, setWindow }) {
           direction="column"
           alignItems="center"
           style={{
-            borderRadius: "10px",
+            marginBottom:"10px",
             background: "white",
             padding: "10px",
             maxHeight: "250px",
@@ -279,12 +276,14 @@ function OrderReview({ customerDTO, setWindow }) {
             >
               <div >
                 <Typography variant="h5" style={{ width: "20%", fontWeight: "850" }}>{item.productName}</Typography>
-                {item.customize} EGP
+                {item.customize} , {item.size}
               </div>
 
               <Typography variant="h5" >
                 <div style={{ display: "flex", alignItems: "center", width: "10%" }}> {item.price }<ClearIcon></ClearIcon> { item.quantity}</div></Typography>
+              
               <div style={{ backgroundColor: "#FEEFAE", width: "14%", borderRadius: "10px", display: "flex", justifyContent: "space-around", alignItems: "center" }}>
+
                 <IconButton onClick={() => handleIncrease(index)}>
                   <AddIcon style={{ color: "black" }} />
                 </IconButton>
@@ -298,7 +297,7 @@ function OrderReview({ customerDTO, setWindow }) {
                 </IconButton>
 
               </div>
-
+              <Typography variant="h5" style={{ width: "20%", fontWeight: "850" }}>{item.price * item.quantity}</Typography>
               <IconButton onClick={() => handleDelete(index)}>
                 <DeleteIcon style={{ color: "black" }} />
               </IconButton>
@@ -317,43 +316,13 @@ function OrderReview({ customerDTO, setWindow }) {
           borderRadius: "10px",
           background: "white",
           padding: "10px",
-
           borderRadius: "20px",
-
           margin: "auto",
           width: "50%",
         }}
 
       >
-        {/* Payment Method 
-
-                   <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          style={{ marginBottom: "20px", width: "90%" }}
-        >
-          <Typography
-            variant="h5"
-            component="h2"
-            style={{ marginBottom: "8px", textAlign: "center" }}
-          >
-            Select Payment Method :
-          </Typography>
-          <Select
-            value={paymentMethod}
-            onChange={handlePaymentMethodChange}
-            style={{ width: "30%" }}
-          >
-
-
-            <MenuItem value="Credit Card">Credit Card</MenuItem>
-            <MenuItem value="PayPal">PayPal</MenuItem>
-            <MenuItem value="Cash on Delivery">Cash on Delivery</MenuItem>
-          </Select>
-        </Stack>
-
-        */}
+      
   <div
         
          
@@ -405,6 +374,7 @@ function OrderReview({ customerDTO, setWindow }) {
      
             variant="contained"
             color={confirmOrTrack==="Confirm"?"success":"info"}
+            disable={isReview}
             style={{ width: "30%", borderRadius: "20px" }}
             onClick={()=>{
               confirmOrTrack==="Confirm"?handleConfirm():setWindow("track")
@@ -426,27 +396,126 @@ function OrderReview({ customerDTO, setWindow }) {
         </Stack>
       </Stack>
       {/* Popup for Order Number */}
-      <Dialog open={isDialogOpen} onClose={handleOnClose}>
-        <DialogTitle style={{ background: "#FEEFAE", marginBottom: "10px" }}>Order Confirmation</DialogTitle>
-        <DialogContent>
-          <Typography variant="h6" >
-            Your order has been confirmed!
+      <Dialog open={isDialogOpen} onClose={handleOnClose} fullWidth maxWidth="sm">
+  <DialogTitle
+    style={{
+      backgroundColor: "#FEEFAE",
+      color: "#333",
+      textAlign: "center",
+      fontWeight: "bold",
+    }}
+  >
+    Order Confirmation
+  </DialogTitle>
+  <DialogContent
+    style={{
+      padding: "20px",
+      backgroundColor: "#FFF",
+    }}
+  >
+    <Typography
+      variant="h6"
+      style={{
+        marginBottom: "10px",
+        textAlign: "center",
+        fontWeight: "bold",
+        color: "#444",
+      }}
+    >
+      Your order has been confirmed!
+    </Typography>
+    <Typography
+      variant="h6"
+      style={{
+        marginBottom: "15px",
+        textAlign: "center",
+        color: "#666",
+      }}
+    >
+      Order Number: <span style={{ fontWeight: "700" }}>{cart.id}</span>
+    </Typography>
+    <div
+      style={{
+        marginBottom: "15px",
+        padding: "10px",
+        border: "1px solid #ddd",
+        borderRadius: "10px",
+        backgroundColor: "#f9f9f9",
+      }}
+    >
+      {cart.orderItems.map((item, itemIndex) => (
+        <div
+          key={itemIndex}
+          style={{
+            marginBottom: "10px",
+            padding: "5px 0",
+            borderBottom: "1px solid #eee",
+          }}
+        >
+          <Typography variant="body1">
+            <strong>Product Name:</strong> {item.productName}
           </Typography>
-          <Typography variant="h6">Order Number: {orderNumber}</Typography>
-          <Typography variant="h6">
-            Payment Method: {paymentMethod}
+          <Typography variant="body1">
+            <strong>Size:</strong> {item.size}
           </Typography>
-          <Typography variant="h6">Total: {total} EGP</Typography>
-        </DialogContent>
-        <DialogActions>
-        <Button onClick={() => setWindow("track")} color="primary">
-           Track Your Order 
-          </Button>
-          <Button onClick={() => setDialogOpen(false)} color="primary">
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
+          <Typography variant="body1">
+            <strong>Quantity:</strong> {item.quantity}
+          </Typography>
+          <Typography variant="body1">
+            <strong>Item Price:</strong> {item.price} EGP
+          </Typography>
+        </div>
+      ))}
+    </div>
+    <Typography
+      variant="h6"
+      style={{
+        fontWeight: "bold",
+        textAlign: "center",
+        marginBottom: "10px",
+        color: "#000",
+      }}
+    >
+      Total: {cart.total} EGP
+    </Typography>
+  </DialogContent>
+  <DialogActions
+    style={{
+      justifyContent: "space-around",
+      padding: "10px 20px",
+      backgroundColor: "#f5f5f5",
+    }}
+  >
+    <Button
+      onClick={() => setWindow("track")}
+      variant="contained"
+      color="primary"
+      style={{
+        backgroundColor: "#4caf50",
+        color: "#fff",
+        fontWeight: "bold",
+        borderRadius: "20px",
+        padding: "8px 16px",
+      }}
+    >
+      Track Your Order
+    </Button>
+    <Button
+      onClick={handleOnClose}
+      variant="contained"
+      color="secondary"
+      style={{
+        backgroundColor: "#f44336",
+        color: "#fff",
+        fontWeight: "bold",
+        borderRadius: "20px",
+        padding: "8px 16px",
+      }}
+    >
+      Close
+    </Button>
+  </DialogActions>
+</Dialog>
 
     </div>
   );
