@@ -7,7 +7,6 @@ import axios from "axios";
 import { Button, IconButton, Stack, Typography, Select, MenuItem, DialogTitle, Dialog, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 import logo_icon from "/public/logo.svg";
 import { useEffect, useState } from "react";
-import Orders from "../admin/orders/orders";
 
 function OrderReview({ customerDTO, setWindow }) {
   useEffect(() => {
@@ -20,13 +19,15 @@ function OrderReview({ customerDTO, setWindow }) {
   const [orderPrice, setOrderPrice] = useState(0);
   const [points,setPoints] = useState(0); 
   const [cart,setCart] = useState([])
-  let customerPoints ;
+  const [customerPoints,setCustomerPoints] = useState(0);
 
   async function fetchItems() {
     try {
       const response = await axios.get(`http://localhost:8080/customer/user/${customerDTO.id}`);
       if (response.status === 200) {
-        customerPoints = response.data.points
+        
+        setCustomerPoints(response.data.points)
+        console.log(customerPoints)
       }
     } catch (error) {
       if (error.response?.status === 400) {
@@ -70,7 +71,7 @@ function OrderReview({ customerDTO, setWindow }) {
   }
   async function handleUpdate(index) {
     try {
-      const response = await axios.put(`http://localhost:8080/order/update/1`, items[index]);
+      const response = await axios.put(`http://localhost:8080/order/update/${customerDTO.id}`, items[index]);
 
       if (response.status === 200) {
         setItems(response.data.orderItems);
@@ -176,11 +177,11 @@ function OrderReview({ customerDTO, setWindow }) {
   };
 
   async function  applyPoints(e){
-    if (e.target.value<=customerPoints){
+    if (e.target.value <= customerPoints){
       setPoints(e.target.value);
       console.log(points)
       try {
-        const response = await axios.post(`http://localhost:8080/order/points/1`,null,
+        const response = await axios.post(`http://localhost:8080/order/points/${customerDTO.id}`,null,
         {
           params:{
             points: points
