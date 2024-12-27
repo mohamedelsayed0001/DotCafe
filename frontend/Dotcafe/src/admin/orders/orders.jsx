@@ -7,7 +7,7 @@ import { Client } from "@stomp/stompjs";
 
 export default function Orders ({orders, setOrders}) {
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(10);
+    const [size, setSize] = useState(20);
      const [connected, setConnected] = useState(false);
 
     const fetchOrders = async () => {
@@ -36,7 +36,6 @@ export default function Orders ({orders, setOrders}) {
         fetchOrders();
     }, []);
     
-    
     useEffect(() => {
         const client = new Client({
         brokerURL: "ws://localhost:8080/ws",
@@ -47,6 +46,7 @@ export default function Orders ({orders, setOrders}) {
 
         client.subscribe(`/track/admin/order`, (message) => {
             const order = JSON.parse(message.body)
+            setPage(0);
             setOrders(prevOrders => [order, ...prevOrders]);
         });
         },
