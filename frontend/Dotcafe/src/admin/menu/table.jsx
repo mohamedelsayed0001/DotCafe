@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from "react";
-import upDownArrowIcon from '../icons/up-down-arrow.svg'
 import trashIcon from '../icons/trash.svg'
 import editIcon from '../icons/edit.svg'
 import '../table.css'
@@ -10,9 +8,7 @@ export default function Table({window, setWindow, selectedProduct, setSelectedPr
         try {
             const response = await fetch(`http://localhost:8080/admin/product/${productId}`, {
                 method: 'DELETE'
-            });   
-            const data = await response.text(); 
-            console.log('delete message:', data);
+            });
         } catch (error) {
             console.error('Error deleting product:', error); 
         } 

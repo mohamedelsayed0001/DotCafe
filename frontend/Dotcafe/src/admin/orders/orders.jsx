@@ -7,7 +7,7 @@ import { Client } from "@stomp/stompjs";
 
 export default function Orders ({orders, setOrders}) {
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(50);
+    const [size, setSize] = useState(10);
      const [connected, setConnected] = useState(false);
 
     const fetchOrders = async () => {
@@ -18,6 +18,13 @@ export default function Orders ({orders, setOrders}) {
                 return;
             } else {
                 const data = await response.json();
+                if(data.length === 0){
+                    if(page !== 0) {
+                        setPage(page - 1)  
+                    } 
+                    return;
+                }
+                
                 setOrders(data);
             }
         } catch (error) {
@@ -25,40 +32,39 @@ export default function Orders ({orders, setOrders}) {
         } 
     };
 
-      useEffect(() => {
+    useEffect(() => {
         fetchOrders();
-      }, []);
+    }, []);
     
     
-      useEffect(() => {
-        // Create a new STOMP client
+    useEffect(() => {
         const client = new Client({
-          brokerURL: "ws://localhost:8080/ws",
-          reconnectDelay: 1000,
-          onConnect: () => {
-            console.log("Connected to WebSocket");
-            setConnected(true);
-    
-            client.subscribe(`/track/admin/order`, (message) => {
-                const order = JSON.parse(message.body)
-                setOrders(prevOrders => [order, ...prevOrders]);
-            });
-          },
-          onDisconnect: () => {
-            console.log("Disconnected from WebSocket");
-            setConnected(false);
-          },
-          onStompError: (error) => {
-            console.error("STOMP error:", error);
-          },
+        brokerURL: "ws://localhost:8080/ws",
+        reconnectDelay: 1000,
+        onConnect: () => {
+        // console.log("Connected to WebSocket");
+        setConnected(true);
+
+        client.subscribe(`/track/admin/order`, (message) => {
+            const order = JSON.parse(message.body)
+            setOrders(prevOrders => [order, ...prevOrders]);
         });
-    
-        client.activate();
-    
-        return () => {
-          client.deactivate();
-        };
-      }, []);
+        },
+        onDisconnect: () => {
+        // console.log("Disconnected from WebSocket");
+        setConnected(false);
+        },
+        onStompError: (error) => {
+        console.error("STOMP error:", error);
+        },
+    });
+
+    client.activate();
+
+    return () => {
+        client.deactivate();
+    };
+    }, []);
 
     const handlePrevious = async () => {
         if(page === 0) {
@@ -69,11 +75,7 @@ export default function Orders ({orders, setOrders}) {
     }
 
     const handleNext = async () => {
-        if(page === 0) {
-            return;
-        } else {
-            setPage(page + 1);
-        }
+        setPage(page + 1);
     }
 
     useEffect(() => {
@@ -86,10 +88,10 @@ export default function Orders ({orders, setOrders}) {
     return (
         <div className= 'menu-page' style={{ backgroundColor: "#E9EED9", minHeight: "100vh", display: 'flex', flexDirection: 'column' }}>
             <div className='new-manage-buttons'>
-                <button onClick={() => {fetchOrders();}}>refresh</button>
-                <button onClick={() => {handlePrevious();}} style={{padding:'0 1% 0 1%', marginLeft:'auto'}}>Previous</button>
-                <button disabled style={{padding:'0 2% 0 2%', cursor:'default'}}>1</button>
+                <button onClick={() => {handlePrevious();}} style={{padding:'0 1% 0 1%'}}>Previous</button>
+                <button disabled style={{padding:'0 2% 0 2%', cursor:'default'}}>{page + 1}</button>
                 <button onClick={() => {handleNext();}} style={{padding:'0 1% 0 1%'}}>Next</button>
+                <button onClick={() => {setPage(0); fetchOrders();}} style={{marginLeft:'auto'}}>refresh</button>
             </div>
             <Table  window={ordersWindow} setWindow={setOrdersWindow} 
                     orders={orders} setOrders={setOrders}

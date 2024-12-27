@@ -8,9 +8,10 @@ export default function Inventory ({items, setItems}) {
     const fetchItems = async () => {
         try { const response = await fetch('http://localhost:8080/admin/item');
             const data = await response.json(); 
-            setItems(data);
+            // setItems(data);
+            setItems(data.sort((a, b) => a.id - b.id));
         } catch (error) {
-            console.error('Error fetching items:', error); 
+            console.error('Error fetching items:', error);
         } 
     };
 
@@ -26,7 +27,7 @@ export default function Inventory ({items, setItems}) {
             <div className='new-manage-buttons'>
                 <button onClick={() => setInventoryWindow("New Item")}>New Item</button>
                 {/* for testing */}
-                <button onClick={() => {console.log(items); fetchItems();}}>refresh</button>
+                <button onClick={() => {fetchItems();}} style={{marginLeft:'auto'}}>refresh</button>
             </div>
             <Table  window={inventoryWindow} setWindow={setInventoryWindow} 
                     items={items} setItems={setItems}

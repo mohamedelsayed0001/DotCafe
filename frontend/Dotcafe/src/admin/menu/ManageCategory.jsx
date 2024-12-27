@@ -17,11 +17,9 @@ export default function ManageCategory({ menuWindow, setMenuWindow, categories, 
 
                 if (!response.ok) {
                     const errorText = await response.text();
-                    console.error('Server error:', errorText);
+                    alert(errorText)
                     return;
                 } else {
-                    const data = await response.text();
-                    console.log('deleting category message:', data);
                     setCategories(categories.filter(category => category.id !== categoryId));
                 }
 
@@ -29,6 +27,8 @@ export default function ManageCategory({ menuWindow, setMenuWindow, categories, 
                 console.error('Error deleting category:', error);
             }
         }
+
+        setSelectedCategory(null);
     }
 
     const handleBack = () => {
