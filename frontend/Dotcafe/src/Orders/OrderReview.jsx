@@ -180,7 +180,7 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
   };
 
   async function applyPoints(e) {
-    if (e.target.value <= customerPoints && e.target.value > 0) {
+    if (e.target.value <= customerPoints && e.target.value >= 0) {
       const newPoints = e.target.value
       setPoints(newPoints);
       try {
@@ -292,12 +292,12 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
                   }}
                 >
                   <div >
-                    <Typography variant="h5" style={{ width: "20%", fontWeight: "850" }}>{item.productName}</Typography>
+                    <Typography variant="h6" style={{ width: "200px", fontWeight: "850" }}>{item.productName}</Typography>
                     {item.customize} , {item.size}
                   </div>
 
-                  <Typography variant="h5" >
-                    <div style={{ display: "flex", alignItems: "center", width: "10%" }}> {item.price}<ClearIcon></ClearIcon> {item.quantity}</div></Typography>
+                  <Typography variant="h5" style={{ width: "100px", fontWeight: "850" }} >
+                    <div style={{ display: "flex", alignItems: "center", width: "100%" }}> {item.price}<ClearIcon></ClearIcon> {item.quantity}</div></Typography>
 
                   <div style={{ backgroundColor: "#FEEFAE", width: "14%", borderRadius: "10px", display: "flex", justifyContent: "space-around", alignItems: "center" }}>
 
@@ -365,7 +365,7 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
           >
             Enter points
           </Typography>
-          <Box sx={{ width: "30%" }}>
+          <Box sx={{ width: "20%" }}>
             <input
               type="number"
               placeholder="Enter points"
@@ -381,7 +381,9 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
                 color: "#333",
               }}
             />
-            <Typography
+        
+          </Box>
+          <Typography
               sx={{
                 fontWeight: "500",
                 fontSize: "16px",
@@ -391,7 +393,6 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
             >
               Your Points : {customerPoints}
             </Typography>
-          </Box>
 
         </Box>
 
@@ -546,6 +547,9 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
                 </Typography>
                 <Typography variant="body1">
                   <strong>Item Price:</strong> {item.price} EGP
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Customization:</strong> {item.customize}
                 </Typography>
               </div>)
             )) : (<></>)}

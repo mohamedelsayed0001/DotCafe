@@ -168,27 +168,49 @@ function Track({ cutomerDTO, setWindow }) {
                       Order Number : {order.id}
                     </Typography>
 
-                    <Typography sx={{ color: "text.secondary" }}>
+                    <Typography sx={{ color: "text.secondary", width: "33%", flexShrink: 0  }}>
                       Total: {order.total} EGP
                     </Typography>
-                  </AccordionSummary>
-
-                  <AccordionDetails>
-                    <Typography variant="h6">Details:</Typography>
-                    <ul>
-                      {order.orderItems.map((item, itemIndex) => (
-                        <div key={itemIndex}>
-                          <li>Product Name : {item.productName}</li>
-                          <li>Size : {item.size}</li>
-                          <li>Quantity : {item.quantity}</li>
-                          <li>Item Price : {item.price}</li>
-                        </div>
-                      ))}
-                    </ul>
-                    <Typography>
-                      <strong>Total:</strong> {order.total} EGP
+                    <Typography sx={{ color: "text.secondary", width: "33%", flexShrink: 0  }}>
+                      Date: {order.localDateTime}
                     </Typography>
-                  </AccordionDetails>
+                  </AccordionSummary>
+                  <div
+            style={{
+              marginBottom: "15px",
+              padding: "10px",
+              border: "1px solid #ddd",
+              borderRadius: "10px",
+              backgroundColor: "#f9f9f9",
+            }}
+          >
+            {order.orderItems?.length > 0 ? (order.orderItems.map((item, itemIndex) => (
+              <div
+                key={itemIndex}
+                style={{
+                  marginBottom: "10px",
+                  padding: "5px 0",
+                  borderBottom: "1px solid #eee",
+                }}
+              >
+                <Typography variant="body1">
+                  <strong>Product Name:</strong> {item.productName}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Size:</strong> {item.size}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Quantity:</strong> {item.quantity}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Item Price:</strong> {item.price} EGP
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Customization:</strong> {item.customize}
+                </Typography>
+              </div>)
+            )) : (<></>)}
+          </div>
                 </Accordion>
                 <Button
                   variant="text"

@@ -44,7 +44,7 @@ export default function Table({window, setWindow, selectedProduct, setSelectedPr
                             <td className="table-cell">{product.name}</td>
                             <td className="table-cell">{category.name}</td> 
                             <td className="table-cell">{product.inStock ? 'In Stock' : 'Out of Stock'}</td>
-                            <td className="table-cell">${product.price}</td>
+                            <td className="table-cell">{product.price} EGP</td>
                             <td className="table-cell">
                                 <button
                                 className="actions-button"
