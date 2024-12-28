@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
 import "../window.css";
 
 export default function OrderDetails({ ordersWindow, setOrdersWindow, orders, setOrders, selectedOrder, setSelectedOrder}) {
    
    const handleCancel = () => {
+      setSelectedOrder(null);
       setOrdersWindow("Home");
    }
 

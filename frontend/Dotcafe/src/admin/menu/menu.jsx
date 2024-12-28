@@ -10,16 +10,12 @@ export default function Menu ({categories, setCategories}) {
     const fetchCategories = async () => {
         try { const response = await fetch('http://localhost:8080/admin/menu');
             const data = await response.json(); 
-            setCategories(data);
+            // setCategories(data);
+            setCategories(data.sort((a, b) => a.id - b.id));
         } catch (error) {
             console.error('Error fetching categories:', error); 
-        } 
-        // console.log("categories");
-        // console.log(categories); 
-        // console.log("filered categories");
-        // console.log(filteredCategories);
+        }
         
-        // setFilterBy(0); // still not sure
         setFilteredCategories(categories);
     };
 
@@ -48,11 +44,11 @@ export default function Menu ({categories, setCategories}) {
                 <button onClick={() => setMenuWindow("New Category")}>New Category</button>
                 <button onClick={() => setMenuWindow("Manage Category")}>Manage Category</button>
                 {/* for testing */}
-                <button onClick={() => {fetchCategories();}}>refresh</button>
                 <select
                     className='filter-by'
                     value={filterBy}
                     onChange={(e) => setFilterBy(Number(e.target.value))}
+                    style={{marginLeft:'auto'}}
                     >
                     <option value={0}>No filter</option>
                     {categories.map((category) => (
@@ -61,6 +57,7 @@ export default function Menu ({categories, setCategories}) {
                         </option>
                     ))}
                 </select>
+                <button onClick={() => {fetchCategories();}}>refresh</button>
             </div>
             <Table  window={menuWindow} setWindow={setMenuWindow} 
                     categories={filteredCategories} setCategories={setCategories}

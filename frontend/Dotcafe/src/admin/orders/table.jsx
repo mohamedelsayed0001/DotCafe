@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import editIcon from '../icons/edit.svg'
 import '../table.css'
 

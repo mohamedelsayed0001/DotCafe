@@ -21,8 +21,7 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
         } 
     }, [menuWindow, selectedProduct]);
 
-    const addProduct = async (product) => {   
-        console.log(product);
+    const addProduct = async (product) => {
 
         try {
             const response = await fetch('http://localhost:8080/admin/product', {
@@ -33,15 +32,11 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
         ); 
 
         if (!response.ok) { 
-            const errorText = await response.text(); 
-            if(errorText === "Product name exist") {
-                alert("Product name exist")
-            }
-            console.error('Server error:', errorText); 
+            const errorText = await response.text();
+            alert(errorText)
             return; 
         }
         const data = await response.json(); 
-        console.log('adding message:', data);
 
         const returnedProduct = { 
             id: data.id,
@@ -52,10 +47,7 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
             price: data.price,
             src: data.src
         };
-
-        console.log("returned");
         
-        console.log(returnedProduct);
 
         setCategories(prevCategories =>
             prevCategories.map(category => 
@@ -81,14 +73,10 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
 
         if (!response.ok) {
             const errorText = await response.text();
-            console.error('Server error:', errorText);
-            if(errorText === "Another product with the same name already exists.") {
-                alert("Another product with the same name already exists")
-            }
+            alert(errorText)
             return;
         }
         const data = await response.json(); 
-        console.log('editing message:', data);
 
         const returnedProduct = { 
             id: data.id,
@@ -139,7 +127,7 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
         
         }
         } catch (error) {
-          console.error('Error adding product:', error); 
+          console.error('Error editing product:', error); 
         } 
     };
 
@@ -147,10 +135,10 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
         if(name === "") {
             alert("write product name");
             return;
-        } else if (categoryId === "") {
+        } else if (categoryId === "" || categoryId === null) {
             alert("choose a category");
             return;
-        } else if (inStock === "") {
+        } else if (inStock === "" || inStock === null) {
             alert("Choose an availability");
             return;
         } else if (price === null) {
@@ -165,12 +153,12 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
         }
 
         const newProduct = { 
-            id: selectedProduct?.id || 0,
+            id: selectedProduct && !isNaN(Number(selectedProduct.id)) ? Number(selectedProduct.id) : 0,
             name, 
             description, 
-            categoryId, 
+            categoryId: Number(categoryId), 
             inStock, 
-            price, 
+            price: Number(price), 
             src: imageSrc 
         };
 
@@ -180,10 +168,12 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
             await addProduct(newProduct);
         }
 
+        setSelectedProduct(null)
         setMenuWindow("Home");
     };    
 
     const handleCancel = () => {
+        setSelectedProduct(null)
         setMenuWindow("Home");
     };
 
@@ -252,6 +242,7 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
                             placeholder="Type Description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
+                            maxLength={220}
                         ></textarea>
                     </div>
 
@@ -266,11 +257,6 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
                                 onChange={handleFileChange}
                                 style={{ display: "none" }}
                                 />
-                                {/* {!imageSrc && (
-                                    <label htmlFor="file-input" className="custom-file-label">
-                                    +
-                                    </label>
-                                    )} */}
                                 { imageSrc && (
                                     <div className="image-container">
                                         <img src={imageSrc} alt="Preview" className="image-preview" />
@@ -281,14 +267,6 @@ export default function AddingProduct({ menuWindow, setMenuWindow, categories, s
                                         <img style={{ width: "32px", height: "32px" }} src={editIcon} alt="edit icon" title="Edit Image" />
                                     </label>
                                 )}
-                        </div>
-                        <div className="image-buttons">
-                            {/* <button onClick={() => setImageSrc("")}>
-                                <img style={{ width: "32px", height: "32px" }} src={trashIcon} alt="trash icon" title="Delete Image" />
-                            </button> */}
-                            {/* <button >
-                                <img style={{ width: "32px", height: "32px" }} src={editIcon} alt="edit icon" title="Edit Image" />
-                            </button> */}
                         </div>
                     </div>
                 </form>

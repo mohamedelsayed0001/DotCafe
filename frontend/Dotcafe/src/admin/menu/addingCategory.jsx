@@ -23,11 +23,9 @@ export default function AddingCategory({ menuWindow, setMenuWindow, categories, 
             if (!response.ok) { 
                 const errorText = await response.text();
                 alert(errorText);
-                // console.error('Server error:', errorText); 
                 return; 
             }
             const data = await response.json(); 
-            console.log('adding category message:', data);
 
             const returnedCategory = { 
                 id: data.id,
@@ -35,10 +33,11 @@ export default function AddingCategory({ menuWindow, setMenuWindow, categories, 
                 products: data.products,
             };
 
-            setCategories([...categories, returnedCategory]);
+            // setCategories([...categories, returnedCategory]);
+            setCategories([...categories, returnedCategory].sort((a, b) => a.id - b.id));
 
         } catch (error) {
-            console.error('Error adding product:', error); 
+            console.error('Error adding category:', error); 
         } 
     };
 
@@ -54,11 +53,9 @@ export default function AddingCategory({ menuWindow, setMenuWindow, categories, 
             if (!response.ok) { 
                 const errorText = await response.text(); 
                 alert(errorText);
-                // console.error('Server error:', errorText); 
                 return; 
             }
             const data = await response.json(); 
-            console.log('adding category message:', data);
 
             const returnedCategory = { 
                 id: data.id,
@@ -75,13 +72,13 @@ export default function AddingCategory({ menuWindow, setMenuWindow, categories, 
             );
 
         } catch (error) {
-            console.error('Error adding product:', error); 
+            console.error('Error editing category:', error); 
         } 
     };
 
     const handleSave = async () => {
         const newCategory = {
-            id: selectedCategory?.id || 0,
+            id: selectedCategory && !isNaN(Number(selectedCategory.id)) ? Number(selectedCategory.id) : 0,
             name: newCategoryName,
             products: [],
         };
@@ -93,10 +90,12 @@ export default function AddingCategory({ menuWindow, setMenuWindow, categories, 
         }
         
         setMenuWindow("Manage Category");
+        setSelectedCategory(null)
     }
 
     const handleCancel = () => {
         setNewCategoryName('')
+        setSelectedCategory(null)
         setMenuWindow("Manage Category");
     }
 

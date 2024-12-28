@@ -5,24 +5,6 @@ import '../table.css'
 
 export default function Table({window, setWindow, setSelectedUser, users, setUsers}) {
 
-    const handleDelete = async (userId) => {
-        try {
-            const response = await fetch(`http://localhost:8080/admin/delete/${userId}`, {
-                method: 'DELETE'
-            });
-            const data = await response.text(); 
-            if(!response.ok) {
-                alert(data);
-                return;
-            } else {
-                setUsers(users.filter(user => user.id !== userId));
-            }
-            console.log('delete message:', data);   
-        } catch (error) {
-            console.error('Error deleting user:', error); 
-        } 
-    };
-    
     return (
         <div style={{ backgroundColor: "#E9EED9", padding: "0.5% 4% 0px 4%" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -48,32 +30,18 @@ export default function Table({window, setWindow, setSelectedUser, users, setUse
                             <td className="table-cell">{user.points}</td>
                             <td className="table-cell">
                                 <button
-                                className="actions-button"
-                                onClick={() => {
-                                    setSelectedUser(user);
-                                    handleDelete(user.id);
-                                }}
+                                    className="actions-button"
+                                    onClick={() => {
+                                        setWindow("Edit User");
+                                        setSelectedUser(user);
+                                    }}
                                 >
-                                <img
-                                    style={{ width: "25px", height: "25px" }}
-                                    src={trashIcon}
-                                    alt="trash icon"
-                                    title="Delete"
-                                />
-                                </button>
-                                <button
-                                className="actions-button"
-                                onClick={() => {
-                                    setWindow("Edit User");
-                                    setSelectedUser(user);
-                                }}
-                                >
-                                <img
-                                    style={{ width: "25px", height: "25px" }}
-                                    src={editIcon}
-                                    alt="edit icon"
-                                    title="Edit"
-                                />
+                                    <img
+                                        style={{ width: "25px", height: "25px" }}
+                                        src={editIcon}
+                                        alt="edit icon"
+                                        title="Edit"
+                                    />
                                 </button>
                             </td>
                             </tr>
