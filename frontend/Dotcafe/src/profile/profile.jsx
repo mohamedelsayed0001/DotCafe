@@ -11,45 +11,41 @@ import {
   ListItem,
   ListItemText,
   Divider,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import HomeLogo from "../menu/HomeLogo";
 import Background from "../assets/background.jpg";
 import Controlbuttons from "./controlbuttons";
-import profile from '../assets/profileimage.svg';
+import profile from "../assets/profileimage.svg";
 import OrderListItem from "./OrderListItem";
 
-function Profile({ setWindow ,customerDTO}) {
-  
+function Profile({ setWindow, customerDTO }) {
   const [user, setUser] = useState(customerDTO);
-  
+  const [isEditing, setIsEditing] = useState(false);
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "error" });
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/customer/profile/${customerDTO.id}`); // Ensure the variable is named `response`
+        const response = await fetch(`http://localhost:8080/customer/profile/${customerDTO.id}`);
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
         }
         const data = await response.json();
-        setUser(data); // Set the user data in state
-        
+        setUser(data);
       } catch (err) {
-        console.error("Error fetching user data:", err); // Proper error logging
+        console.error("Error fetching user data:", err);
       }
     };
-  
+
     if (customerDTO?.id) {
-      fetchUser(); // Call the API when customerDTO.id is provided
+      fetchUser();
     }
-  }, [customerDTO.id]); // Add customerDTO.id to the dependency array
-  
-  
-  const [isEditing, setIsEditing] = useState(false);
-  
+  }, [customerDTO.id]);
 
   const handleChange = (field, value) => {
     setUser((prev) => ({ ...prev, [field]: value }));
-    console.log(user)
   };
 
   const handleImageChange = (event) => {
@@ -62,10 +58,24 @@ function Profile({ setWindow ,customerDTO}) {
       };
       reader.readAsDataURL(file);
     }
-  }
+  };
+
+  const validateInputs = () => {
+    if (!user.mail.includes("@")) {
+      setSnackbar({ open: true, message: "Invalid email address.", severity: "error" });
+      return false;
+    }
+    if (user.phoneNumber.length !== 11) {
+      setSnackbar({ open: true, message: "Phone number must be 11 digits.", severity: "error" });
+      return false;
+    }
+    return true;
+  };
 
   const saveChanges = async () => {
-    setIsEditing(false); // Exit edit mode
+    if (!validateInputs()) return;
+
+    setIsEditing(false);
     try {
       const response = await fetch(`http://localhost:8080/customer/profile/edit/${customerDTO.id}`, {
         method: "PUT",
@@ -74,63 +84,65 @@ function Profile({ setWindow ,customerDTO}) {
         },
         body: JSON.stringify(user),
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to save changes. Please try again.");
       }
-  
+
       const updatedUser = await response.json();
-      console.log("User profile saved:", updatedUser); // Log the updated profile
-      setUser(updatedUser); // Update state with the response from the backend
+      console.log("User profile saved:", updatedUser);
+      setUser(updatedUser);
     } catch (error) {
       console.error("Error saving profile changes:", error);
-      alert("Error saving changes: " + error.message);
+      setSnackbar({ open: true, message: "Error saving changes: " + error.message, severity: "error" });
     }
   };
-  
-  
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ open: false, message: "", severity: "error" });
+  };
 
   return (
-    <Box 
+    <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
+        display: "flex",
+        flexDirection: "column",
         padding: 0,
-        
-        minWidth: '100vw',
-        minHeight: '100vh',
+        minWidth: "100vw",
+        minHeight: "100vh",
         backgroundImage: `url(${Background})`,
-        backgroundSize: 'cover',
-        
-        overflow: 'hidden',
-        position: 'absolute', 
-        top: 0, 
-        left: 0, 
+        backgroundSize: "cover",
+        overflow: "hidden",
+        position: "absolute",
+        top: 0,
+        left: 0,
       }}
     >
-      <Box sx={{ width: '100%', padding: 2 }}>
+      <Box sx={{ width: "100%", padding: 2 }}>
         <HomeLogo setwindow={setWindow} />
-        <Controlbuttons setWindow={setWindow}/>
+        <Controlbuttons setWindow={setWindow} />
       </Box>
-      <Box sx={{ 
-        display: 'flex',
-        justifyContent: 'center',
-        width: '100%',
-        marginTop: 8.7,
-        position: 'relative',
-      }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          width: "100%",
+          marginTop: 8.7,
+          position: "relative",
+        }}
+      >
         <Avatar
-          src={user.src === null ? profile:user.src}
+          src={user.src === null ? profile : user.src}
           alt={user.name}
           sx={{
             width: 120,
             height: 120,
-            position: 'absolute',
+            position: "absolute",
             top: -60,
-            left: '50%',
-            transform: 'translateX(-50%)',
+            left: "50%",
+            transform: "translateX(-50%)",
             zIndex: 2,
-            border: '4px solid #FFF9DF'
+            border: "4px solid #FFF9DF",
           }}
         />
         <Paper
@@ -140,34 +152,24 @@ function Profile({ setWindow ,customerDTO}) {
             width: "60%",
             backgroundColor: "rgba(255, 249, 223, 0.9)",
             paddingTop: 8,
-            maxHeight: '70vh',
-            overflowY: 'scroll',
-            '&::-webkit-scrollbar': {
-              display: 'none'
+            maxHeight: "70vh",
+            overflowY: "scroll",
+            "&::-webkit-scrollbar": {
+              display: "none",
             },
-            msOverflowStyle: 'none',
-            scrollbarWidth: 'none',
-            borderRadius:12,
+            msOverflowStyle: "none",
+            scrollbarWidth: "none",
+            borderRadius: 12,
           }}
         >
           <Grid item xs={12} sm={4} textAlign="center">
             {isEditing && (
-              <Button
-                variant="outlined"
-                component="label"
-                sx={{ marginTop: 1 }}
-              >
+              <Button variant="outlined" component="label" sx={{ marginTop: 1 }}>
                 Change Image
-                <input
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  onChange={handleImageChange}
-                />
+                <input type="file" accept="image/*" hidden onChange={handleImageChange} />
               </Button>
             )}
 
-            {/* Profile Details */}
             <Box sx={{ marginTop: 2 }}>
               {isEditing ? (
                 <>
@@ -205,15 +207,12 @@ function Profile({ setWindow ,customerDTO}) {
                   <Typography variant="body1">Phone: {user.phoneNumber}</Typography>
                 </>
               )}
-              {/* Non-Editable Fields */}
               <Typography variant="body1" sx={{ marginTop: 2 }}>
                 Points: {user.points}
               </Typography>
-              
             </Box>
           </Grid>
 
-          {/* Edit/Save Buttons */}
           <Box textAlign="center" marginTop={2}>
             {isEditing ? (
               <>
@@ -225,11 +224,7 @@ function Profile({ setWindow ,customerDTO}) {
                 >
                   Save Changes
                 </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => setIsEditing(false)}
-                >
+                <Button variant="outlined" color="secondary" onClick={() => setIsEditing(false)}>
                   Cancel
                 </Button>
               </>
@@ -238,51 +233,58 @@ function Profile({ setWindow ,customerDTO}) {
                 variant="contained"
                 color="primary"
                 onClick={() => setIsEditing(true)}
-                sx={{backgroundColor: "rgb(220, 151, 151,0.7)"}}
+                sx={{ backgroundColor: "rgb(220, 151, 151,0.7)" }}
               >
                 Edit Profile
               </Button>
             )}
           </Box>
 
-          {/* Last 3 Orders Section */}
           <Box sx={{ marginTop: 4 }}>
-  { user.orders.length > 0 ? (
-    <>
-      <Typography variant="h6" gutterBottom>
-        All Orders
-      </Typography>
-      <Box
-        sx={{
-          height: "200px", // Adjust the height to fit 3 items
-          overflowY: "auto", // Enable vertical scrolling
-          borderRadius: "5px",
-          padding: "10px", // Optional: Add padding for a better look
-         
-        }}
-      >
-        <List>
-          {user.orders.map((order) => (
-            <React.Fragment key={order.id}>
-              <ListItem>
-                
-                <OrderListItem order={order}></OrderListItem>
-              </ListItem>
-              <Divider />
-            </React.Fragment>
-          ))}
-        </List>
-      </Box>
-    </>
-          ) : (
-            <Typography variant="h6" align="center" gutterBottom>
-              No orders yet
-            </Typography>
-          )}
-        </Box>
-
+            {user.orders.length > 0 ? (
+              <>
+                <Typography variant="h6" gutterBottom>
+                  All Orders
+                </Typography>
+                <Box
+                  sx={{
+                    height: "200px",
+                    overflowY: "auto",
+                    borderRadius: "5px",
+                    padding: "10px",
+                  }}
+                >
+                  <List>
+                    {user.orders.map((order) => (
+                      <React.Fragment key={order.id}>
+                        <ListItem>
+                          <OrderListItem order={order}></OrderListItem>
+                        </ListItem>
+                        <Divider />
+                      </React.Fragment>
+                    ))}
+                  </List>
+                </Box>
+              </>
+            ) : (
+              <Typography variant="h6" align="center" gutterBottom>
+                No orders yet
+              </Typography>
+            )}
+          </Box>
         </Paper>
       </Box>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: "100%" }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

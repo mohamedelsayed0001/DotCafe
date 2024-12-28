@@ -29,7 +29,6 @@ export default function EditOrder({ ordersWindow, setOrdersWindow, orders, setOr
                return; 
          }
          const data = await response.json(); 
-         console.log('editing progress message :', data);
 
          setOrders((prevOrders) =>
             prevOrders.map((order) =>
@@ -43,12 +42,14 @@ export default function EditOrder({ ordersWindow, setOrdersWindow, orders, setOr
    };
 
    const handleSave = async () => {
-      editOrder(selectedOrder.id);
+      editOrder(Number(selectedOrder.id));
+      setSelectedOrder(null);
       setOrdersWindow("Home");
    }
 
    const handleCancel = () => {
       setNewProgress('')
+      setSelectedOrder(null);
       setOrdersWindow("Home");
    }
 

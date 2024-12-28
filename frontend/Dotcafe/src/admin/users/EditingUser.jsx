@@ -23,11 +23,10 @@ export default function EditingUser({ usersWindow, setUsersWindow, users, setUse
 
         if (!response.ok) {
             const errorText = await response.text();
-            console.error('Server error:', errorText);
+            alert(errorText);
             return;
         }
         const data = await response.json(); 
-        console.log('editing message:', data);
 
         const returnedUser = { 
             mail:data.mail,
@@ -44,26 +43,28 @@ export default function EditingUser({ usersWindow, setUsersWindow, users, setUse
         ));
           
         } catch (error) {
-          console.error('Error editing user:', error); 
+            console.error('Error editing user:', error); 
         } 
     };
 
     const handleSave = async () => {
 
         const newUser = { 
-            id: selectedUser?.id,
+            id: selectedUser && !isNaN(Number(selectedUser.id)) ? Number(selectedUser.id) : null,
             role: role, 
-            points: points, 
+            points: Number(points), 
         };
 
         if (usersWindow === "Edit User") {
             await editUser(newUser)
         }
 
+        setSelectedUser(null);
         setUsersWindow("Home");
     };    
 
     const handleCancel = () => {
+        setSelectedUser(null);
         setUsersWindow("Home");
     };
 

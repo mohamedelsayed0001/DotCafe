@@ -17,7 +17,6 @@ export default function Users ({users, setUsers}) {
         } else {
             setFilteredUsers(users);
         }
-        console.log(users); 
     }, [filterBy, users]);
 
     const fetchUsers = async () => {
@@ -36,18 +35,19 @@ export default function Users ({users, setUsers}) {
     return (
         <div className= 'menu-page' style={{ backgroundColor: "#E9EED9", minHeight: "100vh", display: 'flex', flexDirection: 'column' }}>
             <div className='new-manage-buttons'>
-                {/* for testing */}
-                <button onClick={() => {fetchUsers();}}>refresh</button>
-                
                 <select
                     className='filter-by'
                     value={filterBy}
                     onChange={(e) => setFilterBy(e.target.value)}
+                    style={{marginLeft:'auto'}}
                     >
                     <option value="">No filter</option>
                     <option value="admin">Admin</option>
                     <option value="customer">Customer</option>
                 </select>
+                
+                {/* for testing */}
+                <button onClick={() => {fetchUsers();}}>refresh</button>
             </div>
 
             <Table  window={usersWindow} setWindow={setUsersWindow} 

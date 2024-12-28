@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "../window.css";
-import trashIcon from '../icons/trash.svg';
-import editIcon from '../icons/edit.svg';
 
 export default function AddingItem({ inventoryWindow, setInventoryWindow, items, setItems, selectedItem, setSelectedItem }) {
     const [name, setName] = useState("");
@@ -17,38 +15,34 @@ export default function AddingItem({ inventoryWindow, setInventoryWindow, items,
     }, [inventoryWindow, selectedItem]);
 
     const addItem = async (item) => {   
-        // console.log(item);
 
         try {
             const response = await fetch('http://localhost:8080/admin/item', {
                 method: 'POST', 
                 headers: { 'Content-Type': 'application/json'}, 
                 body: JSON.stringify(item)
+                }
+            ); 
+
+            if (!response.ok) { 
+                const errorText = await response.text(); 
+                alert(errorText)
+                return;
             }
-        ); 
+            const data = await response.json(); 
 
-        if (!response.ok) { 
-            const errorText = await response.text(); 
-            if(errorText === "Item with the same name already exists.") {
-                alert("Item with the same name already exists.")
-            }
-            console.error('Server error:', errorText); 
-            return; 
-        }
-        const data = await response.json(); 
-        console.log('adding message:', data);
+            const returnedItem = { 
+                id: data.id,
+                name: data.name,
+                price: data.price,
+                quantity: data.quantity
+            };
 
-        const returnedItem = { 
-            id: data.id,
-            name: data.name,
-            price: data.price,
-            quantity: data.quantity
-        };
-
-        setItems([...items, returnedItem]);
+            // setItems([...items, returnedItem]);
+            setItems([...items, returnedItem].sort((a, b) => a.id - b.id));
 
         } catch (error) {
-          console.error('Error adding Item:', error); 
+            console.error('Error adding Item:', error); 
         } 
     };
 
@@ -58,54 +52,53 @@ export default function AddingItem({ inventoryWindow, setInventoryWindow, items,
                 method: 'PUT', 
                 headers: { 'Content-Type': 'application/json'}, 
                 body: JSON.stringify(item)
+                }
+            ); 
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                alert(errorText)
+                return;
             }
-        ); 
+            const data = await response.json(); 
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Server error:', errorText);
-            if(errorText === "Another item with the same name already exists.") {
-                alert("Another item with the same name already exists.")
-            }
-            return;
-        }
-        const data = await response.json(); 
-        console.log('editing message:', data);
+            const returnedItem = { 
+                id: data.id,
+                name: data.name,
+                price: data.price,
+                quantity: data.quantity
+            };
 
-        const returnedItem = { 
-            id: data.id,
-            name: data.name,
-            price: data.price,
-            quantity: data.quantity
-        };
-
-        setItems(items.map (item => 
-            item.id === selectedItem.id ? returnedItem : item
-        ));
+            setItems(items.map (item => 
+                item.id === selectedItem.id ? returnedItem : item
+            ));
           
         } catch (error) {
-          console.error('Error adding product:', error); 
+          console.error('Error editing item:', error); 
         } 
     };
 
     const handleSave = async () => {
-        if(name === "") {
-            alert("write item name");
+        if (name === "") {
+            alert("Write item name");
             return;
-        } else if (quantity === null) {
+        } else if (quantity === "" || quantity === null) {
             alert("Set item quantity");
             return;
-        } else if (price === null) {
+        } else if (price === "" || price === null) {
             alert("Set item price");
             return;
         }
 
         const newItem = { 
-            id: selectedItem?.id ||null,
+            id: selectedItem && !isNaN(Number(selectedItem.id)) ? Number(selectedItem.id) : null,
             name, 
-            quantity: quantity, 
-            price, 
+            quantity: Number(quantity), 
+            price: Number(price), 
         };
+
+        console.log(newItem);
+        
 
         if (inventoryWindow === "Edit Item") {
             await editItem(newItem)
@@ -114,9 +107,11 @@ export default function AddingItem({ inventoryWindow, setInventoryWindow, items,
         }
 
         setInventoryWindow("Home");
+        setSelectedItem(null)
     };    
 
     const handleCancel = () => {
+        setSelectedItem(null)
         setInventoryWindow("Home");
     };
 

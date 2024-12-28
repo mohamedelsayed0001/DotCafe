@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from "react";
-import upDownArrowIcon from '../icons/up-down-arrow.svg'
 import trashIcon from '../icons/trash.svg'
 import editIcon from '../icons/edit.svg'
 import '../table.css'
@@ -10,9 +8,7 @@ export default function Table({window, setWindow, selectedProduct, setSelectedPr
         try {
             const response = await fetch(`http://localhost:8080/admin/product/${productId}`, {
                 method: 'DELETE'
-            });   
-            const data = await response.text(); 
-            console.log('delete message:', data);
+            });
         } catch (error) {
             console.error('Error deleting product:', error); 
         } 
@@ -31,7 +27,7 @@ export default function Table({window, setWindow, selectedProduct, setSelectedPr
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                     <tr>
-                        <th className="header-cell">Product ID</th>
+                        {/* <th className="header-cell">Product ID</th> */}
                         <th className="header-cell">Product Name</th>
                         <th className="header-cell">Category</th>
                         <th className="header-cell">Availability</th>
@@ -44,7 +40,7 @@ export default function Table({window, setWindow, selectedProduct, setSelectedPr
                         category.products.length > 0 ? (
                         category.products.map((product) => (
                             <tr key={product.id}>
-                            <td className="table-cell">{product.id}</td>
+                            {/* <td className="table-cell">{product.id}</td> */}
                             <td className="table-cell">{product.name}</td>
                             <td className="table-cell">{category.name}</td> 
                             <td className="table-cell">{product.inStock ? 'In Stock' : 'Out of Stock'}</td>

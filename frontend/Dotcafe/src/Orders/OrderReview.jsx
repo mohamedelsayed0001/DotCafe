@@ -54,6 +54,7 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
         setOrderPrice(response.data.orderPrice);
         setTaxes(response.data.taxes);
         setTotal(response.data.total)
+        setPoints(response.data.points)
 
         console.log(response.data)
 
@@ -180,13 +181,13 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
 
   async function applyPoints(e) {
     if (e.target.value <= customerPoints && e.target.value > 0) {
-      setPoints(e.target.value);
-      console.log(points)
+      const newPoints = e.target.value
+      setPoints(newPoints);
       try {
         const response = await axios.post(`http://localhost:8080/order/points/${customerDTO.id}`, null,
           {
             params: {
-              points: points
+              points: newPoints
             }
 
           }
