@@ -14,6 +14,13 @@ export default function Admin ({setMainWindow, setUserState}) {
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
 
+  useEffect(() => {
+    document.body.classList.add('admin-body');
+    return () => {
+        document.body.classList.remove('admin-body');
+    };
+  }, []);
+
   return (
       <>
           <NavBar activeButton={page} setPage={setPage} 

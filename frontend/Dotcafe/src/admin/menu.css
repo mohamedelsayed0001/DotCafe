@@ -34,7 +34,7 @@
     width: 100vw;
 }
 
-body {
+body.admin-body {
     margin: 0;
     padding: 0;
     background-color: #CBD2A4;
