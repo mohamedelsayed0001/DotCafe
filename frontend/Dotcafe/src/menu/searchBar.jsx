@@ -1,23 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { TextField, InputAdornment, List, ListItem, ListItemText, ListItemAvatar, Avatar } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
-function SearchBar({setSelectedProduct}) {
+function SearchBar({ setSelectedProduct }) {
     const [searchKeyword, setSearchKeyword] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+    const containerRef = useRef(null);
+
     const handleItemClick = (item) => {
         setSelectedProduct(item);
-        setSearchResults([]); 
+        setSearchResults([]); // Clear the search results
+        setSearchKeyword(''); // Clear the search keyword
     };
 
     const sendToken = async () => {
+        if (!searchKeyword.trim()) return; // Avoid sending a request for empty input
         try {
-            const response = await fetch('http://localhost:8080/menu/search?keyword=' + encodeURIComponent(searchKeyword), {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            const response = await fetch(
+                `http://localhost:8080/menu/search?keyword=${encodeURIComponent(searchKeyword)}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
 
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -30,16 +37,35 @@ function SearchBar({setSelectedProduct}) {
         }
     };
 
+    const handleClickOutside = (event) => {
+        if (containerRef.current && !containerRef.current.contains(event.target)) {
+            setSearchResults([]); // Close the dropdown on outside click
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
+
     return (
-        <div style={{ position: 'relative', width: '16%', margin: '16px' }}>
-            <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                height: '40px', 
-                background: 'linear-gradient(to right, rgba(217, 217, 217, 0.2) 0%, rgba(208, 146, 46, 0.2) 100%)', 
-                borderRadius: '20px', 
-                border: '1px solid #F18A86'
-            }}>
+        <div
+            ref={containerRef}
+            style={{ position: 'relative', width: '16%', margin: '16px' }}
+        >
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: '40px',
+                    background:
+                        'linear-gradient(to right, rgba(217, 217, 217, 0.2) 0%, rgba(208, 146, 46, 0.2) 100%)',
+                    borderRadius: '20px',
+                    border: '1px solid #F18A86',
+                }}
+            >
                 <TextField
                     placeholder="Search..."
                     value={searchKeyword}
@@ -48,7 +74,10 @@ function SearchBar({setSelectedProduct}) {
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
-                                <SearchIcon style={{ width: '40px', height: '35px', cursor: 'pointer' }} onClick={sendToken} />
+                                <SearchIcon
+                                    style={{ width: '40px', height: '35px', cursor: 'pointer' }}
+                                    onClick={sendToken}
+                                />
                             </InputAdornment>
                         ),
                     }}
@@ -64,13 +93,14 @@ function SearchBar({setSelectedProduct}) {
                 />
             </div>
             {searchResults.length > 0 && (
-            <List
+                <List
                     style={{
                         position: 'absolute',
                         top: '50px',
                         left: '0',
                         width: '100%',
-                        background: 'linear-gradient(to right, rgba(217, 217, 217, 1) 0%, rgba(208, 146, 46, 1) 100%)',
+                        background:
+                            'linear-gradient(to right, rgba(217, 217, 217, 1) 0%, rgba(208, 146, 46, 1) 100%)',
                         border: '1px solid #ccc',
                         borderRadius: '8px',
                         maxHeight: '200px',
@@ -78,7 +108,7 @@ function SearchBar({setSelectedProduct}) {
                         zIndex: 1000,
                     }}
                 >
-            {searchResults.map((item, index) => (
+                    {searchResults.map((item, index) => (
                         <ListItem
                             key={index}
                             onClick={() => handleItemClick(item)}
