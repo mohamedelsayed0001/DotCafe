@@ -24,7 +24,7 @@ export default function Table({window, setWindow, setSelectedItem, items, setIte
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                     <tr>
-                        <th className="header-cell">Item ID</th>
+                        {/* <th className="header-cell">Item ID</th> */}
                         <th className="header-cell">Item Name</th>
                         <th className="header-cell">Quantity</th>
                         <th className="header-cell">Item Price</th>
@@ -35,7 +35,7 @@ export default function Table({window, setWindow, setSelectedItem, items, setIte
                 <tbody>
                     {items.map((item) => (
                             <tr key={item.id}>
-                            <td className="table-cell">{item.id}</td>
+                            {/* <td className="table-cell">{item.id}</td> */}
                             <td className="table-cell">{item.name}</td>
                             <td className="table-cell">{item.quantity}</td> 
                             <td className="table-cell">${item.price}</td>
