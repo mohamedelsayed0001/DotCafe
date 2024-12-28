@@ -23,7 +23,7 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
   const [customerPoints, setCustomerPoints] = useState(0);
 
   async function fetchItems() {
-  
+
     try {
       const response = await axios.get(`http://localhost:8080/customer/user/${customerDTO.id}`);
       if (response.status === 200) {
@@ -253,86 +253,86 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
           Menu
         </button>
       </Stack>
-     
 
-     {items.length>0?
-      (<>
-              <Stack>
-        <Typography variant="h5" component="h2" style={{ marginBottom: "10px", fontWeight: "900", fontStyle: "italic" }}>
-          Review Order
-        </Typography>
 
-        <Stack
-          direction="column"
-          alignItems="center"
-          style={{
-            backgroundImage: `url(${Background})`,
-            padding: "10px",
-            maxHeight: "250px",
-            borderRadius: "20px",
-            overflowY: "auto",
-            margin: "auto",
-            width: "90%",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          {items.map((item, index) => (
+      {items.length > 0 ?
+        (<>
+          <Stack>
+            <Typography variant="h5" component="h2" style={{ marginBottom: "10px", fontWeight: "900", fontStyle: "italic" }}>
+              Review Order
+            </Typography>
+
             <Stack
-              key={index}
-              direction="row"
+              direction="column"
               alignItems="center"
-              justifyContent="space-between"
-              spacing={2}
               style={{
-                marginBottom: "10px",
+                backgroundImage: `url(${Background})`,
                 padding: "10px",
+                maxHeight: "250px",
+                borderRadius: "20px",
+                overflowY: "auto",
+                margin: "auto",
                 width: "90%",
-                background: "#f9f9f9",
-                borderRadius: "8px",
+                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <div >
-                <Typography variant="h5" style={{ width: "20%", fontWeight: "850" }}>{item.productName}</Typography>
-                {item.customize} , {item.size}
-              </div>
-
-              <Typography variant="h5" >
-                <div style={{ display: "flex", alignItems: "center", width: "10%" }}> {item.price}<ClearIcon></ClearIcon> {item.quantity}</div></Typography>
-
-              <div style={{ backgroundColor: "#FEEFAE", width: "14%", borderRadius: "10px", display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-
-                <IconButton onClick={() => handleIncrease(index)}>
-                  <AddIcon style={{ color: "black" }} />
-                </IconButton>
-                <div style={{ height: "100%" }}><strong>|</strong></div>
-
-                <IconButton
-                  onClick={() => handleDecrease(index)}
-                  disabled={item.quantity <= 0}
+              {items.map((item, index) => (
+                <Stack
+                  key={index}
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  spacing={2}
+                  style={{
+                    marginBottom: "10px",
+                    padding: "10px",
+                    width: "90%",
+                    background: "#f9f9f9",
+                    borderRadius: "8px",
+                  }}
                 >
-                  <RemoveIcon style={{ color: "black" }} />
-                </IconButton>
+                  <div >
+                    <Typography variant="h5" style={{ width: "20%", fontWeight: "850" }}>{item.productName}</Typography>
+                    {item.customize} , {item.size}
+                  </div>
 
-              </div>
-              <Typography variant="h5" style={{ width: "20%", fontWeight: "850" }}>{item.price * item.quantity}</Typography>
-              <IconButton onClick={() => handleDelete(index)}>
-                <DeleteIcon style={{ color: "black" }} />
-              </IconButton>
+                  <Typography variant="h5" >
+                    <div style={{ display: "flex", alignItems: "center", width: "10%" }}> {item.price}<ClearIcon></ClearIcon> {item.quantity}</div></Typography>
+
+                  <div style={{ backgroundColor: "#FEEFAE", width: "14%", borderRadius: "10px", display: "flex", justifyContent: "space-around", alignItems: "center" }}>
+
+                    <IconButton onClick={() => handleIncrease(index)}>
+                      <AddIcon style={{ color: "black" }} />
+                    </IconButton>
+                    <div style={{ height: "100%" }}><strong>|</strong></div>
+
+                    <IconButton
+                      onClick={() => handleDecrease(index)}
+                      disabled={item.quantity <= 0}
+                    >
+                      <RemoveIcon style={{ color: "black" }} />
+                    </IconButton>
+
+                  </div>
+                  <Typography variant="h5" style={{ width: "20%", fontWeight: "850" }}>{item.price * item.quantity}</Typography>
+                  <IconButton onClick={() => handleDelete(index)}>
+                    <DeleteIcon style={{ color: "black" }} />
+                  </IconButton>
 
 
+                </Stack>
+              ))}
             </Stack>
-          ))}
-        </Stack>
-      </Stack>
+          </Stack>
 
-      </>):
-      (
-        <>
-           <Typography variant="h5" style={{ width: "20%", fontWeight: "850" }}>Your Cart Is Empty!!</Typography>
-        </>
-      )
-     }
-    
+        </>) :
+        (
+          <>
+            <Typography variant="h5" style={{ width: "20%", fontWeight: "850" }}>Your Cart Is Empty!!</Typography>
+          </>
+        )
+      }
+
       <Stack
         direction="column"
         alignItems="center"
@@ -381,7 +381,18 @@ function OrderReview({ customerDTO, setCartButton, setWindow }) {
                 color: "#333",
               }}
             />
+            <Typography
+              sx={{
+                fontWeight: "500",
+                fontSize: "16px",
+                color: "#555",
+                paddingLeft: "20px"
+              }}
+            >
+              Your Points : {customerPoints}
+            </Typography>
           </Box>
+
         </Box>
 
         {/* Price Details Section */}

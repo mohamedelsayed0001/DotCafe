@@ -3,7 +3,8 @@ import cart from '../assets/tracking.svg';
 function Controlbuttons({ setWindow }) {
     return (
         <div style={{ display: "flex"}}>
-            <img src={cart} alt="Cart" style={{ width: "50px", height: "50px", position: "absolute", left: "20%",top:"3.5%" }}  onClick={()=>{setWindow("reviewOrder")}}/>
+{/*     <img src={cart} alt="Cart" style={{ width: "50px", height: "50px", position: "absolute", left: "20%",top:"3.5%" }}  onClick={()=>{setWindow("reviewOrder")}}/> 
+*/}  
             <button
         onClick={() => setWindow("menu")}
         style={{

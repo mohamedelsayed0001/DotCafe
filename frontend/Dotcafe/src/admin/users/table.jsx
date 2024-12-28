@@ -10,7 +10,7 @@ export default function Table({window, setWindow, setSelectedUser, users, setUse
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                     <tr>
-                        <th className="header-cell">User ID</th>
+                        {/* <th className="header-cell">User ID</th> */}
                         <th className="header-cell">User Name</th>
                         <th className="header-cell">Role</th>
                         <th className="header-cell">Address</th>
@@ -22,7 +22,7 @@ export default function Table({window, setWindow, setSelectedUser, users, setUse
                 <tbody>
                     {users.map((user) => (
                             <tr key={user.id}>
-                            <td className="table-cell">{user.id}</td>
+                            {/* <td className="table-cell">{user.id}</td> */}
                             <td className="table-cell">{user.name}</td>
                             <td className="table-cell">{user.role}</td> 
                             <td className="table-cell">{user.mail}</td>
