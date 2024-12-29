@@ -4,18 +4,10 @@ import Orders from '../assets/tracking.svg';
 import { Button, IconButton, Snackbar, Alert } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
+
 function LogedinButton({setWindow,cart}){
     const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const handleSnackbarOpen = () => {
-        setSnackbarOpen(true);
-      };
-      
-      const handleSnackbarClose = (event, reason) => {
-        if (reason === 'clickaway') {
-          return;
-        }
-        setSnackbarOpen(false);
-      };
+   
     return (
         <div className='navigation-container'>
           <button 
@@ -25,25 +17,11 @@ function LogedinButton({setWindow,cart}){
           >
             Track
           </button>
-          {cart ? (
-            <IconButton onClick={() =>{ setWindow("reviewOrder")}}>
-              <ShoppingCartIcon />
-            </IconButton>
-          ) : (
-            <IconButton onClick={handleSnackbarOpen}>
-              <RemoveShoppingCartIcon />
-            </IconButton>
-          )}
-          <Snackbar
-            open={snackbarOpen}
-            autoHideDuration={3000}
-            onClose={handleSnackbarClose}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          >
-            <Alert onClose={handleSnackbarClose} severity="warning" sx={{ width: '100%' }}>
-              Your cart is empty.
-            </Alert>
-          </Snackbar>
+         <img src={Orders} alt="Cart" style={{ width: "50px", height: "50px", position: "absolute", left: "-13%",top:"3.5%" }}  onClick={()=>{setWindow("reviewOrder")}}/> 
+
+              
+         
+         
         </div>
       );
 }

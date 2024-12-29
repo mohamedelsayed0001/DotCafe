@@ -11,6 +11,7 @@ import Background from "../assets/background.jpg";
 import sizeIcon from "../assets/size.svg";
 
 function ItemCardpage({setCart, product,setProduct,signed,customerDTO,setWindow,setItemAddedToCart}) {
+  const [price,setPrice]=useState(product.price);
   const [size, setSize] = useState("Small");
   const [quantity, setQuantity] = useState(1);
   const [open, setOpen] = useState(true);
@@ -20,7 +21,12 @@ function ItemCardpage({setCart, product,setProduct,signed,customerDTO,setWindow,
   if (factor ===4)
     {factor=3}
   console.log(factor)
+function calculatePrice(scale){
 
+   setPrice(product.price*scale);
+
+
+}
   const handleClose = () =>{ 
     setProduct(null)
     setOpen(false)
@@ -159,7 +165,10 @@ function ItemCardpage({setCart, product,setProduct,signed,customerDTO,setWindow,
         component="img"
         src={sizeIcon}
         alt="Small Size"
-        onClick={() => setSize("Small")}
+        onClick={() => {setSize("Small");
+          calculatePrice(1);
+
+        }}
         sx={{
           width: 50,
           height: 70,
@@ -168,12 +177,16 @@ function ItemCardpage({setCart, product,setProduct,signed,customerDTO,setWindow,
           backgroundColor: size === "Small" ? "#FE9F81" : "none",
           marginTop: 6
         }}
+      
     />
       <Box
         component="img"
         src={sizeIcon}
         alt="Medium Size"
-        onClick={() => setSize("Medium")}
+        onClick={() => {setSize("Medium");
+          calculatePrice(1.25);
+        }
+        }
         sx={{
           width: 75,
           height: 95,
@@ -187,7 +200,10 @@ function ItemCardpage({setCart, product,setProduct,signed,customerDTO,setWindow,
         component="img"
         src={sizeIcon}
         alt="Large Size"
-        onClick={() => setSize("Large")}
+    
+        onClick={() => {setSize("Large");
+          calculatePrice(1.5);
+        }}
         sx={{
              width: 100,
              height: 120,
@@ -211,7 +227,8 @@ function ItemCardpage({setCart, product,setProduct,signed,customerDTO,setWindow,
               , borderRadius: 4
               , boxShadow: 2 
               }}>
-              Price: {product.price} EGP
+          
+              Price: {price} EGP
             </Typography>
 
             <Box
